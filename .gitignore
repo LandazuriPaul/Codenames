@@ -12,6 +12,7 @@ node_modules/
 # Environment files
 *.env
 !example.env
+docker-compose.*.yml
 
 # production
 build/
