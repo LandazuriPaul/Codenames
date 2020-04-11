@@ -1,0 +1,16 @@
+version: '3.6'
+
+services:
+  nginx:
+    networks:
+      reverse-proxy:
+    environment:
+      - LETSENCRYPT_EMAIL=postmaster@landazuri.fr
+      - LETSENCRYPT_HOST=codenames.landazuri.fr
+      - VIRTUAL_HOST=codenames.landazuri.fr
+    restart: unless-stopped
+
+networks:
+  reverse-proxy:
+    name: reverse-proxy
+    external: true
