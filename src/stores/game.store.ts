@@ -16,6 +16,7 @@ export class GameStore extends ChildStore {
   static COL_COUNT = 5;
 
   static BOARD_SIZE = GameStore.COL_COUNT * GameStore.ROW_COUNT;
+  static TURN_COUNT = Math.floor(GameStore.BOARD_SIZE / 3);
 
   @persist
   @observable
@@ -48,9 +49,8 @@ export class GameStore extends ChildStore {
   @action
   generateBoardFromSeed() {
     seedrandom(this.seed, { global: true });
-    const nThings = Math.floor(GameStore.BOARD_SIZE / 3);
     const cellTypeList: CellType[] = [];
-    for (let i = 0; i < nThings; i++) {
+    for (let i = 0; i < GameStore.TURN_COUNT; i++) {
       cellTypeList.push(CellType.TeamA);
       cellTypeList.push(CellType.TeamB);
     }
@@ -60,7 +60,11 @@ export class GameStore extends ChildStore {
       cellTypeList.push(CellType.TeamB);
     }
     cellTypeList.push(CellType.Excluded);
-    for (let i = 0; i < GameStore.BOARD_SIZE - (2 * nThings + 2); i += 1) {
+    for (
+      let i = 0;
+      i < GameStore.BOARD_SIZE - (2 * GameStore.TURN_COUNT + 2);
+      i += 1
+    ) {
       cellTypeList.push(CellType.Neutral);
     }
     const shuffledCellTypeList = shuffleArray(cellTypeList);
