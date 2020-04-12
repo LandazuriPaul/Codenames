@@ -4,7 +4,7 @@ import seedrandom from 'seedrandom';
 
 import data from '~/data.json';
 import { AvailableLanguages, Cell, CellStatus, CellType } from '~/domain';
-import { getRandomInt, shuffleArray } from '~/utils';
+import { getRandomInt, shuffleArray, numericToStringSeed } from '~/utils';
 
 import { ChildStore } from './child.store';
 import { RootStore } from './root.store';
@@ -47,7 +47,46 @@ export class GameStore extends ChildStore {
   }
 
   @action
-  generateBoardFromSeed() {
+  resetBoard() {
+    const newBoard = this.generateBoardFromSeed();
+    this.board = newBoard;
+  }
+
+  @action
+  setLang(lang: AvailableLanguages) {
+    this.lang = lang;
+  }
+
+  @action
+  setSeed(seed: string) {
+    this.seed = seed;
+  }
+
+  @action
+  revealCell(cellIndex: number) {
+    if (!this.board[cellIndex].isRevealed) {
+      this.board[cellIndex].isRevealed = true;
+    }
+  }
+
+  @action
+  toggleMasterMode() {
+    this.isMasterMode = !this.isMasterMode;
+  }
+
+  getCellStatus(cellIndex: number): CellStatus {
+    if (this.isMasterMode || this.board[cellIndex].isRevealed) {
+      return this.board[cellIndex].type;
+    }
+    return 'hidden';
+  }
+
+  getNewRandomSeed() {
+    const numericSeed = getRandomInt(0, 1e9);
+    return numericToStringSeed(numericSeed);
+  }
+
+  private generateBoardFromSeed() {
     seedrandom(this.seed, { global: true });
     const cellTypeList: CellType[] = [];
     for (let i = 0; i < GameStore.TURN_COUNT; i++) {
@@ -63,7 +102,7 @@ export class GameStore extends ChildStore {
     for (
       let i = 0;
       i < GameStore.BOARD_SIZE - (2 * GameStore.TURN_COUNT + 2);
-      i += 1
+      i++
     ) {
       cellTypeList.push(CellType.Neutral);
     }
@@ -72,40 +111,15 @@ export class GameStore extends ChildStore {
       0,
       GameStore.BOARD_SIZE
     );
+    const newBoard: Cell[] = [];
     for (let i = 0; i < GameStore.BOARD_SIZE; i++) {
-      this.board.push({
+      newBoard.push({
         index: i,
         word: shuffledDictionary[i],
         type: shuffledCellTypeList[i],
         isRevealed: false,
       });
     }
-  }
-
-  @action
-  setLang(lang: AvailableLanguages) {
-    this.lang = lang;
-  }
-
-  @action
-  setSeed(seed: string) {
-    this.seed = seed;
-  }
-
-  @action
-  toggelRevealCell(cellIndex: number) {
-    this.board[cellIndex].isRevealed = !this.board[cellIndex].isRevealed;
-  }
-
-  @action
-  toggleMasterMode() {
-    this.isMasterMode = !this.isMasterMode;
-  }
-
-  getCellStatus(cellIndex: number): CellStatus {
-    if (this.isMasterMode || this.board[cellIndex].isRevealed) {
-      return this.board[cellIndex].type;
-    }
-    return 'hidden';
+    return newBoard;
   }
 }

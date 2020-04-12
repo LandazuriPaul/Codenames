@@ -1,25 +1,41 @@
-import React, { FC } from 'react';
-import { observer } from 'mobx-react-lite';
-import { FormControlLabel, Switch, Typography } from '@material-ui/core';
+import React, { FC, useState } from 'react';
+import { Button, Dialog, Typography } from '@material-ui/core';
 
-import { useStores } from '~hooks';
+import { Settings } from '~/components/Settings';
 
-export const Header: FC<{}> = observer(() => {
-  const { gameStore } = useStores();
+import { HeaderContainer } from './header.styles';
+
+export const Header: FC<{}> = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  function handleClickOpen() {
+    setIsOpen(true);
+  }
+
+  function handleClose() {
+    setIsOpen(false);
+  }
 
   return (
-    <header>
-      <Typography component="h1">Codenames</Typography>
-      <FormControlLabel
-        control={
-          <Switch
-            checked={gameStore.isMasterMode}
-            onChange={() => gameStore.toggleMasterMode()}
-            color="primary"
-          />
-        }
-        label="Master mode"
-      />
-    </header>
+    <HeaderContainer>
+      <Typography component="h1" variant="h3">
+        Codenames
+      </Typography>
+      <Button
+        size="small"
+        color="primary"
+        variant="outlined"
+        onClick={handleClickOpen}
+      >
+        Settings
+      </Button>
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="simple-dialog-title"
+        open={isOpen}
+      >
+        <Settings onClose={handleClose} />
+      </Dialog>
+    </HeaderContainer>
   );
-});
+};

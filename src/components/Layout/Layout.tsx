@@ -24,7 +24,7 @@ export const Layout: FC<{}> = () => {
     gameStore.setSeed(seed);
   }
 
-  gameStore.generateBoardFromSeed();
+  gameStore.resetBoard();
   return (
     <>
       <Header />

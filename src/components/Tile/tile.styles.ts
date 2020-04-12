@@ -1,32 +1,21 @@
 import styled from 'styled-components';
-import { Paper } from '@material-ui/core';
+import { Paper, Theme } from '@material-ui/core';
 
 import { CellStatus, CellType } from '~/domain';
+import { setTileBackground } from '~utils';
 
 export const CellContainer = styled.td`
   vertical-align: middle;
   text-align: center;
-  padding: 1em;
   width: 20%;
+  padding: 1em;
 `;
 
 export const TilePaper = styled(Paper)<{ status: CellStatus }>`
-  background: ${props => {
-    switch (props.status) {
-      case CellType.Excluded:
-        return 'black';
-      case CellType.Neutral:
-        return 'grey';
-      case CellType.TeamA:
-        return 'red';
-      case CellType.TeamB:
-        return 'blue';
-      case 'hidden':
-      default:
-        return 'white';
-    }
-  }};
-  color: ${props => (props.status === CellType.Excluded ? 'white' : 'black')};
-  padding: 1em 0;
-  cursor: pointer;
+  ${({ theme, status }: { theme: Theme; status: CellStatus }) => `
+    background: ${setTileBackground(status, theme)};
+    color: ${status === CellType.Excluded ? 'white' : 'black'};
+    padding: 1em 0;
+    cursor: pointer;
+  `}
 `;
