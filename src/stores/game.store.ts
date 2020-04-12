@@ -70,8 +70,8 @@ export class GameStore extends ChildStore {
   }
 
   @action
-  toggleMasterMode() {
-    this.isMasterMode = !this.isMasterMode;
+  enableMasterMode() {
+    this.isMasterMode = true;
   }
 
   getCellStatus(cellIndex: number): CellStatus {

@@ -9,20 +9,22 @@ export const Board: FC<{}> = () => {
   let counter = -1;
   return (
     <Container>
-      <tbody>
-        {Array(GameStore.ROW_COUNT)
-          .fill(null)
-          .map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {Array(GameStore.COL_COUNT)
-                .fill(null)
-                .map((cell, colIndex) => {
-                  counter++;
-                  return <Tile key={colIndex} cellIndex={counter} />;
-                })}
-            </tr>
-          ))}
-      </tbody>
+      <table>
+        <tbody>
+          {Array(GameStore.ROW_COUNT)
+            .fill(null)
+            .map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {Array(GameStore.COL_COUNT)
+                  .fill(null)
+                  .map((cell, colIndex) => {
+                    counter++;
+                    return <Tile key={colIndex} cellIndex={counter} />;
+                  })}
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </Container>
   );
 };

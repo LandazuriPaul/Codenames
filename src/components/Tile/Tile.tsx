@@ -27,7 +27,9 @@ export const Tile: FC<TileProps> = observer(({ cellIndex }) => {
         status={gameStore.getCellStatus(cellIndex)}
         onMouseOver={onEnter}
         onMouseOut={onLeave}
-        elevation={isHover && !cell.isRevealed ? 10 : 2}
+        elevation={
+          !gameStore.isMasterMode && isHover && !cell.isRevealed ? 10 : 2
+        }
       >
         <Typography>{cell.word}</Typography>
       </TilePaper>

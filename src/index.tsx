@@ -12,7 +12,7 @@ import 'normalize.css';
 import { App } from '~/components/App';
 import { APP_ROOT } from '~/config';
 import { StoresProvider } from '~/stores';
-import { DefaultTheme } from '~/styles';
+import { DefaultTheme, GlobalStyles } from '~/styles';
 
 const rootElement = document.getElementById(APP_ROOT);
 function ReactApp() {
@@ -21,6 +21,7 @@ function ReactApp() {
       <MuiThemeProvider theme={DefaultTheme}>
         <ThemeProvider theme={DefaultTheme}>
           <StoresProvider>
+            <GlobalStyles />
             <App />
           </StoresProvider>
         </ThemeProvider>

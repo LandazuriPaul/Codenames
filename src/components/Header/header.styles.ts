@@ -8,7 +8,7 @@ export const Title = styled(Typography)`
 
 export const HeaderContainer = styled(Paper)`
   ${({ theme }: { theme: Theme }) => `
-  width: calc(100% -  ${theme.spacing(4)});
+  width: calc(100% -  ${theme.spacing(4)}px);
   justify-content: space-between;
   display: flex;
   align-items: center;
