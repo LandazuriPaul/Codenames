@@ -1,0 +1,1 @@
+export { MasterSwitch } from './MasterSwitch';

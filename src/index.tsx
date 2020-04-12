@@ -7,6 +7,8 @@ import {
 } from '@material-ui/core/styles';
 import 'mobx-react-lite/batchingForReactDom';
 
+import 'normalize.css';
+
 import { App } from '~/components/App';
 import { APP_ROOT } from '~/config';
 import { StoresProvider } from '~/stores';

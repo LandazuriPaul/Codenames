@@ -1,0 +1,1 @@
+export { GameHandler } from './GameHandler';
