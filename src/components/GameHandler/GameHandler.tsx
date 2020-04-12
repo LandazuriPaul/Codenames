@@ -137,7 +137,7 @@ export const GameHandler: FC<{}> = observer(() => {
             <ChevronRight fontSize="small" />
           </Button>
           &nbsp;&nbsp;
-          <IconButton size="small" onClick={() => setIsEditMode(false)}>
+          <IconButton onClick={() => setIsEditMode(false)}>
             <Close fontSize="small" />
           </IconButton>
         </GameHandlerForm>
