@@ -1,10 +1,6 @@
 import styled from 'styled-components';
-import { Paper, Theme, Typography } from '@material-ui/core';
+import { Button, Paper, Theme, Typography } from '@material-ui/core';
 import { darken, lighten } from '@material-ui/core/styles';
-
-export const Title = styled(Typography)`
-  width: auto;
-` as any;
 
 export const HeaderContainer = styled(Paper)`
   ${({ theme }: { theme: Theme }) => `
@@ -22,3 +18,28 @@ export const HeaderContainer = styled(Paper)`
   }
   `}
 `;
+
+export const Banner = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+`;
+
+export const ExternalButton = styled(Button)`
+  ${({ theme }: { theme: Theme }) => `
+  margin-top: ${theme.spacing(1)}px;
+
+  a {
+    text-decoration: none;
+    color: ${theme.palette.grey[500]};
+  }
+
+  &:first-of-type {
+    margin-left: ${theme.spacing(4)}px;
+  }
+  `}
+`;
+
+export const Title = styled(Typography)`
+  width: auto;
+` as any;
