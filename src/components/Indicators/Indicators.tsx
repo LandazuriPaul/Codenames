@@ -6,7 +6,6 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   Typography,
 } from '@material-ui/core';
 
@@ -41,7 +40,6 @@ export const Indicators: FC<{}> = observer(() => {
         </TeamCount>
       </IndicatorsContainer>
       <Dialog open={isEndModalOpen} onClose={handleClose}>
-        <DialogTitle>Enable Master mode?</DialogTitle>
         <DialogContent>
           <DialogContentText>
             <Typography
@@ -54,7 +52,7 @@ export const Indicators: FC<{}> = observer(() => {
             >
               {gameStore.winnerTeam === CellType.TeamA ? 'Team A' : 'Team B'}
             </Typography>
-            &nbsp;has won!
+            &nbsp;wins!
           </DialogContentText>
         </DialogContent>
         <DialogActions>
