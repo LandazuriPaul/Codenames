@@ -15,6 +15,7 @@ export const HeaderContainer = styled(Paper)`
 
   h1 {
     color: ${darken(theme.palette.secondary.dark, 0.5)};
+    cursor: default;
   }
   `}
 `;

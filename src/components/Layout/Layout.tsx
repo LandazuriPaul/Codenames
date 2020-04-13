@@ -5,8 +5,9 @@ import { AvailableLanguages } from '~/domain';
 import { useStores } from '~/hooks';
 import { Logger } from '~/utils';
 
-import { Header } from '~/components/Header';
 import { Board } from '~/components/Board';
+import { Header } from '~/components/Header';
+import { Indicators } from '~/components/Indicators';
 
 export const Layout: FC<{}> = () => {
   const { lang, seed } = useParams();
@@ -28,6 +29,7 @@ export const Layout: FC<{}> = () => {
   return (
     <>
       <Header />
+      <Indicators />
       <Board />
     </>
   );

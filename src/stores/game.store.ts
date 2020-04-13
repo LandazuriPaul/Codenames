@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 import seedrandom from 'seedrandom';
 
@@ -32,6 +32,12 @@ export class GameStore extends ChildStore {
   @observable
   isMasterMode: boolean;
 
+  @observable
+  winnerTeam: CellType.TeamA | CellType.TeamB | undefined;
+
+  @observable
+  private remainingByCategory: Map<CellType, number>;
+
   constructor(rootStore: RootStore) {
     super(rootStore);
     this.init();
@@ -64,9 +70,31 @@ export class GameStore extends ChildStore {
 
   @action
   revealCell(cellIndex: number) {
-    if (!this.board[cellIndex].isRevealed) {
-      this.board[cellIndex].isRevealed = true;
+    const cell = this.board[cellIndex];
+    if (!cell.isRevealed) {
+      cell.isRevealed = true;
+      this.remainingByCategory.set(
+        cell.type,
+        this.remainingByCategory.get(cell.type) - 1
+      );
+      if (
+        this.remainingByCategory.get(cell.type) === 0 &&
+        !this.winnerTeam &&
+        (cell.type === CellType.TeamA || cell.type === CellType.TeamB)
+      ) {
+        this.winnerTeam = cell.type;
+      }
     }
+  }
+
+  @computed
+  get remainingTeamACount() {
+    return this.remainingByCategory.get(CellType.TeamA);
+  }
+
+  @computed
+  get remainingTeamBCount() {
+    return this.remainingByCategory.get(CellType.TeamB);
   }
 
   @action
@@ -88,15 +116,38 @@ export class GameStore extends ChildStore {
 
   private generateBoardFromSeed() {
     seedrandom(this.seed, { global: true });
+    this.remainingByCategory = new Map([
+      [CellType.TeamA, 0],
+      [CellType.TeamB, 0],
+      [CellType.Neutral, 0],
+      [CellType.Excluded, 1],
+    ]);
+    this.winnerTeam = undefined;
     const cellTypeList: CellType[] = [];
     for (let i = 0; i < GameStore.TURN_COUNT; i++) {
       cellTypeList.push(CellType.TeamA);
+      this.remainingByCategory.set(
+        CellType.TeamA,
+        this.remainingByCategory.get(CellType.TeamA) + 1
+      );
       cellTypeList.push(CellType.TeamB);
+      this.remainingByCategory.set(
+        CellType.TeamB,
+        this.remainingByCategory.get(CellType.TeamB) + 1
+      );
     }
     if (getRandomInt(0, 2) === 0) {
       cellTypeList.push(CellType.TeamA);
+      this.remainingByCategory.set(
+        CellType.TeamA,
+        this.remainingByCategory.get(CellType.TeamA) + 1
+      );
     } else {
       cellTypeList.push(CellType.TeamB);
+      this.remainingByCategory.set(
+        CellType.TeamB,
+        this.remainingByCategory.get(CellType.TeamB) + 1
+      );
     }
     cellTypeList.push(CellType.Excluded);
     for (
@@ -105,6 +156,10 @@ export class GameStore extends ChildStore {
       i++
     ) {
       cellTypeList.push(CellType.Neutral);
+      this.remainingByCategory.set(
+        CellType.Neutral,
+        this.remainingByCategory.get(CellType.Neutral) + 1
+      );
     }
     const shuffledCellTypeList = shuffleArray(cellTypeList);
     const shuffledDictionary = shuffleArray(data[this.lang]).slice(
