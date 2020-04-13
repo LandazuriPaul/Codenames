@@ -48,12 +48,19 @@ export class GameStore extends ChildStore {
     // in MobX strict mode we have to init properties within
     // an action function – the constructor cannot be decorated
     // as it is an *observable* object, we have to first initialise it
-    this.board = [];
     this.isMasterMode = false;
+    this.winnerTeam = undefined;
+    this.remainingByCategory = new Map([
+      [CellType.TeamA, 0],
+      [CellType.TeamB, 0],
+      [CellType.Neutral, 0],
+      [CellType.Excluded, 1],
+    ]);
   }
 
   @action
   resetBoard() {
+    this.init();
     const newBoard = this.generateBoardFromSeed();
     this.board = newBoard;
   }
@@ -116,13 +123,6 @@ export class GameStore extends ChildStore {
 
   private generateBoardFromSeed() {
     seedrandom(this.seed, { global: true });
-    this.remainingByCategory = new Map([
-      [CellType.TeamA, 0],
-      [CellType.TeamB, 0],
-      [CellType.Neutral, 0],
-      [CellType.Excluded, 1],
-    ]);
-    this.winnerTeam = undefined;
     const cellTypeList: CellType[] = [];
     for (let i = 0; i < GameStore.TURN_COUNT; i++) {
       cellTypeList.push(CellType.TeamA);
