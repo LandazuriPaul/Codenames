@@ -56,7 +56,13 @@ export const Indicators: FC<{}> = observer(() => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button
+            onClick={handleClose}
+            color={
+              gameStore.winnerTeam === CellType.TeamA ? 'primary' : 'secondary'
+            }
+            autoFocus
+          >
             OK
           </Button>
         </DialogActions>
