@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  Tooltip,
   Typography,
 } from '@material-ui/core';
 
@@ -31,13 +32,17 @@ export const Indicators: FC<{}> = observer(() => {
   return (
     <>
       <IndicatorsContainer>
-        <TeamCount variant="body1" color="primary">
-          {gameStore.remainingTeamACount} remaining
-        </TeamCount>
+        <Tooltip title="Team A">
+          <TeamCount variant="body1" color="primary">
+            {gameStore.remainingTeamACount} remaining
+          </TeamCount>
+        </Tooltip>
         <Versus>&nbsp;VS&nbsp;</Versus>
-        <TeamCount variant="body1" color="secondary">
-          {gameStore.remainingTeamBCount} remaining
-        </TeamCount>
+        <Tooltip title="Team B">
+          <TeamCount variant="body1" color="secondary">
+            {gameStore.remainingTeamBCount} remaining
+          </TeamCount>
+        </Tooltip>
       </IndicatorsContainer>
       <Dialog open={isEndModalOpen} onClose={handleClose}>
         <DialogContent>
