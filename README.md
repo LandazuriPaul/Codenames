@@ -14,7 +14,17 @@ The dictionaries used to generate the games are in the `dictionaries` folder:
 
 Any correction or addition is very welcome, so we can spice up the game :)
 
-### Development
+## Roadmap
+
+Here is an unordered list of improvements coming up:
+
+- Mobile friendly! So that the spymasters can be even more discrete!
+
+- Dark theme
+
+- Backend to assign roles in a game (no more cheating!)
+
+## Development
 
 If you want to run the project locally, here are the basic requirements:
 
