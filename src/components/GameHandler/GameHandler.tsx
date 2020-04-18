@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import copy from 'clipboard-copy';
 import {
   Button,
   IconButton,
@@ -20,13 +19,15 @@ import {
 import {
   Autorenew,
   ChevronRight,
+  Close,
   Edit,
   FileCopy,
-  Close,
 } from '@material-ui/icons';
+import { useSnackbar } from 'notistack';
 
 import { AvailableLanguages } from '~/domain';
 import { useStores } from '~/hooks';
+import { Logger } from '~/utils';
 
 import { GameHandlerContainer, GameHandlerForm } from './gameHandler.styles';
 
@@ -39,6 +40,7 @@ export const GameHandler: FC<{}> = observer(() => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const { gameStore } = useStores();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   const currentUrl = `${window.location.origin}/${lang}/${seed}`;
 
@@ -62,8 +64,16 @@ export const GameHandler: FC<{}> = observer(() => {
     setNewLang(event.target.value);
   }
 
-  function handleCopyGameURL() {
-    copy(currentUrl);
+  async function handleCopyGameURL() {
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      enqueueSnackbar('Game URL copied to clipboard', { variant: 'success' });
+    } catch (error) {
+      Logger.error(error);
+      enqueueSnackbar('An error occured, try again please', {
+        variant: 'error',
+      });
+    }
   }
 
   function handleSeedChange(event: ChangeEvent<HTMLInputElement>) {
@@ -84,6 +94,7 @@ export const GameHandler: FC<{}> = observer(() => {
     if (isSetupRoomChanged) {
       history.push(`/${newLang}/${newSeed}`);
       setIsEditMode(false);
+      enqueueSnackbar('New game!', { variant: 'info' });
     }
   }
 

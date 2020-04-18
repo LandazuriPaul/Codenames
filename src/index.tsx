@@ -5,6 +5,7 @@ import {
   ThemeProvider as MuiThemeProvider,
   StylesProvider,
 } from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack';
 import 'mobx-react-lite/batchingForReactDom';
 
 import 'normalize.css';
@@ -21,8 +22,10 @@ function ReactApp() {
       <MuiThemeProvider theme={DefaultTheme}>
         <ThemeProvider theme={DefaultTheme}>
           <StoresProvider>
-            <GlobalStyles />
-            <App />
+            <SnackbarProvider>
+              <GlobalStyles />
+              <App />
+            </SnackbarProvider>
           </StoresProvider>
         </ThemeProvider>
       </MuiThemeProvider>
