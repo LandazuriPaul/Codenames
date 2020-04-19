@@ -1,46 +1,23 @@
 import styled from 'styled-components';
-import { Button, Paper, Theme, Typography } from '@material-ui/core';
+import { AppBar, IconButton, Theme, Typography } from '@material-ui/core';
 import { darken, lighten } from '@material-ui/core/styles';
 
-export const HeaderContainer = styled(Paper)`
+export const HeaderContainer = styled(AppBar)`
   ${({ theme }: { theme: Theme }) => `
-  width: calc(100% -  ${theme.spacing(4)}px);
-  justify-content: space-between;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  height: ${theme.spacing(5)}px;
-  padding:  ${theme.spacing(2)}px ${theme.spacing(3)}px;
-  background: ${lighten(theme.palette.primary.light, 0.7)};
-
-  h1 {
-    color: ${darken(theme.palette.secondary.dark, 0.5)};
-    cursor: default;
-  }
+    background: ${lighten(theme.palette.primary.light, 0.5)};
+    color: inherit;
   `}
 `;
 
-export const Banner = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-`;
-
-export const ExternalButton = styled(Button)`
+export const MobileMenu = styled(IconButton)`
   ${({ theme }: { theme: Theme }) => `
-  margin-top: ${theme.spacing(1)}px;
-
-  a {
-    text-decoration: none;
-    color: ${theme.palette.grey[500]};
-  }
-
-  &:first-of-type {
-    margin-left: ${theme.spacing(4)}px;
-  }
+    color: ${darken(theme.palette.secondary.dark, 0.5)};
   `}
 `;
 
 export const Title = styled(Typography)`
-  width: auto;
+  ${({ theme }: { theme: Theme }) => `
+    width: auto;
+    color: ${darken(theme.palette.secondary.dark, 0.5)};
+  `}
 ` as any;

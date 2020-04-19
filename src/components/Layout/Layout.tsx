@@ -6,8 +6,10 @@ import { useStores } from '~/hooks';
 import { Logger } from '~/utils';
 
 import { Board } from '~/components/Board';
+import { Footer } from '~/components/Footer';
 import { Header } from '~/components/Header';
-import { Indicators } from '~/components/Indicators';
+
+import { LayoutContainer } from './layout.styles';
 
 export const Layout: FC<{}> = () => {
   const { lang, seed } = useParams();
@@ -29,8 +31,10 @@ export const Layout: FC<{}> = () => {
   return (
     <>
       <Header />
-      <Indicators />
-      <Board />
+      <LayoutContainer>
+        <Board />
+      </LayoutContainer>
+      <Footer />
     </>
   );
 };
