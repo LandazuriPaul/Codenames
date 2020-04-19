@@ -19,7 +19,7 @@
     "game"
   ],
   "author": "Paul Landázuri",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@material-ui/core": "^4.9.9",
     "@material-ui/icons": "^4.9.1",
