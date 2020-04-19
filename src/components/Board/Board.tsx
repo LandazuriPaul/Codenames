@@ -1,16 +1,20 @@
 import React, { FC } from 'react';
+import { observer } from 'mobx-react-lite';
 
+import { useStores } from '~/hooks';
 import { GameStore } from '~/stores';
 import { Indicators } from '~/components/Indicators';
 import { Tile } from '~/components/Tile';
 
 import { Container } from './board.styles';
 
-export const Board: FC<{}> = () => {
+export const Board: FC<{}> = observer(() => {
+  const { gameStore } = useStores();
+
   let counter = -1;
   return (
     <Container>
-      <Indicators />
+      {!gameStore.isMasterMode && <Indicators />}
       <table>
         <tbody>
           {Array(GameStore.ROW_COUNT)
@@ -29,4 +33,4 @@ export const Board: FC<{}> = () => {
       </table>
     </Container>
   );
-};
+});
