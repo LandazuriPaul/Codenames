@@ -7,7 +7,6 @@ import { Tile } from '~/components/Tile';
 import { Container } from './board.styles';
 
 export const Board: FC<{}> = () => {
-
   let counter = -1;
   return (
     <Container>
@@ -30,4 +29,4 @@ export const Board: FC<{}> = () => {
       </table>
     </Container>
   );
-});
+};
