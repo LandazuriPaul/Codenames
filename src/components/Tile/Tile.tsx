@@ -24,12 +24,10 @@ export const Tile: FC<TileProps> = observer(({ cellIndex }) => {
     <CellContainer>
       <TilePaper
         onClick={handleClick}
-        status={gameStore.getCellStatus(cellIndex)}
         onMouseOver={onEnter}
         onMouseOut={onLeave}
-        elevation={
-          !gameStore.isMasterMode && isHover && !cell.isRevealed ? 10 : 2
-        }
+        status={gameStore.getCellStatus(cellIndex)}
+        elevation={isHover && !cell.isRevealed ? 10 : 2}
       >
         <Typography>{cell.word}</Typography>
       </TilePaper>

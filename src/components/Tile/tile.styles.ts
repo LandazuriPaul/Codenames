@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Paper, Theme } from '@material-ui/core';
 
 import { CellStatus } from '~/domain';
-import { setTileBackground } from '~utils';
+import { setTileBackground } from '~/utils';
 
 export const CellContainer = styled.td`
   ${({ theme }: { theme: Theme }) => `

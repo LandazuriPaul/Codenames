@@ -1,6 +1,7 @@
-import { Theme } from '@material-ui/core/styles';
+import { Theme, lighten } from '@material-ui/core/styles';
 
-import { CellStatus, CellType } from '~/domain';
+import { MASTER_VIEW_DIMMING_COEFFICIENT } from '~/config';
+import { CellStatus, CellType, MasterViewCellType } from '~/domain';
 
 export function getRandomInt(min: number, max: number) {
   min = Math.ceil(min);
@@ -29,6 +30,20 @@ export function setTileBackground(status: CellStatus, theme: Theme) {
       return theme.palette.primary.main;
     case CellType.TeamB:
       return theme.palette.secondary.main;
+    case MasterViewCellType.MasterViewExcluded:
+      return theme.palette.grey[800];
+    case MasterViewCellType.MasterViewNeutral:
+      return theme.palette.grey[300];
+    case MasterViewCellType.MasterViewTeamA:
+      return lighten(
+        theme.palette.primary.main,
+        MASTER_VIEW_DIMMING_COEFFICIENT
+      );
+    case MasterViewCellType.MasterViewTeamB:
+      return lighten(
+        theme.palette.secondary.main,
+        MASTER_VIEW_DIMMING_COEFFICIENT
+      );
     case 'hidden':
     default:
       return theme.palette.grey[100];
@@ -45,4 +60,18 @@ export function numericToStringSeed(numericSeed: number) {
     seed = Math.floor(seed / ALPHABET.length);
   }
   return out;
+}
+
+export function masterView(cellType: CellType): MasterViewCellType {
+  switch (cellType) {
+    case CellType.Excluded:
+      return MasterViewCellType.MasterViewExcluded;
+    case CellType.TeamA:
+      return MasterViewCellType.MasterViewTeamA;
+    case CellType.TeamB:
+      return MasterViewCellType.MasterViewTeamB;
+    case CellType.Neutral:
+    default:
+      return MasterViewCellType.MasterViewNeutral;
+  }
 }

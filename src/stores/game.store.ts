@@ -4,7 +4,12 @@ import seedrandom from 'seedrandom';
 
 import data from '~/data.json';
 import { AvailableLanguages, Cell, CellStatus, CellType } from '~/domain';
-import { getRandomInt, numericToStringSeed, shuffleArray } from '~/utils';
+import {
+  getRandomInt,
+  masterView,
+  numericToStringSeed,
+  shuffleArray,
+} from '~/utils';
 
 import { ChildStore } from './child.store';
 import { RootStore } from './root.store';
@@ -110,10 +115,13 @@ export class GameStore extends ChildStore {
   }
 
   getCellStatus(cellIndex: number): CellStatus {
-    if (this.isMasterMode || this.board[cellIndex].isRevealed) {
-      return this.board[cellIndex].type;
+    const cell = this.board[cellIndex];
+    if (cell.isRevealed) {
+      return cell.type;
+    } else if (!this.isMasterMode) {
+      return 'hidden';
     }
-    return 'hidden';
+    return masterView(cell.type);
   }
 
   getNewRandomSeed() {
