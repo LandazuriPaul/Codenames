@@ -20,9 +20,21 @@ Here is an unordered list of improvements coming up:
 
 - Mobile friendly! So that the spymasters can be even more discrete!
 
-- Dark theme
+- Master mode to have different tile colours when revealed or not.
 
-- Backend to assign roles in a game (no more cheating!)
+- Who's turn it currently is?
+
+- Join a game / New game in different menus
+
+- Counter for the time for each turn
+  - Time restricted games ?
+
+* Dark theme
+
+* Backend with websocket rooms:
+  - to assign roles in a game (no more cheating!)
+  - chat (background colours by team)
+  - check for words sent through chat
 
 ## Development
 
