@@ -31,7 +31,7 @@ export function setTileBackground(status: CellStatus, theme: Theme) {
     case CellType.TeamB:
       return theme.palette.secondary.main;
     case MasterViewCellType.MasterViewExcluded:
-      return theme.palette.grey[800];
+      return theme.palette.grey[600];
     case MasterViewCellType.MasterViewNeutral:
       return theme.palette.grey[300];
     case MasterViewCellType.MasterViewTeamA:
