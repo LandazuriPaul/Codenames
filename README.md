@@ -20,9 +20,7 @@ Here is an unordered list of improvements coming up:
 
 - Mobile friendly! So that the spymasters can be even more discrete!
 
-- Master mode to have different tile colours when revealed or not.
-
-- Who's turn it currently is?
+- Whose turn is it currently?
 
 - Join a game / New game in different menus
 
