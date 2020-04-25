@@ -5,6 +5,7 @@
       "modules": true,
       "jsx": true
     },
+    "project": "tsconfig.json",
     "ecmaVersion": 6,
     "sourceType": "module",
     "useJSXTextNode": true
@@ -25,12 +26,19 @@
   "plugins": ["@typescript-eslint", "react", "react-hooks"],
   "rules": {
     "arrow-parens": [0, "as-needed"],
+    "consistent-return": "error",
     "max-len": [1, { "code": 150, "ignoreUrls": true }],
+    "no-return-assign": "error",
+    "no-return-await": "error",
     "no-unused-expressions": 1,
     "no-unused-vars": 1,
     "quotes": [1, "single"],
     "sort-imports": ["warn", { "ignoreDeclarationSort": true }],
-    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-function-return-type": [
+      "warn",
+      { "allowExpressions": true }
+    ],
+    "@typescript-eslint/promise-function-async": "error",
     "@typescript-eslint/interface-name-prefix": [2, "never"],
     "@typescript-eslint/member-ordering": 1,
     "react-hooks/exhaustive-deps": "warn",
