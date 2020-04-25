@@ -8,7 +8,7 @@
     "start": "tsc -w --noEmit & parcel src/index.html",
     "prebuild": "rimraf dist",
     "build": "tsc --noEmit & parcel build src/index.html",
-    "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx .",
+    "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx src scripts",
     "generate-dictionaries": "ts-node -O '{\"module\": \"commonjs\"}' scripts/generate-dictionaries.ts",
     "deploy": "./scripts/deploy.sh"
   },
