@@ -6,7 +6,6 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import {
   IconButton,
@@ -30,14 +29,13 @@ export const JoinGame: FC<{}> = observer(() => {
   const [newGameId, setNewGameId] = useState<string>('');
   const [isGameIdValid, setIsGameIdValid] = useState<boolean>(true);
 
-  const history = useHistory();
-  const { newLang, setNewLang } = useContext(gameFormContext);
+  const { joinGame, newLang, setNewLang } = useContext(gameFormContext);
 
   function onJoinSubmit(
     event: MouseEvent<HTMLAnchorElement, MouseEvent> | FormEvent
   ): void {
     event.preventDefault();
-    history.push(`/${newLang.toLowerCase()}/${newGameId}`);
+    joinGame(newGameId);
   }
 
   function handleLangChange(event): void {

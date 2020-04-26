@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Typography } from '@material-ui/core';
 
@@ -12,13 +13,18 @@ import { Container, MainForm, NewGame } from './gameForm.styles';
 import { gameFormContext } from '~contexts';
 
 export const GameForm: FC<{}> = observer(() => {
+  const history = useHistory();
   const { gameStore } = useStores();
   const currentLang = gameStore.lang ? gameStore.lang : DEFAULT_LANGUAGE;
 
   const [newLang, setNewLang] = useState<AvailableLanguages>(currentLang);
 
+  function joinGame(gameId: string): void {
+    history.push(`/${newLang}/${gameId}`);
+  }
+
   return (
-    <gameFormContext.Provider value={{ newLang, setNewLang }}>
+    <gameFormContext.Provider value={{ newLang, setNewLang, joinGame }}>
       <Container>
         <JoinGame />
         {/* TODO: <Typography variant="body2" align="center">
