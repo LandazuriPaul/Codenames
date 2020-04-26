@@ -126,7 +126,7 @@ export class GameStore extends ChildStore {
 
   getNewRandomSeed() {
     const numericSeed = getRandomInt(0, 1e9);
-    return numericToStringSeed(numericSeed);
+    return numericToStringSeed(numericSeed).toUpperCase();
   }
 
   private generateBoardFromSeed() {
