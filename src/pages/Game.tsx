@@ -6,7 +6,7 @@ import { Board } from '~/components/Board';
 import { Layout } from '~/components/Layout';
 import { AvailableLanguages } from '~/domain';
 import { useStores } from '~/hooks';
-import { Logger } from '~/utils';
+import { Logger, cleanGameSeedFromInput } from '~/utils';
 
 export const Game: FC<{}> = () => {
   const { lang, seed } = useParams();
@@ -15,8 +15,9 @@ export const Game: FC<{}> = () => {
   if (!(Object.values(AvailableLanguages) as string[]).includes(lang)) {
     return <Redirect to="/" />;
   }
-  if (seed.toUpperCase() !== seed) {
-    return <Redirect to={`/${lang}/${seed.toUpperCase()}`} />;
+  const cleanSeed = cleanGameSeedFromInput(seed);
+  if (seed !== cleanSeed) {
+    return <Redirect to={`/${lang}/${cleanSeed}`} />;
   }
 
   Logger.log(`lang: ${lang} - seed: ${seed}`);

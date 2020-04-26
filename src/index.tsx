@@ -22,7 +22,12 @@ function ReactApp(): JSX.Element {
       <MuiThemeProvider theme={DefaultTheme}>
         <ThemeProvider theme={DefaultTheme}>
           <StoresProvider>
-            <SnackbarProvider>
+            <SnackbarProvider
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+            >
               <GlobalStyles />
               <App />
             </SnackbarProvider>
