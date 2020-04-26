@@ -1,1 +1,1 @@
-export { storesContext } from './stores.context';
+export * from './stores.context';

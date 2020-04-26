@@ -25,7 +25,7 @@ export const Indicators: FC<{}> = observer(() => {
     }
   }, [gameStore.winnerTeam]);
 
-  function handleClose() {
+  function handleClose(): void {
     setIsEndModalOpen(false);
   }
 

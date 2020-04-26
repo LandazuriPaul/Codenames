@@ -7,7 +7,7 @@ import { RootStore } from './root.store';
 export const StoresProvider: FC<{}> = ({ children }) => {
   const [rootStore, setRootStore] = useState<RootStore | null>(null);
   useEffect(() => {
-    const initStore = async () => {
+    const initStore = async (): Promise<void> => {
       const newRootStore = await RootStore.instantiate();
       setRootStore(newRootStore);
     };

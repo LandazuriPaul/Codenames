@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 
-import { storesContext } from '~/contexts';
+import { StoresContext, storesContext } from '~/contexts';
 
-export const useStores = () => {
+export const useStores = (): StoresContext => {
   const stores = useContext(storesContext);
   if (!stores) {
     throw new Error('useStores must be used within a StoresProvider.');

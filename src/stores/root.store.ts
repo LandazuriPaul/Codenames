@@ -19,7 +19,7 @@ export class RootStore {
     this.gameStore = new GameStore(this);
   }
 
-  static async instantiate() {
+  static async instantiate(): Promise<RootStore> {
     if (RootStore.instance) {
       return RootStore.instance;
     }

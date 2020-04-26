@@ -3,13 +3,13 @@ import { Theme, lighten } from '@material-ui/core/styles';
 import { MASTER_VIEW_DIMMING_COEFFICIENT } from '~/config';
 import { CellStatus, CellType, MasterViewCellType } from '~/domain';
 
-export function getRandomInt(min: number, max: number) {
+export function getRandomInt(min: number, max: number): number {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-export function shuffleArray(arr: any[]) {
+export function shuffleArray(arr: any[]): any[] {
   arr = arr.slice();
   for (let i = arr.length - 1; i >= 1; --i) {
     const j = getRandomInt(0, i + 1);
@@ -20,7 +20,7 @@ export function shuffleArray(arr: any[]) {
   return arr;
 }
 
-export function setTileBackground(status: CellStatus, theme: Theme) {
+export function setTileBackground(status: CellStatus, theme: Theme): string {
   switch (status) {
     case CellType.Excluded:
       return 'black';
@@ -52,7 +52,7 @@ export function setTileBackground(status: CellStatus, theme: Theme) {
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
 
-export function numericToStringSeed(numericSeed: number) {
+export function numericToStringSeed(numericSeed: number): string {
   let out = '';
   let seed = numericSeed;
   while (seed > 0) {

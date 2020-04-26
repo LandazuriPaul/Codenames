@@ -47,7 +47,7 @@ export const GameHandler: FC<{}> = observer(() => {
   const isSetupRoomChanged = seed !== newSeed || lang !== newLang;
 
   useEffect(() => {
-    function disableEditMode(e: KeyboardEvent) {
+    function disableEditMode(e: KeyboardEvent): void {
       if (e.keyCode === 27) {
         setIsEditMode(false);
       }
@@ -60,11 +60,11 @@ export const GameHandler: FC<{}> = observer(() => {
     };
   }, [isEditMode]);
 
-  function handleLangChange(event) {
+  function handleLangChange(event): void {
     setNewLang(event.target.value);
   }
 
-  async function handleCopyGameURL() {
+  async function handleCopyGameURL(): Promise<void> {
     try {
       await navigator.clipboard.writeText(currentUrl);
       enqueueSnackbar('Game URL copied to clipboard', { variant: 'success' });
@@ -76,18 +76,18 @@ export const GameHandler: FC<{}> = observer(() => {
     }
   }
 
-  function handleSeedChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleSeedChange(event: ChangeEvent<HTMLInputElement>): void {
     setNewSeed(event.currentTarget.value);
   }
 
-  function handleReset() {
+  function handleReset(): void {
     const generatedSeed = gameStore.getNewRandomSeed();
     setNewSeed(generatedSeed);
   }
 
   function onFormSubmit(
     event?: MouseEvent<HTMLAnchorElement, MouseEvent> | FormEvent
-  ) {
+  ): void {
     if (event) {
       event.preventDefault();
     }

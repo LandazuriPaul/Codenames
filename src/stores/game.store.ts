@@ -49,7 +49,7 @@ export class GameStore extends ChildStore {
   }
 
   @action
-  init() {
+  init(): void {
     // in MobX strict mode we have to init properties within
     // an action function – the constructor cannot be decorated
     // as it is an *observable* object, we have to first initialise it
@@ -64,24 +64,24 @@ export class GameStore extends ChildStore {
   }
 
   @action
-  resetBoard() {
+  resetBoard(): void {
     this.init();
     const newBoard = this.generateBoardFromSeed();
     this.board = newBoard;
   }
 
   @action
-  setLang(lang: AvailableLanguages) {
+  setLang(lang: AvailableLanguages): void {
     this.lang = lang;
   }
 
   @action
-  setSeed(seed: string) {
+  setSeed(seed: string): void {
     this.seed = seed;
   }
 
   @action
-  revealCell(cellIndex: number) {
+  revealCell(cellIndex: number): void {
     const cell = this.board[cellIndex];
     if (!cell.isRevealed) {
       cell.isRevealed = true;
@@ -100,17 +100,17 @@ export class GameStore extends ChildStore {
   }
 
   @computed
-  get remainingTeamACount() {
+  get remainingTeamACount(): number {
     return this.remainingByCategory.get(CellType.TeamA);
   }
 
   @computed
-  get remainingTeamBCount() {
+  get remainingTeamBCount(): number {
     return this.remainingByCategory.get(CellType.TeamB);
   }
 
   @action
-  enableMasterMode() {
+  enableMasterMode(): void {
     this.isMasterMode = true;
   }
 
@@ -124,12 +124,12 @@ export class GameStore extends ChildStore {
     return masterView(cell.type);
   }
 
-  getNewRandomSeed() {
+  getNewRandomSeed(): string {
     const numericSeed = getRandomInt(0, 1e9);
     return numericToStringSeed(numericSeed).toUpperCase();
   }
 
-  private generateBoardFromSeed() {
+  private generateBoardFromSeed(): Cell[] {
     seedrandom(this.seed, { global: true });
     const cellTypeList: CellType[] = [];
     for (let i = 0; i < GameStore.TURN_COUNT; i++) {

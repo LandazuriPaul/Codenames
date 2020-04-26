@@ -2,7 +2,7 @@ import { createContext } from 'react';
 
 import { GameStore } from '~/stores';
 
-interface StoresContext {
+export interface StoresContext {
   gameStore: GameStore;
 }
 

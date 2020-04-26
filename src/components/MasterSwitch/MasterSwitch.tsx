@@ -17,15 +17,15 @@ export const MasterSwitch: FC<{}> = observer(() => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
   const { gameStore } = useStores();
 
-  function handleClose() {
+  function handleClose(): void {
     setIsConfirmModalOpen(false);
   }
 
-  function openConfirmModal() {
+  function openConfirmModal(): void {
     setIsConfirmModalOpen(true);
   }
 
-  function enableMasterMode() {
+  function enableMasterMode(): void {
     gameStore.enableMasterMode();
     handleClose();
   }

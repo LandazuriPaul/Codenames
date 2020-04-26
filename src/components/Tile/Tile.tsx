@@ -16,7 +16,7 @@ export const Tile: FC<TileProps> = observer(({ cellIndex }) => {
 
   const [isHover, onEnter, onLeave] = useHover();
 
-  function handleClick() {
+  function handleClick(): void {
     gameStore.revealCell(cellIndex);
   }
 

@@ -16,7 +16,7 @@ import { StoresProvider } from '~/stores';
 import { DefaultTheme, GlobalStyles } from '~/styles';
 
 const rootElement = document.getElementById(APP_ROOT);
-function ReactApp() {
+function ReactApp(): JSX.Element {
   return (
     <StylesProvider injectFirst>
       <MuiThemeProvider theme={DefaultTheme}>
