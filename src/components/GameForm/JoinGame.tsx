@@ -7,17 +7,26 @@ import React, {
   useState,
 } from 'react';
 import { useHistory } from 'react-router-dom';
-
-import { MenuItem, TextField, Tooltip, Typography } from '@material-ui/core';
-import { ChevronRight } from '@material-ui/icons';
+import { observer } from 'mobx-react-lite';
+import {
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
+import { Autorenew, ChevronRight } from '@material-ui/icons';
 
 import { gameFormContext } from '~/contexts';
 import { AvailableLanguages } from '~/domain';
+import { useStores } from '~/hooks';
 import { cleanGameSeedFromInput } from '~/utils';
 
 import { JoinButton, JoinRow, Jonction } from './joinGame.styles';
 
-export const JoinGame: FC<{}> = () => {
+export const JoinGame: FC<{}> = observer(() => {
+  const { gameStore } = useStores();
   const [newGameId, setNewGameId] = useState<string>('');
   const [isGameIdValid, setIsGameIdValid] = useState<boolean>(true);
 
@@ -43,6 +52,11 @@ export const JoinGame: FC<{}> = () => {
     } else {
       setIsGameIdValid(true);
     }
+  }
+
+  function handleReset(): void {
+    const generatedSeed = gameStore.getNewRandomSeed();
+    setNewGameId(generatedSeed);
   }
 
   return (
@@ -89,6 +103,17 @@ export const JoinGame: FC<{}> = () => {
                 </Tooltip>
               )
             }
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Generate new seed">
+                    <IconButton size="small" onClick={handleReset}>
+                      <Autorenew fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
           />
         </JoinRow>
         <JoinRow>
@@ -105,4 +130,4 @@ export const JoinGame: FC<{}> = () => {
       </form>
     </>
   );
-};
+});
