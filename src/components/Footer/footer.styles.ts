@@ -18,12 +18,7 @@ export const ExternalLinks = styled(Typography)`
     text-align: center;
 
     a {
-      text-decoration: none;
       color: ${theme.palette.grey[400]};
-
-      &:hover {
-        text-decoration: underline;
-      }
     }
   `}
 `;
