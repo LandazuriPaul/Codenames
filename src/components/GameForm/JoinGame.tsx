@@ -13,6 +13,7 @@ import { ChevronRight } from '@material-ui/icons';
 
 import { gameFormContext } from '~/contexts';
 import { AvailableLanguages } from '~/domain';
+import { cleanGameSeedFromInput } from '~/utils';
 
 import { JoinButton, JoinRow, Jonction } from './joinGame.styles';
 
@@ -34,8 +35,8 @@ export const JoinGame: FC<{}> = () => {
     setNewLang(event.target.value);
   }
 
-  function handleJoinGameIdChange(event: ChangeEvent<HTMLInputElement>): void {
-    const gameId = event.target.value.toUpperCase();
+  function handleGameIdChange(event: ChangeEvent<HTMLInputElement>): void {
+    const gameId = cleanGameSeedFromInput(event.target.value);
     setNewGameId(gameId);
     if (gameId.length < 3) {
       setIsGameIdValid(false);
@@ -75,7 +76,7 @@ export const JoinGame: FC<{}> = () => {
             variant="outlined"
             autoFocus
             value={newGameId}
-            onChange={handleJoinGameIdChange}
+            onChange={handleGameIdChange}
             error={!isGameIdValid}
             helperText={
               isGameIdValid ? (

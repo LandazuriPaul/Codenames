@@ -62,6 +62,10 @@ export function numericToStringSeed(numericSeed: number): string {
   return out;
 }
 
+export function cleanGameSeedFromInput(input: string): string {
+  return input.replace(/[^a-zA-Z]/g, '').toUpperCase();
+}
+
 export function masterView(cellType: CellType): MasterViewCellType {
   switch (cellType) {
     case CellType.Excluded:

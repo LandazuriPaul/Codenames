@@ -27,7 +27,7 @@ import { useSnackbar } from 'notistack';
 
 import { AvailableLanguages } from '~/domain';
 import { useStores } from '~/hooks';
-import { Logger } from '~/utils';
+import { Logger, cleanGameSeedFromInput } from '~/utils';
 
 import { GameHandlerContainer, GameHandlerForm } from './gameHandler.styles';
 
@@ -77,7 +77,7 @@ export const GameHandler: FC<{}> = observer(() => {
   }
 
   function handleSeedChange(event: ChangeEvent<HTMLInputElement>): void {
-    setNewSeed(event.currentTarget.value);
+    setNewSeed(cleanGameSeedFromInput(event.currentTarget.value));
   }
 
   function handleReset(): void {

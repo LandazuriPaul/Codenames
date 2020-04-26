@@ -36,6 +36,7 @@ export const Header: FC<{}> = observer(() => {
   }
 
   function onTitleClick(): void {
+    // TODO
     // if (uiStore.isInGame) {
     //   setIsConfirmHomeModalOpen(true);
     // } else {

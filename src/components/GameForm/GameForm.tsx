@@ -21,7 +21,7 @@ export const GameForm: FC<{}> = observer(() => {
     <gameFormContext.Provider value={{ newLang, setNewLang }}>
       <Container>
         <JoinGame />
-        {/* <Typography variant="body2" align="center">
+        {/* TODO: <Typography variant="body2" align="center">
           or
         </Typography>
         <NewGame align="center" color="primary">
