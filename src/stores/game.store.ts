@@ -67,6 +67,7 @@ export class GameStore extends ChildStore {
   resetBoard(): void {
     this.init();
     const newBoard = this.generateBoardFromSeed();
+    this.rootStore.uiStore.setIsInGame(true);
     this.board = newBoard;
   }
 

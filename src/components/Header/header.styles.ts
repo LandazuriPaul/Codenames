@@ -19,5 +19,6 @@ export const Title = styled(Typography)`
   ${({ theme }: { theme: Theme }) => `
     width: auto;
     color: ${darken(theme.palette.secondary.dark, 0.5)};
+    cursor: pointer;
   `}
 ` as any;
