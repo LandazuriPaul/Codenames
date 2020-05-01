@@ -8,9 +8,9 @@ There is a running instance of the game accessible at [https://codenames.landazu
 
 The dictionaries used to generate the games are in the `dictionaries` folder:
 
-- [`dictionary.en.txt`](./dictionaries/dictionary.en.txt): English
+- [`dictionary.en.txt`](./dictionaries/clean/dictionary.en.txt): English
 
-- [`dictionary.fr.txt`](./dictionaries/dictionary.fr.txt): French
+- [`dictionary.fr.txt`](./dictionaries/clean/dictionary.fr.txt): French
 
 Any correction or addition is very welcome, so we can spice up the game :)
 
