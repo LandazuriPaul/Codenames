@@ -1,22 +1,25 @@
 {
   "name": "codenames",
   "version": "0.1.0",
+  "author": "Paul Landázuri",
   "description": "This project tries to reproduce a web version of the board game [Codenames](<https://en.wikipedia.org/wiki/Codenames_(board_game)>).",
-  "directories": {
-    "doc": "docs"
-  },
+  "homepage": "https://github.com/LandazuriPaul/Codenames#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LandazuriPaul/Codenames.git"
   },
-  "author": "Paul Landázuri",
-  "private": true,
   "bugs": {
     "url": "https://github.com/LandazuriPaul/Codenames/issues"
   },
-  "homepage": "https://github.com/LandazuriPaul/Codenames#readme",
+  "directories": {
+    "doc": "docs"
+  },
+  "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "generate-dictionaries": "node scripts/generate-dictionaries.js"
+  }
 }
