@@ -21,4 +21,4 @@ export const Title = styled(Typography)`
     color: ${darken(theme.palette.secondary.dark, 0.5)};
     cursor: pointer;
   `}
-` as any;
+` as any; // eslint-disable-line @typescript-eslint/no-explicit-any

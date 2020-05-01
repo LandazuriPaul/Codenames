@@ -6,7 +6,7 @@ export const GameHandlerContainer = styled.div`
   text-align: center;
   justify-content: center;
   flex-wrap: nowrap;
-` as any;
+` as any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 export const GameHandlerForm = styled.form`
   display: flex;

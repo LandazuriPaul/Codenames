@@ -14,6 +14,7 @@ const debugError = debug(`${LOGGER_PREFIX}:error`);
 debugError.enabled = true;
 debugError.color = '#b01405';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const formatArgs = (args: any[]): any => {
   if (args && args.length > 1) {
     return args;

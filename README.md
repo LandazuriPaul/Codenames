@@ -18,11 +18,17 @@ Any correction or addition is very welcome, so we can spice up the game :)
 
 Here is an unordered list of improvements coming up:
 
-- Mobile friendly! So that the spymasters can be even more discrete!
+- Mobile friendly! So that the spymasters can be even more discrete! --> Be clear if you need to scroll right
 
 - Whose turn is it currently?
 
+- Randomize teams
+
+- Party seed in Title
+
 - Join a game / New game in different menus
+
+- Dirty version
 
 - Counter for the time for each turn
   - Time restricted games ?
@@ -33,6 +39,38 @@ Here is an unordered list of improvements coming up:
   - to assign roles in a game (no more cheating!)
   - chat (background colours by team)
   - check for words sent through chat
+
+## Installation
+
+This repository uses [Lerna](https://lerna.js.org/) as a tool to manage the different packages and apps.
+
+If you want to install Lerna globally, you can run:
+
+```sh
+npm i -g lerna
+```
+
+Otherwise, you can run all lerna commands by preceding them with `npx`. It will run the lerna cli from your npm global cache.
+
+To bootstrap the project and install all the dependencies for each package and application, run the following:
+
+```sh
+# If you have lerna installed globally
+lerna bootstrap --hoist
+
+# Otherwise
+npx lerna bootstrap --hoist
+```
+
+The `--hoist` option allows to "hoist" common dependencies across the different packages into a common `node_modules` folder at the root of this repository. Therefore it can spare lots of space on your local machine. This option is not mandatory though, and you can still install the dependencies in each package just by omitting this option. To learn more about the "hoist" mechanism and possible cons, you can [read the hosit documentation](https://github.com/lerna/lerna/blob/master/doc/hoist.md).
+
+## Applications
+
+You can learn more about each application in their respective README:
+
+- [Frontend](./apps/frontend): written in TypeScript, developed with React and bundled with Parcel.
+
+- [API](./apps/api): written in TypeScript, developed with NestJS and bundled with Webpack.
 
 ## Development
 

@@ -4,20 +4,21 @@ import { MASTER_VIEW_DIMMING_COEFFICIENT } from '~/config';
 import { CellStatus, CellType, MasterViewCellType } from '~/domain';
 
 export function getRandomInt(min: number, max: number): number {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+  const intervalMin = Math.ceil(min);
+  const intervalMax = Math.floor(max);
+  return Math.floor(Math.random() * (intervalMax - intervalMin)) + min; // The maximum is exclusive and the minimum is inclusive
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function shuffleArray(arr: any[]): any[] {
-  arr = arr.slice();
-  for (let i = arr.length - 1; i >= 1; --i) {
+  const out = arr.slice();
+  for (let i = out.length - 1; i >= 1; --i) {
     const j = getRandomInt(0, i + 1);
-    const temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    const temp = out[i];
+    out[i] = out[j];
+    out[j] = temp;
   }
-  return arr;
+  return out;
 }
 
 export function setTileBackground(status: CellStatus, theme: Theme): string {

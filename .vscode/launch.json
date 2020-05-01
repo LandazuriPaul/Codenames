@@ -23,6 +23,14 @@
       "sourceMapPathOverrides": {
         "../*": "${webRoot}/*"
       }
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Server debug",
+      "port": 9229,
+      "restart": true,
+      "protocol": "inspector"
     }
   ]
 }

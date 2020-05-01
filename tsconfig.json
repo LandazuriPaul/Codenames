@@ -1,28 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": false,
+    "baseUrl": "./",
+    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "keyofStringsOnly": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react",
-    "baseUrl": "./src",
-    "outDir": "dist",
     "paths": {
-      "~*": ["./*"]
+      "api/*": ["./apps/api/src/*"],
+      "frontend/*": ["./apps/frontend/src/*"]
     },
-    "typeRoots": ["node_modules/@types"]
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/**/@types",
+      "**/node_modules/@types"
+    ]
   },
-  "include": ["src/**/*", "scripts"],
   "exclude": ["node_modules", "dist", ".cache"]
 }

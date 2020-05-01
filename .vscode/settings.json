@@ -1,0 +1,11 @@
+{
+  "eslint.workingDirectories": ["./apps/api", "./apps/frontend"],
+  "editor.formatOnSave": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/.cache": true,
+    "**/dist": true
+  }
+}

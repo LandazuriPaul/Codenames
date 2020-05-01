@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import { Typography } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 
 import { DEFAULT_LANGUAGE } from '~/config';
@@ -10,8 +9,8 @@ import { useStores } from '~/hooks';
 
 import { JoinGame } from './JoinGame';
 
-import { Container, MainForm, NewGame } from './gameForm.styles';
-import { gameFormContext } from '~contexts';
+import { Container } from './gameForm.styles';
+import { gameFormContext } from '~/contexts';
 
 export const GameForm: FC<{}> = observer(() => {
   const history = useHistory();
