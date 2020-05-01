@@ -1,5 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
 
+// import library styles
+import 'normalize.css';
+
 export const GlobalStyles = createGlobalStyle`
   body {
     font-family: 'Roboto', sans-serif;

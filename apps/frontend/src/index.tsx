@@ -8,8 +8,6 @@ import {
 import { SnackbarProvider } from 'notistack';
 import 'mobx-react-lite/batchingForReactDom';
 
-import 'normalize.css';
-
 import { App } from '~/components/App';
 import { APP_ROOT } from '~/config';
 import { StoresProvider } from '~/stores';
