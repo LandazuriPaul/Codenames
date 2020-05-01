@@ -1,24 +1,14 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "baseUrl": "./",
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "keyofStringsOnly": true,
     "moduleResolution": "node",
     "outDir": "dist",
-    "paths": {
-      "api/*": ["./apps/api/src/*"],
-      "frontend/*": ["./apps/frontend/src/*"]
-    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "node_modules/**/@types",
-      "**/node_modules/@types"
-    ]
+    "strict": true
   },
   "exclude": ["node_modules", "dist", ".cache"]
 }

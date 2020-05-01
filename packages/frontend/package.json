@@ -1,5 +1,5 @@
 {
-  "name": "codenames-frontend",
+  "name": "@codenames/frontend",
   "version": "0.1.0",
   "description": "Frontend of a web version of board game Codenames",
   "main": "src/index.tsx",
@@ -14,6 +14,7 @@
   "author": "Paul Landázuri",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@codenames/domain": "^0.1.0",
     "@material-ui/core": "^4.9.9",
     "@material-ui/icons": "^4.9.1",
     "mobx": "^5.15.4",

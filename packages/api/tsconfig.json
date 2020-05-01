@@ -7,7 +7,7 @@
     "emitDecoratorMetadata": true,
     "target": "es2017",
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "dist",
     "incremental": true
   }
 }

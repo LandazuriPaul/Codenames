@@ -7,7 +7,7 @@
     "jsx": "react",
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
-    "outDir": "./dist",
+    "outDir": "dist",
     // FIXME
     "strict": false,
     "target": "es5",
