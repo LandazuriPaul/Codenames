@@ -6,6 +6,7 @@
     "forceConsistentCasingInFileNames": true,
     "keyofStringsOnly": true,
     "moduleResolution": "node",
+    "outDir": "dist",
     "paths": {
       "api/*": ["./apps/api/src/*"],
       "frontend/*": ["./apps/frontend/src/*"]
