@@ -41,5 +41,6 @@ RUN yarn install --pure-lockfile --non-interactive --production
 
 # Ready to start
 WORKDIR /usr/src/codenames/packages/api
+RUN chown -R node:node /usr/src/codenames/packages/api/
 ARG NODE_ENV=production
 CMD ["yarn", "start:prod"]
