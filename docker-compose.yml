@@ -3,7 +3,7 @@ version: '3.6'
 services:
   # API
   api:
-    image: docker.pkg.github.com/landazuripaul/codenames/api:0.1.0
+    image: docker.pkg.github.com/landazuripaul/codenames/codenames-api:0.1.0
     volumes:
       - ./packages/api/env/production.env:/usr/src/codenames/packages/api/env/production.env
     ports:
