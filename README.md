@@ -22,6 +22,8 @@ Here is an unordered list of improvements coming up:
 
 - Whose turn is it currently?
 
+- Icon to start a game? https://thenounproject.com/search/?q=new%20game
+
 - Randomize teams
 
 - Party seed in Title
@@ -30,12 +32,11 @@ Here is an unordered list of improvements coming up:
 
 - Dirty version
 
-- Counter for the time for each turn
-  - Time restricted games ?
+- Counter for the time for each turn --> Time restricted games ?
 
-* Dark theme
+- Dark theme
 
-* Backend with websocket rooms:
+- Backend with websocket rooms:
   - to assign roles in a game (no more cheating!)
   - chat (background colours by team)
   - check for words sent through chat
