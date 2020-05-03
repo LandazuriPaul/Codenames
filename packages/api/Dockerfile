@@ -24,7 +24,7 @@ RUN yarn build
 # Runner
 FROM node:12-alpine AS runner
 
-# Copy
+# Copy the dist builds from builder
 WORKDIR /usr/src/codenames
 COPY --from=builder /usr/src/codenames/package.json .
 COPY --from=builder /usr/src/codenames/yarn.lock .
@@ -39,8 +39,12 @@ COPY --from=builder /usr/src/codenames/packages/api/dist ./packages/api/dist
 # Install production dependencies
 RUN yarn install --pure-lockfile --non-interactive --production
 
-# Ready to start
+# Move to the API app
 WORKDIR /usr/src/codenames/packages/api
+
+# Set the correct ownership for the app folder
 RUN chown -R node:node /usr/src/codenames/packages/api/
+
+# Launch the API with container
 ARG NODE_ENV=production
 CMD ["yarn", "start:prod"]
