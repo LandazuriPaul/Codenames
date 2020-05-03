@@ -18,23 +18,35 @@ Any correction or addition is very welcome, so we can spice up the game :)
 
 Here is an unordered list of improvements coming up:
 
-- Mobile friendly! So that the spymasters can be even more discrete! --> Be clear if you need to scroll right
+### General features
 
 - Whose turn is it currently?
 
-- Icon to start a game? https://thenounproject.com/search/?q=new%20game
-
 - Randomize teams
-
-- Party seed in Title
-
-- Join a game / New game in different menus
 
 - Dirty version
 
 - Counter for the time for each turn --> Time restricted games ?
 
+### Frontend
+
+- Mobile friendly! So that the spymasters can be even more discrete! --> Be clear if you need to scroll right
+
+- Icon to start a game? https://thenounproject.com/search/?q=new%20game
+
+- Party seed in Title
+
+- Join a game / New game in different menus
+
 - Dark theme
+
+### Backend
+
+- Websocket server
+
+- Security:
+
+  - [Helmet](https://github.com/helmetjs/helmet) package? [NestJS security page](https://docs.nestjs.com/techniques/security).
 
 - Backend with websocket rooms:
   - to assign roles in a game (no more cheating!)
