@@ -3,13 +3,16 @@ import { create } from 'mobx-persist';
 
 import { GameStore } from './game.store';
 import { UiStore } from './ui.store';
+import { WebsocketStore } from './websocket.store';
 
 const hydrate = create();
 
 export class RootStore {
   private static instance: RootStore;
+
   public gameStore: GameStore;
   public uiStore: UiStore;
+  public websocketStore: WebsocketStore;
 
   private constructor() {
     // global mobX settings
@@ -20,6 +23,7 @@ export class RootStore {
     // initialise each store
     this.gameStore = new GameStore(this);
     this.uiStore = new UiStore(this);
+    this.websocketStore = new WebsocketStore(this);
   }
 
   static async instantiate(): Promise<RootStore> {

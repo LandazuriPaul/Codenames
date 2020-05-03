@@ -12,6 +12,7 @@
     },
     "removeComments": true,
     "sourceMap": true,
+    "strictPropertyInitialization": false,
     "target": "es2017"
   }
 }
