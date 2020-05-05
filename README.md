@@ -55,78 +55,72 @@ Here is an unordered list of improvements coming up:
 
 ## Installation
 
-This repository uses [Lerna](https://lerna.js.org/) as a tool to manage the different packages and apps.
-
-If you want to install Lerna globally, you can run:
-
-```sh
-npm i -g lerna
-```
-
-Otherwise, you can run all lerna commands by preceding them with `npx`. It will run the lerna cli from your npm global cache.
-
-To bootstrap the project and install all the dependencies for each package and application, run the following:
-
-```sh
-# If you have lerna installed globally
-lerna bootstrap --hoist
-
-# Otherwise
-npx lerna bootstrap --hoist
-```
-
-The `--hoist` option allows to "hoist" common dependencies across the different packages into a common `node_modules` folder at the root of this repository. Therefore it can spare lots of space on your local machine. This option is not mandatory though, and you can still install the dependencies in each package just by omitting this option. To learn more about the "hoist" mechanism and possible cons, you can [read the hosit documentation](https://github.com/lerna/lerna/blob/master/doc/hoist.md).
-
-## Applications
-
-You can learn more about each application in their respective README:
-
-- [Frontend](./apps/frontend): written in TypeScript, developed with React and bundled with Parcel.
-
-- [API](./apps/api): written in TypeScript, developed with NestJS and bundled with Webpack.
-
-## Development
-
 If you want to run the project locally, here are the basic requirements:
 
 - [Node.js](https://nodejs.org/en/): The recommended way is via [`nvm`](https://github.com/nvm-sh/nvm). You can then install the version used for this project: `nvm install lts/erbium`.
 
 - [Yarn](https://classic.yarnpkg.com/): If you have `nvm` installed, you'd prefer to install `yarn` without the node dependency. To do so, the `bash` install is easier: `curl -o- -L https://yarnpkg.com/install.sh | bash`.
 
-Then you can clone this repository and run the project locally:
+This repository uses the [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) as a tool to manage the different packages and apps.
 
-- Install the dependencies:
+From the root folder, simply run the classic command:
+
+```sh
+yarn install
+```
+
+This will install all package dependencies in a common `node_modules` folder at the root of the project using a single `yarn.lock` file to avoid conflicts package dependencies.
+
+## Applications
+
+You can learn more about each application in their respective README:
+
+- [Frontend](./packages/frontend): written in TypeScript, developed with React and bundled with Parcel.
+
+- [API](./packages/api): written in TypeScript, developed with NestJS and bundled with Webpack.
+
+## Development
+
+For both the Frontend and the Backend (API), you can navigate to the appropriate folder (`packages/frontend` or `packages/api`) and run the following commands:
+
+- To run a local dev server of the application with Hot Module Reload:
 
   ```sh
-  yarn install
+  yarn start:dev
   ```
 
-- Run the development server:
+  For the API, you can also run local server in [debug mode]((https://nodejs.org/en/docs/guides/debugging-getting-started/):
 
   ```sh
-  yarn start
+  yarn start:debug
   ```
 
-- To produce a distribution build:
-
+- To produce a distribution build in the corresponding `dist` folder:
   ```sh
   yarn build
   ```
 
-- To deploy the `dist` folder, if you have set up a `scripts/.env` file following the [`example.env`](./scripts/example.env), you can simply run:
+### Regenerate dictionaries
 
-  ```sh
-  yarn deploy
-  ```
+To regenerate the `packages/frontend/src/data.json` file based on the `dictionaries/dictionary.**.txt` file, you can run:
 
-- To regenerate the `src/data.json` file based on the `dictionaries/dictionary.**.txt` file, you can run:
-  ```sh
-  yarn generate-dictionaries
-  ```
+```sh
+yarn generate-dictionaries
+```
+
+#### Legacy frontend deployment
+
+To deploy the `dist` folder, if you have set up a `scripts/.env` file following the [`example.env`](./scripts/example.env), you can simply run:
+
+```sh
+yarn deploy:frontend
+```
 
 ### Technical aspects
 
 This projects uses the following technologies:
+
+- [NestJS](https://nestjs.com): ^7.0.0
 
 - [React + React DOM](https://reactjs.org/): ^16.12.0
 
@@ -141,6 +135,7 @@ This project also includes some development dependencies (`devDependencies` in `
 - [ESLint](https://eslint.org/) with [TypeScript parser](https://github.com/typescript-eslint/typescript-eslint) and React
 
 - React Hooks configuration: `.eslintrc` following [this article](https://medium.com/@oliver.grack/using-eslint-with-typescript-and-react-hooks-and-vscode-c583a18f0c75) as a starting point.
+
 - [Prettier](https://prettier.io/): `.prettierrc` — formatting options
 
 ## Author

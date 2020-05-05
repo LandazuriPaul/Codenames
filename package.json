@@ -19,6 +19,7 @@
     "packages/*"
   ],
   "scripts": {
-    "generate-dictionaries": "node scripts/generate-dictionaries.js"
+    "generate-dictionaries": "node scripts/generate-dictionaries.js",
+    "deploy:frontend": "./scripts/deploy.sh"
   }
 }

@@ -8,8 +8,7 @@
     "start:dev": "tsc -w --noEmit & parcel src/index.html",
     "prebuild": "rimraf dist",
     "build": "tsc --noEmit & parcel build src/index.html",
-    "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx src",
-    "deploy": "./scripts/deploy.sh"
+    "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx src"
   },
   "author": "Paul Landázuri",
   "license": "GPL-3.0-or-later",

@@ -7,4 +7,4 @@ export $(cat scripts/.env | xargs)
 ssh $FULL_HOST_ADDRESS -p $PORT "rm $DESTINATION_FOLDER/* ||:"
 
 # Send the files to the destination folder
-scp -P $PORT -r dist/* $FULL_HOST_ADDRESS:$DESTINATION_FOLDER
+scp -P $PORT -r packages/frontend/dist/* $FULL_HOST_ADDRESS:$DESTINATION_FOLDER
