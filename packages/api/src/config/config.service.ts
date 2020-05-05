@@ -6,6 +6,9 @@ import { HexBase64Latin1Encoding } from 'crypto';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 
 export class ConfigService {
+  public rootDir: string;
+  public runningDir: string;
+
   private readonly configSchema: SchemaMap = {
     // TODO
     // JWT_ENCRYPTION_FORMAT: string()
@@ -14,13 +17,13 @@ export class ConfigService {
     //   .required(),
     // JWT_ENCRYPTION_PASSWORD_HASH_LENGTH: number().required(),
     // JWT_EXPIRE_TIME: number().required(),
+    // JWT_SECRET: string().required(),
+    // ENCRYPTION_RANDOM_BYTES_LENGTH: number().default(12)
     HOST: string().required(),
     PORT: number().default(4000),
   };
   private envConfig: DotenvParseOutput;
   private logger = new Logger(ConfigService.name);
-  private rootDir: string;
-  private runningDir: string;
 
   constructor() {
     const { CONFIG_PATH: configPath, SECRETS_PATH: secretsPath } = process.env;
@@ -35,31 +38,16 @@ export class ConfigService {
     this.runningDir = `${join(this.rootDir, process.env.baseUrl || '')}`;
   }
 
-  printConfig(envConfig: DotenvParseOutput): void {
-    const config = Object.keys(envConfig)
-      .filter(key => !key.includes('SECRET'))
-      .reduce((obj, key) => {
-        obj[key] = envConfig[key];
-        return obj;
-      }, {} as DotenvParseOutput);
-    const secrets = Object.keys(envConfig).filter(key =>
-      key.includes('SECRET')
-    );
-    this.logger.log(`API configuration:\n${JSON.stringify(config, null, 2)}`);
-    this.logger.log(`API secrets:\n${JSON.stringify(secrets, null, 2)}`);
-  }
-
-  private extractConfigFromFileList(
-    partialConfig: DotenvParseOutput,
-    file: string,
-    dir: string
-  ): DotenvParseOutput {
-    const filePath = join(dir, file);
-    const fileContent = readFileSync(filePath)
-      .toString()
-      .trim();
-    partialConfig[file] = fileContent;
-    return partialConfig;
+  private getConfigFromEnvFile(env?: string): DotenvParseOutput {
+    if (!env) {
+      const msg = `No environment definition found. Please choose one of the following options (in priority order):
+      1. Set both the CONFIG_PATH and the SECRETS_PATH environment variables and fill their respective folders with corresponding environment values.
+      2. Set the NODE_ENV environment variable and attach the env file to the API.`;
+      throw new InternalServerErrorException(msg);
+    }
+    const envFilePath = join('env', `${env}.env`);
+    const config = parse(readFileSync(envFilePath));
+    return config;
   }
 
   private getConfigFromVolume(
@@ -75,27 +63,28 @@ export class ConfigService {
     const config: DotenvParseOutput = {};
     configFiles.reduce(
       (partialConfig, file) =>
-        this.extractConfigFromFileList(partialConfig, file, configPath),
+        this.extractConfigFromFile(partialConfig, file, configPath),
       config
     );
     secretsFiles.reduce(
       (partialConfig, file) =>
-        this.extractConfigFromFileList(partialConfig, file, secretsPath),
+        this.extractConfigFromFile(partialConfig, file, secretsPath),
       config
     );
     return config;
   }
 
-  private getConfigFromEnvFile(env?: string): DotenvParseOutput {
-    if (!env) {
-      const msg = `No environment definition found. Please choose one of the following options (in priority order):
-      1. Set both the CONFIG_PATH and the SECRETS_PATH environment variables and fill their respective folders with corresponding environment values.
-      2. Set the NODE_ENV environment variable and attach the env file to the API.`;
-      throw new InternalServerErrorException(msg);
-    }
-    const envFilePath = join('env', `${env}.env`);
-    const config = parse(readFileSync(envFilePath));
-    return config;
+  private extractConfigFromFile(
+    partialConfig: DotenvParseOutput,
+    file: string,
+    dir: string
+  ): DotenvParseOutput {
+    const filePath = join(dir, file);
+    const fileContent = readFileSync(filePath)
+      .toString()
+      .trim();
+    partialConfig[file] = fileContent;
+    return partialConfig;
   }
 
   /**
@@ -115,8 +104,18 @@ export class ConfigService {
     return validatedEnvConfig;
   }
 
-  get deploymentEnvironment(): string {
-    return String(this.envConfig.DEPLOYMENT_ENVIRONMENT);
+  private printConfig(envConfig: DotenvParseOutput): void {
+    const config = Object.keys(envConfig)
+      .filter(key => !key.includes('SECRET'))
+      .reduce((obj, key) => {
+        obj[key] = envConfig[key];
+        return obj;
+      }, {} as DotenvParseOutput);
+    const secrets = Object.keys(envConfig).filter(key =>
+      key.includes('SECRET')
+    );
+    this.logger.log(`API configuration:\n${JSON.stringify(config, null, 2)}`);
+    this.logger.log(`API secrets:\n${JSON.stringify(secrets, null, 2)}`);
   }
 
   get encryptionFormat(): HexBase64Latin1Encoding {
