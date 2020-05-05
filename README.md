@@ -108,12 +108,15 @@ To regenerate the `packages/frontend/src/data.json` file based on the `dictionar
 yarn generate-dictionaries
 ```
 
-#### Legacy frontend deployment
+### Legacy frontend deployment
 
-To deploy the `dist` folder, if you have set up a `scripts/.env` file following the [`example.env`](./scripts/example.env), you can simply run:
+Once built, if you want to send the `packages/frontend/dist` folder to a static content hosting service accessible via SSH, you can run the `scripts/deploy_static.sh` script. But first, you'll need to set up your hosting information at the beginning of the script:
 
 ```sh
-yarn deploy:frontend
+# Hosting information
+FULL_HOST_ADDRESS="username@host.address"
+PORT="21"
+DESTINATION_FOLDER="/absolute/path/to/www/"
 ```
 
 ### Technical aspects

@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-# Get the .env as environment variables
-export $(cat scripts/.env | xargs)
+# Hosting information
+FULL_HOST_ADDRESS="username@host.address"
+PORT="21"
+DESTINATION_FOLDER="/absolute/path/to/www/"
 
 # Remove all files in the destination folder
 ssh $FULL_HOST_ADDRESS -p $PORT "rm $DESTINATION_FOLDER/* ||:"
