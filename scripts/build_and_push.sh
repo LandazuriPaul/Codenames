@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Exit on fail or ctrl-c
+set -e
+trap "exit" INT
+
 if [[ -z "${PACKAGE}" ]]; then
   printf "You must specify a PACKAGE name (api or frontend) as an environment, e.g.: PACKAGE=api"
   exit 1
