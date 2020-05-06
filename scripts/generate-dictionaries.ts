@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { readFileSync, readdirSync, writeFileSync } from 'fs';
 
-const DICTIONARIES_DIR = join(__dirname, '..', 'dictionaries');
+const DICTIONARIES_DIR = join(__dirname, '..', 'clean', 'dictionaries');
 const DATA_FILE_PATH = join(__dirname, '..', 'src', 'data.json');
 const DICTIONARY_LANG_MATCH_REGEXP = /^dictionary\.([a-z]+)\.txt$/;
 
