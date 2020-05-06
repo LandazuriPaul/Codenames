@@ -7,8 +7,8 @@ COPY package.json .
 COPY tsconfig.json .
 COPY yarn.lock .
 
-COPY ./packages/api ./packages/api/
-COPY ./packages/domain ./packages/domain/
+COPY packages/api packages/api/
+COPY packages/domain packages/domain/
 
 # Install domain + API dependencies
 RUN yarn install --pure-lockfile --non-interactive

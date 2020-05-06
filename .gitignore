@@ -30,6 +30,7 @@ docker-compose.*.yml
 build/
 .cache/
 dist/
+packages/frontend/src/data.json
 
 # misc
 .DS_Store

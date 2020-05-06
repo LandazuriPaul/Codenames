@@ -1,6 +1,5 @@
-dictionaries
 node_modules
-scripts
+packages/frontend/src/data.json
 .editorconfig
 .gitignore
 .nvmrc
