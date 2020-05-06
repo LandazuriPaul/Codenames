@@ -5,7 +5,7 @@ const DICTIONARIES_DIR = join(__dirname, '..', 'dictionaries');
 const DATA_FILE_PATH = join(
   __dirname,
   '..',
-  'apps',
+  'packages',
   'frontend',
   'src',
   'data.json'
