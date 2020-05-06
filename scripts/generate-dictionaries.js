@@ -1,7 +1,8 @@
-import { join } from 'path';
-import { readFileSync, readdirSync, writeFileSync } from 'fs';
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { join } = require('path');
+const { readFileSync, readdirSync, writeFileSync } = require('fs');
 
-const DICTIONARIES_DIR = join(__dirname, '..', 'dictionaries');
+const DICTIONARIES_DIR = join(__dirname, '..', 'dictionaries', 'clean');
 const DATA_FILE_PATH = join(
   __dirname,
   '..',
