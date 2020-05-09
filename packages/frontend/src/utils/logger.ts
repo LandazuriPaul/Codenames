@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import debug from 'debug';
 
-const LOGGER_PREFIX = 'codenames';
+import { LOGGER_PREFIX } from '~/config';
 
 const debugInfo = debug(`${LOGGER_PREFIX}:info`);
 debugInfo.enabled = true;
@@ -23,18 +24,22 @@ const formatArgs = (args: any[]): any => {
 };
 
 export class Logger {
+  // @ts-ignore:Rest parameter 'args' implicitly has an 'any[]' type
   static info(...args): void {
     return debugInfo(formatArgs(args));
   }
 
+  // @ts-ignore:Rest parameter 'args' implicitly has an 'any[]' type
   static log(...args): void {
     return debugInfo(formatArgs(args));
   }
 
+  // @ts-ignore:Rest parameter 'args' implicitly has an 'any[]' type
   static warn(...args): void {
     return debugWarn(formatArgs(args));
   }
 
+  // @ts-ignore:Rest parameter 'args' implicitly has an 'any[]' type
   static error(e: Error, ...rest): void {
     let message = e.toString();
     if (e.stack) {

@@ -1,9 +1,10 @@
 {
+  "root": true,
   "env": {
     "node": true,
-    "es6": true
+    "es6": true,
+    "jest": true
   },
-  "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
@@ -11,7 +12,7 @@
     "ecmaFeatures": {
       "modules": true
     },
-    "ecmaVersion": 2019
+    "ecmaVersion": 2020
   },
   "extends": [
     "eslint:recommended",
@@ -131,5 +132,13 @@
     "@typescript-eslint/triple-slash-reference": "error",
     "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/unified-signatures": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }

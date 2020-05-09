@@ -1,19 +1,20 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "incremental": false,
     "isolatedModules": true,
     "jsx": "react",
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "outDir": "dist",
-    // FIXME
-    "strict": false,
-    "target": "es5",
-    "baseUrl": "./src",
     "paths": {
-      "~/*": ["./*"]
-    }
+      "~/*": ["src/*"]
+    },
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
+    "target": "es5"
   }
 }

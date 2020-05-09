@@ -8,4 +8,4 @@ export interface GameFormContext {
   setNewLang: (newLang: AvailableLanguages) => void;
 }
 
-export const gameFormContext = createContext<GameFormContext>(null);
+export const gameFormContext = createContext<GameFormContext | null>(null);

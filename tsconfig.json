@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": true,
     "keyofStringsOnly": true,
     "moduleResolution": "node",
-    "outDir": "dist",
+    "removeComments": true,
     "resolveJsonModule": true,
+    "sourceMap": true,
     "skipLibCheck": true,
     "strict": true
   },

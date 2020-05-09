@@ -38,8 +38,10 @@ export const JoinGame: FC<{}> = observer(() => {
     joinGame(newGameId);
   }
 
-  function handleLangChange(event): void {
-    setNewLang(event.target.value);
+  function handleLangChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void {
+    setNewLang(event.target.value as AvailableLanguages);
   }
 
   function handleGameIdChange(event: ChangeEvent<HTMLInputElement>): void {

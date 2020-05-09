@@ -19,6 +19,11 @@
     "packages/*"
   ],
   "scripts": {
-    "generate-dictionaries": "node scripts/generate-dictionaries.js"
+    "generate-dictionaries": "node scripts/generate-dictionaries.js",
+    "start:domain": "yarn workspace @codenames/domain start:dev",
+    "build:domain": "yarn workspace @codenames/domain build",
+    "build-push:api": "PACKAGE=api ./scripts/build_and_push.sh",
+    "build-push:frontend": "PACKAGE=frontend ./scripts/build_and_push.sh",
+    "lint": "yarn workspaces run lint"
   }
 }

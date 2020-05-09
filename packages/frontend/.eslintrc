@@ -1,12 +1,16 @@
 {
   "extends": ["../../.eslintrc", "plugin:react/recommended"],
+  "env": {
+    "browser": true,
+    "node": false
+  },
   "parserOptions": {
     "ecmaFeatures": {
       "modules": true,
       "jsx": true
     },
     "project": "tsconfig.json",
-    "ecmaVersion": 6,
+    "ecmaVersion": 2020,
     "useJSXTextNode": true
   },
   "settings": {

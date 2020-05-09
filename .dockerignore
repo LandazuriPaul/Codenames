@@ -1,4 +1,6 @@
-node_modules
+**/env
+**/dist
+**/node_modules
 packages/frontend/src/data.json
 .editorconfig
 .gitignore

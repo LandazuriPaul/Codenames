@@ -60,8 +60,10 @@ export const GameHandler: FC<{}> = observer(() => {
     };
   }, [isEditMode]);
 
-  function handleLangChange(event): void {
-    setNewLang(event.target.value);
+  function handleLangChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void {
+    setNewLang(event.target.value as AvailableLanguages);
   }
 
   async function handleCopyGameURL(): Promise<void> {

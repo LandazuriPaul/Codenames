@@ -1,4 +1,4 @@
-import { action, computed } from 'mobx';
+import { action } from 'mobx';
 import io from 'socket.io-client';
 
 import { SocketEvent } from '@codenames/domain';
@@ -22,31 +22,26 @@ export class WebsocketStore extends ChildStore {
     this.socket.on(SocketEvent.DISCONNECT, this.handleDisconnect.bind(this));
   }
 
-  @computed
-  get isConnected(): boolean {
-    return this.socket.connected;
-  }
-
   @action
   handleConnect(): void {
-    Logger.log('handleConnect');
-    setTimeout(() => {
-      this.socket.emit('chat', 'un premier message');
-    }, 1000);
+    Logger.log('ws: connected as user');
   }
 
   @action
   handleDisconnect(): void {
-    Logger.log('Disconnected');
+    Logger.log('ws: disconnected');
   }
 
   @action
-  handleEvent(data): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleEvent(data: any): void {
+    Logger.log('ws: generic event');
     Logger.log(data);
   }
 
   @action
-  handleException(exception): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleException(exception: any): void {
     Logger.warn(exception);
   }
 }
