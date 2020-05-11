@@ -1,5 +1,4 @@
 {
-  "eslint.workingDirectories": ["./apps/api", "./apps/frontend"],
   "editor.formatOnSave": true,
   "search.exclude": {
     "**/node_modules": true,

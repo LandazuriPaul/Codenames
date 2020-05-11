@@ -61,7 +61,7 @@ If you want to run the project locally, here are the basic requirements:
 
 - [Yarn](https://classic.yarnpkg.com/): If you have `nvm` installed, you'd prefer to install `yarn` without the node dependency. To do so, the `bash` install is easier: `curl -o- -L https://yarnpkg.com/install.sh | bash`.
 
-This repository uses the [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) as a tool to manage the different packages and apps.
+This repository uses the [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) as a tool to manage the different packages.
 
 From the root folder, simply run the classic command:
 

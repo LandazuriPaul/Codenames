@@ -4,8 +4,7 @@ import { APIModule } from './modules/api.module';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(APIModule);
-  const env = app.get('ConfigService').envConfig;
-  const port = env.PORT;
-  await app.listen(port);
+  const config = app.get('ConfigService').envConfig;
+  await app.listen(config.PORT);
 }
 bootstrap();
