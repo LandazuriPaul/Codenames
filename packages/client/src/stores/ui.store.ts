@@ -3,12 +3,11 @@ import { persist } from 'mobx-persist';
 import io from 'socket.io-client';
 
 import {
-  AvailableLanguages,
+  RoomJoinedMessage,
   SocketEvent,
   SocketNamespace,
 } from '@codenames/domain';
 
-import { DEFAULT_LANGUAGE } from '~/config';
 import { Logger, getNamespaceSocketUrl } from '~/utils';
 
 import { ChildStore } from './child.store';
@@ -17,16 +16,20 @@ import { RootStore } from './root.store';
 export class UiStore extends ChildStore {
   static LOCALSTORAGE_KEY = 'codenames';
 
+  @persist
   @observable
-  lang: AvailableLanguages;
+  isPlaying: boolean;
 
   @persist
   @observable
   roomId: string;
 
+  @observable
+  roomSize: number;
+
   @persist
   @observable
-  isPlaying: boolean;
+  userId: string;
 
   private socket: SocketIOClient.Socket;
 
@@ -38,13 +41,18 @@ export class UiStore extends ChildStore {
   @action
   init(): void {
     this.isPlaying = false;
-    this.lang = DEFAULT_LANGUAGE;
+    this.roomId = undefined;
+    this.roomSize = 0;
+    this.userId = undefined;
   }
 
   connect(): void {
     this.socket = io(getNamespaceSocketUrl(SocketNamespace.GAME));
     this.socket.on(SocketEvent.ROOM_JOINED, this.roomJoined.bind(this));
     this.socket.on(SocketEvent.ROOM_LEFT, this.roomLeft.bind(this));
+    this.socket.on(SocketEvent.USER_JOINED, this.userJoined.bind(this));
+    this.socket.on(SocketEvent.USER_LEFT, this.userLeft.bind(this));
+    this.socket.on('userList', this.userList.bind(this));
   }
 
   joinRoom(roomId: string): void {
@@ -54,21 +62,41 @@ export class UiStore extends ChildStore {
   }
 
   @action
-  roomJoined(event: any): void {
-    this.roomId = event.roomId;
-    Logger.log(event);
-    Logger.log(`room ${this.roomId} joined`);
+  roomJoined({ roomId, userId, roomSize }: RoomJoinedMessage): void {
+    this.roomId = roomId;
+    this.userId = userId;
+    this.roomSize = roomSize;
+    Logger.log(
+      `room ${this.roomId} (${this.roomSize} users) joined with self userId: ${this.userId}`
+    );
   }
 
   leaveRoom(): void {
+    if (!this.socket) {
+      return;
+    }
     Logger.log(`leaving room ${this.roomId}`);
     this.socket.emit(SocketEvent.LEAVE_ROOM, this.roomId);
   }
 
   @action
-  roomLeft(event: any): void {
-    Logger.log(`room ${this.roomId} left`);
+  roomLeft(roomId: string): void {
+    Logger.log(`room ${roomId} left`);
     this.roomId = undefined;
-    Logger.log(event);
+  }
+
+  @action
+  userJoined(userId: string): void {
+    Logger.log(`new user joined: ${userId}`);
+  }
+
+  @action
+  userLeft(userId: string): void {
+    Logger.log(`self user ${userId} left`);
+    this.userId = undefined;
+  }
+
+  userList(roomSize: number): void {
+    Logger.log(`room size: ${roomSize}`);
   }
 }
