@@ -16,7 +16,7 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core';
-import { Autorenew, ChevronRight } from '@material-ui/icons';
+import { Autorenew, ChevronRight, Info } from '@material-ui/icons';
 
 import { cleanRoomIdFromInput, getRandomUppercaseString } from '@codenames/lib';
 
@@ -66,7 +66,7 @@ export const RoomForm: FC<RoomFormProps> = ({ isJoinForm = true }) => {
         align="center"
         variant="h4"
         component="h4"
-        color="textSecondary"
+        color={isJoinForm ? 'primary' : 'secondary'}
       >
         {isJoinForm ? 'Join' : 'Create'}&nbsp;a room
       </Typography>
@@ -80,20 +80,15 @@ export const RoomForm: FC<RoomFormProps> = ({ isJoinForm = true }) => {
           variant="outlined"
           value={newRoomId}
           onChange={handleRoomIdChange}
-          error={newRoomId.length < 3}
-          helperText={
-            newRoomId.length < 3 ? (
-              <Tooltip
-                title="The room id has to be at least 3 characters long"
-                placement="right"
-              >
-                <Typography variant="caption">Invalid room id</Typography>
-              </Tooltip>
-            ) : null
-          }
           inputRef={inputRef}
           InputProps={{
-            endAdornment: isJoinForm ? null : (
+            endAdornment: isJoinForm ? (
+              <Tooltip title="Ask your host for the room ID">
+                <IconButton size="small">
+                  <Info fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            ) : (
               <InputAdornment position="end">
                 <Tooltip title="Generate new seed" placement="right">
                   <IconButton size="small" onClick={handleReset}>
@@ -107,7 +102,7 @@ export const RoomForm: FC<RoomFormProps> = ({ isJoinForm = true }) => {
         <Button
           variant="contained"
           disabled={newRoomId.length < 3}
-          color="secondary"
+          color={isJoinForm ? 'primary' : 'secondary'}
           onClick={onCreateSubmit}
           type="submit"
         >

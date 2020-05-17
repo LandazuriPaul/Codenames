@@ -1,5 +1,5 @@
 import React, { FC, MouseEvent, useState } from 'react';
-import { Link } from '@material-ui/core';
+import { Link, Typography } from '@material-ui/core';
 
 import { RoomForm } from '~/components/RoomForm';
 
@@ -16,8 +16,14 @@ export const HomeForm: FC<{}> = () => {
   return (
     <Container>
       <RoomForm isJoinForm={isJoinForm} />
-      <Or>or</Or>
-      <Link href="#" color="primary" onClick={handleToggleClick}>
+      <Or>
+        <Typography>or</Typography>
+      </Or>
+      <Link
+        href="#"
+        color={isJoinForm ? 'secondary' : 'primary'}
+        onClick={handleToggleClick}
+      >
         {isJoinForm ? 'Create a room' : 'Join a room'}
       </Link>
     </Container>

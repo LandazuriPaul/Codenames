@@ -14,6 +14,7 @@ export const Or = styled('div')(({ theme }) => ({
   textTransform: 'uppercase',
   textAlign: 'center',
   width: '100%',
+  color: theme.palette.grey[400],
   marginBottom: theme.spacing(),
 
   '&:before': {
