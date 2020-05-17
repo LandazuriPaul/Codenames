@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 
-import { getLastCommit } from '~/../../lib/src/getLastCommit';
+import { getLastCommit } from '~/utils';
 
 @Controller()
 export class HelloController {
