@@ -7,4 +7,6 @@ export enum SocketEvent {
   LEAVE_ROOM = 'leaveRoom',
   ROOM_JOINED = 'roomJoined',
   ROOM_LEFT = 'roomLeft',
+  USER_JOINED = 'userJoined',
+  USER_LEFT = 'userLeft',
 }

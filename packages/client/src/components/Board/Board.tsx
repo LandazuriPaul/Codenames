@@ -11,6 +11,9 @@ export const Board: FC<{}> = () => {
       <Indicators />
       <table>
         <tbody>
+          <tr>
+            <td>Board</td>
+          </tr>
           {/* {Array(GameStore.ROW_COUNT)
             .fill(null)
             .map((row, rowIndex) => (
@@ -23,7 +26,6 @@ export const Board: FC<{}> = () => {
                   })}
               </tr>
             ))} */}
-          Board
         </tbody>
       </table>
     </Container>

@@ -36,6 +36,7 @@ export const RoomForm: FC<RoomFormProps> = ({ isJoinForm = true }) => {
       setNewRoomId('');
       inputRef.current.focus();
     } else {
+      // TODO: API query to check if available
       setNewRoomId(getRandomUppercaseString());
     }
   }, [isJoinForm]);

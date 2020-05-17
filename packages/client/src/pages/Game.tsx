@@ -25,9 +25,9 @@ export const Game: FC<{}> = observer(() => {
 
   return (
     <Layout>
+      {!uiStore.username && <UsernameDialog />}
       <Board />
       <Chat />
-      {!uiStore.username && <UsernameDialog />}
     </Layout>
   );
 });
