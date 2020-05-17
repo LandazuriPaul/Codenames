@@ -1,1 +1,0 @@
-export { GameForm } from './GameForm';

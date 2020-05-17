@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { GameForm } from '~/components/GameForm';
+import { HomeForm } from '~/components/HomeForm';
 import { Layout } from '~/components/Layout';
 import { useStores } from '~/hooks';
 
@@ -13,7 +13,7 @@ export const Home: FC<{}> = () => {
 
   return (
     <Layout>
-      <GameForm />
+      <HomeForm />
     </Layout>
   );
 };

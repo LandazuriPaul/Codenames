@@ -1,4 +1,12 @@
-import React, { ChangeEvent, FC, FormEvent, MouseEvent, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FC,
+  FormEvent,
+  MouseEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   Button,
@@ -12,13 +20,25 @@ import { Autorenew, ChevronRight } from '@material-ui/icons';
 
 import { cleanRoomIdFromInput, getRandomUppercaseString } from '@codenames/lib';
 
-import { CreateForm } from './createRoom.styles';
+import { RoomFormContainer } from './roomForm.styles';
 
-export const CreateRoom: FC<{}> = () => {
-  const [newRoomId, setNewRoomId] = useState<string>(
-    getRandomUppercaseString()
-  );
+interface RoomFormProps {
+  isJoinForm?: boolean;
+}
+
+export const RoomForm: FC<RoomFormProps> = ({ isJoinForm = true }) => {
+  const [newRoomId, setNewRoomId] = useState<string>('');
+  const inputRef = useRef<HTMLInputElement>();
   const history = useHistory();
+
+  useEffect(() => {
+    if (isJoinForm) {
+      setNewRoomId('');
+      inputRef.current.focus();
+    } else {
+      setNewRoomId(getRandomUppercaseString());
+    }
+  }, [isJoinForm]);
 
   function handleRoomIdChange(event: ChangeEvent<HTMLInputElement>): void {
     const roomId = cleanRoomIdFromInput(event.target.value);
@@ -47,13 +67,16 @@ export const CreateRoom: FC<{}> = () => {
         component="h4"
         color="textSecondary"
       >
-        Create a room
+        {isJoinForm ? 'Join' : 'Create'}&nbsp;a room
       </Typography>
-      <CreateForm noValidate autoComplete="off" onSubmit={onCreateSubmit}>
+      <RoomFormContainer
+        noValidate
+        autoComplete="off"
+        onSubmit={onCreateSubmit}
+      >
         <TextField
           label="Room ID"
           variant="outlined"
-          autoFocus
           value={newRoomId}
           onChange={handleRoomIdChange}
           error={newRoomId.length < 3}
@@ -64,10 +87,11 @@ export const CreateRoom: FC<{}> = () => {
               </Tooltip>
             ) : null
           }
+          inputRef={inputRef}
           InputProps={{
-            endAdornment: (
+            endAdornment: isJoinForm ? null : (
               <InputAdornment position="end">
-                <Tooltip title="Generate new seed">
+                <Tooltip title="Generate new seed" placement="right">
                   <IconButton size="small" onClick={handleReset}>
                     <Autorenew fontSize="small" />
                   </IconButton>
@@ -83,9 +107,13 @@ export const CreateRoom: FC<{}> = () => {
           onClick={onCreateSubmit}
           type="submit"
         >
-          Create the room <ChevronRight fontSize="small" />
+          <>
+            {isJoinForm ? 'Join the room' : 'Create the room'}
+            &nbsp;
+            <ChevronRight fontSize="small" />
+          </>
         </Button>
-      </CreateForm>
+      </RoomFormContainer>
     </>
   );
 };

@@ -17,9 +17,7 @@ export const Game: FC<{}> = () => {
     return <Redirect to={`/${cleanRoomId}`} />;
   }
 
-  if (uiStore.roomId !== roomId) {
-    uiStore.joinRoom(roomId);
-  }
+  uiStore.joinRoom(roomId);
 
   return (
     <Layout>
