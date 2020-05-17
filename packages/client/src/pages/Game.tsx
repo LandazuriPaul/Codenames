@@ -1,14 +1,16 @@
 import React, { FC } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 import { cleanRoomIdFromInput } from '@codenames/lib';
 
 import { Board } from '~/components/Board';
 import { Chat } from '~/components/Chat';
 import { Layout } from '~/components/Layout';
+import { UsernameDialog } from '~/components/UsernameDialog';
 import { useStores } from '~/hooks';
 
-export const Game: FC<{}> = () => {
+export const Game: FC<{}> = observer(() => {
   const { roomId } = useParams();
   const { uiStore } = useStores();
 
@@ -17,12 +19,15 @@ export const Game: FC<{}> = () => {
     return <Redirect to={`/${cleanRoomId}`} />;
   }
 
-  uiStore.joinRoom(roomId);
+  if (uiStore.username) {
+    uiStore.joinRoom(roomId);
+  }
 
   return (
     <Layout>
       <Board />
       <Chat />
+      {!uiStore.username && <UsernameDialog />}
     </Layout>
   );
-};
+});

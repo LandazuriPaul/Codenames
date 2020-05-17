@@ -29,7 +29,11 @@ export class UiStore extends ChildStore {
 
   @persist
   @observable
-  userId: string;
+  socketId: string;
+
+  @persist
+  @observable
+  username: string;
 
   private socket: SocketIOClient.Socket;
 
@@ -43,7 +47,8 @@ export class UiStore extends ChildStore {
     this.isPlaying = false;
     this.roomId = undefined;
     this.roomSize = 0;
-    this.userId = undefined;
+    this.socketId = undefined;
+    this.username = undefined;
   }
 
   connect(): void {
@@ -58,16 +63,17 @@ export class UiStore extends ChildStore {
   joinRoom(roomId: string): void {
     this.connect();
     Logger.log(`joining room ${roomId}`);
+    // TODO: add username?
     this.socket.emit(SocketEvent.JOIN_ROOM, roomId);
   }
 
   @action
   roomJoined({ roomId, userId, roomSize }: RoomJoinedMessage): void {
     this.roomId = roomId;
-    this.userId = userId;
+    this.socketId = userId;
     this.roomSize = roomSize;
     Logger.log(
-      `room ${this.roomId} (${this.roomSize} users) joined with self userId: ${this.userId}`
+      `room ${this.roomId} (${this.roomSize} users) joined with self userId: ${this.socketId}`
     );
   }
 
@@ -86,6 +92,11 @@ export class UiStore extends ChildStore {
   }
 
   @action
+  setUsername(username: string): void {
+    this.username = username;
+  }
+
+  @action
   userJoined(userId: string): void {
     Logger.log(`new user joined: ${userId}`);
   }
@@ -93,7 +104,7 @@ export class UiStore extends ChildStore {
   @action
   userLeft(userId: string): void {
     Logger.log(`self user ${userId} left`);
-    this.userId = undefined;
+    this.socketId = undefined;
   }
 
   userList(roomSize: number): void {

@@ -82,7 +82,10 @@ export const RoomForm: FC<RoomFormProps> = ({ isJoinForm = true }) => {
           error={newRoomId.length < 3}
           helperText={
             newRoomId.length < 3 ? (
-              <Tooltip title="The room id has to be at least 3 characters long">
+              <Tooltip
+                title="The room id has to be at least 3 characters long"
+                placement="right"
+              >
                 <Typography variant="caption">Invalid room id</Typography>
               </Tooltip>
             ) : null
