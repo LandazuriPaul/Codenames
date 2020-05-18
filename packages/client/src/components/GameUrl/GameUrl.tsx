@@ -1,18 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import {
-  IconButton,
-  InputAdornment,
-  TextField,
-  Tooltip,
-} from '@material-ui/core';
+import { IconButton, InputAdornment, Tooltip } from '@material-ui/core';
 import { FileCopy } from '@material-ui/icons';
 import { useSnackbar } from 'notistack';
 
 import { Logger } from '~/utils';
 
-import { GameHandlerContainer } from './gameUrl.styles';
+import { GameHandlerContainer, UrlField } from './gameUrl.styles';
 
 export const GameUrl: FC<{}> = observer(() => {
   const { roomId } = useParams();
@@ -49,11 +44,8 @@ export const GameUrl: FC<{}> = observer(() => {
 
   return (
     <GameHandlerContainer component="div">
-      <TextField
+      <UrlField
         value={roomId}
-        style={{
-          maxWidth: '10em',
-        }}
         size="small"
         variant="outlined"
         label="Codename seed"

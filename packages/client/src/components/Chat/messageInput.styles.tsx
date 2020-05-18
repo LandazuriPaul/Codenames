@@ -4,6 +4,8 @@ import { Paper, TextField, TextFieldProps, Theme } from '@material-ui/core';
 
 import { UserColor } from '@codenames/domain';
 
+export const MessageInputProps = { style: { overflow: 'auto' } };
+
 export const MessageInputContainer = styled(Paper)(({ theme }) => ({
   padding: 0,
   margin: 0,

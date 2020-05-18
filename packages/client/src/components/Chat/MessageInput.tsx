@@ -15,6 +15,7 @@ import {
   MessageInputContainer,
   MessageInputField,
   MessageInputForm,
+  MessageInputProps,
 } from './messageInput.styles';
 
 export const MessageInput: FC<{}> = observer(() => {
@@ -51,7 +52,7 @@ export const MessageInput: FC<{}> = observer(() => {
           onKeyDown={handleInputKeyDown}
           onChange={handleInputChange}
           placeholder="Send a message..."
-          inputProps={{ style: { overflow: 'auto' } }}
+          inputProps={MessageInputProps}
           userColor={uiStore.userColor}
         />
         <IconButton

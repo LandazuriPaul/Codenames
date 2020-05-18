@@ -1,4 +1,5 @@
 import { styled } from '@material-ui/core/styles';
+import { TextField } from '@material-ui/core';
 
 export const GameHandlerContainer = styled('div')({
   display: 'flex',
@@ -12,4 +13,8 @@ export const GameHandlerForm = styled('form')({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+});
+
+export const UrlField = styled(TextField)({
+  maxWidth: '10em',
 });
