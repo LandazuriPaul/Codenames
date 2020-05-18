@@ -1,4 +1,5 @@
 export enum SocketNamespace {
-  DEFAULT = '',
-  CHAT = 'chat',
+  Default = '',
+  Chat = 'chat',
+  Game = 'game',
 }

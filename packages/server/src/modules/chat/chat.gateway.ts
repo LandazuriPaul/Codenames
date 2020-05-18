@@ -12,7 +12,7 @@ import { Server, Socket } from 'socket.io';
 
 import { ChatEvent, SocketEvent, SocketNamespace } from '@codenames/domain';
 
-@WebSocketGateway({ namespace: SocketNamespace.CHAT, serveClient: false })
+@WebSocketGateway({ namespace: SocketNamespace.Chat, serveClient: false })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
@@ -33,14 +33,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.log('1 connection closed');
   }
 
-  @SubscribeMessage(ChatEvent.MESSAGE)
+  @SubscribeMessage(ChatEvent.Message)
   async onMessage(
     @ConnectedSocket() client: Socket,
     @MessageBody() message: string
   ): Promise<void> {
     this.logger.log(message);
 
-    client.broadcast.emit(SocketEvent.EVENT, {
+    client.broadcast.emit(SocketEvent.Event, {
       message,
       timestamp: new Date(),
       id: '123',

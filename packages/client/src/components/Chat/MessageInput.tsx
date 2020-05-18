@@ -49,7 +49,7 @@ export const MessageInput: FC<{}> = () => {
           placeholder="Send a message..."
           inputProps={{ style: { overflow: 'auto' } }}
         />
-        <IconButton type="submit" size="small">
+        <IconButton color="primary" type="submit" size="small">
           <Send fontSize="inherit" />
         </IconButton>
       </MessageInputForm>

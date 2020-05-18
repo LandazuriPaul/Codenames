@@ -13,7 +13,7 @@ export class ChatStore extends ChildStore {
   }
 
   connect(): void {
-    this.socket = io(getNamespaceSocketUrl(SocketNamespace.CHAT));
+    this.socket = io(getNamespaceSocketUrl(SocketNamespace.Chat));
     this.socket.on(ChatEvent.MESSAGE, this.handleMessage.bind(this));
     this.socket.on(ChatEvent.USER_LIST, this.handleUserList.bind(this));
   }

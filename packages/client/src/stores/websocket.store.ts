@@ -16,7 +16,7 @@ export class WebsocketStore extends ChildStore {
   }
 
   connect(): void {
-    this.socket = io(getNamespaceSocketUrl(SocketNamespace.DEFAULT));
+    this.socket = io(getNamespaceSocketUrl(SocketNamespace.Default));
     this.socket.on(SocketEvent.CONNECT, this.handleConnect.bind(this));
     this.socket.on(SocketEvent.EVENT, this.handleEvent.bind(this));
     this.socket.on(SocketEvent.EXCEPTION, this.handleException.bind(this));

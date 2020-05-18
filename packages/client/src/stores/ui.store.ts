@@ -6,6 +6,7 @@ import {
   RoomJoinedMessage,
   SocketEvent,
   SocketNamespace,
+  UserTeam,
 } from '@codenames/domain';
 
 import { Logger, getNamespaceSocketUrl } from '~/utils';
@@ -35,6 +36,10 @@ export class UiStore extends ChildStore {
   @observable
   username: string;
 
+  @persist
+  @observable
+  userTeam: UserTeam;
+
   private socket: SocketIOClient.Socket;
 
   constructor(rootStore: RootStore) {
@@ -49,14 +54,15 @@ export class UiStore extends ChildStore {
     this.roomSize = 0;
     this.socketId = undefined;
     this.username = undefined;
+    this.userTeam = UserTeam.Observer;
   }
 
   connect(): void {
-    this.socket = io(getNamespaceSocketUrl(SocketNamespace.GAME));
-    this.socket.on(SocketEvent.ROOM_JOINED, this.roomJoined.bind(this));
-    this.socket.on(SocketEvent.ROOM_LEFT, this.roomLeft.bind(this));
-    this.socket.on(SocketEvent.USER_JOINED, this.userJoined.bind(this));
-    this.socket.on(SocketEvent.USER_LEFT, this.userLeft.bind(this));
+    this.socket = io(getNamespaceSocketUrl(SocketNamespace.Game));
+    this.socket.on(SocketEvent.RoomJoined, this.roomJoined.bind(this));
+    this.socket.on(SocketEvent.RoomLeft, this.roomLeft.bind(this));
+    this.socket.on(SocketEvent.UserJoined, this.userJoined.bind(this));
+    this.socket.on(SocketEvent.UserLeft, this.userLeft.bind(this));
     this.socket.on('userList', this.userList.bind(this));
   }
 
@@ -64,13 +70,13 @@ export class UiStore extends ChildStore {
     this.connect();
     Logger.log(`joining room ${roomId}`);
     // TODO: add username?
-    this.socket.emit(SocketEvent.JOIN_ROOM, roomId);
+    this.socket.emit(SocketEvent.JoinRoom, roomId);
   }
 
   @action
-  roomJoined({ roomId, userId, roomSize }: RoomJoinedMessage): void {
+  roomJoined({ roomId, socketId, roomSize }: RoomJoinedMessage): void {
     this.roomId = roomId;
-    this.socketId = userId;
+    this.socketId = socketId;
     this.roomSize = roomSize;
     Logger.log(
       `room ${this.roomId} (${this.roomSize} users) joined with self userId: ${this.socketId}`
@@ -82,7 +88,7 @@ export class UiStore extends ChildStore {
       return;
     }
     Logger.log(`leaving room ${this.roomId}`);
-    this.socket.emit(SocketEvent.LEAVE_ROOM, this.roomId);
+    this.socket.emit(SocketEvent.LeaveRoom, this.roomId);
   }
 
   @action

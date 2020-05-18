@@ -14,7 +14,7 @@ import { SocketEvent, SocketNamespace } from '@codenames/domain';
 
 import { RoomService } from '~/modules/room/room.service';
 
-@WebSocketGateway({ namespace: SocketNamespace.GAME, serveClient: false })
+@WebSocketGateway({ namespace: SocketNamespace.Game, serveClient: false })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
@@ -33,7 +33,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.log(`${client.id} disconnected`);
   }
 
-  @SubscribeMessage(SocketEvent.JOIN_ROOM)
+  @SubscribeMessage(SocketEvent.JoinRoom)
   async onJoinRoom(
     @ConnectedSocket() socket: Socket,
     @MessageBody() roomId: string
@@ -41,7 +41,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.roomService.allocateSocketToRoom(socket, roomId);
     const roomSize = this.roomService.getRoomInServer(this.server, roomId)
       .length;
-    socket.emit(SocketEvent.ROOM_JOINED, {
+    socket.emit(SocketEvent.RoomJoined, {
       socketId: socket.client.id,
       roomId: roomId,
       roomSize,
