@@ -6,6 +6,9 @@ export const MessageListContainer = styled('div')(({ theme }) => ({
   overflowY: 'auto',
 
   '& > ul': {
+    listStyleType: 'none',
+    listStylePosition: 'inside',
     margin: 0,
+    padding: `0px ${theme.spacing(1 / 2)}px`,
   },
 }));

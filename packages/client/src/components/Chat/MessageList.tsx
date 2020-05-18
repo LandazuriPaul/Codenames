@@ -6,9 +6,10 @@ import { MessageListContainer } from './messageList.styles';
 
 const messageList = [
   {
-    from: 'bibi',
+    from: 'bibiqmsdlkfjqsmdklfjqmskdlfj',
     timestamp: 1589752519,
-    text: 'Salut la compagnie !',
+    text:
+      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
   },
   {
     from: 'pif',
