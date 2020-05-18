@@ -4,6 +4,7 @@ import { AppBar, IconButton, Typography } from '@material-ui/core';
 export const HeaderContainer = styled(AppBar)(({ theme }) => ({
   background: lighten(theme.palette.primary.light, 0.5),
   color: 'inherit',
+  height: theme.spacing(8),
 }));
 
 export const MobileMenu = styled(IconButton)(({ theme }) => ({

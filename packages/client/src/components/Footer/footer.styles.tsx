@@ -7,7 +7,7 @@ export const FooterContainer = styled(props => <Paper {...props} />)(
     width: `calc(100% -  ${theme.spacing(6)}px)`,
     textAlign: 'center',
     height: theme.spacing(5),
-    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
+    padding: `${theme.spacing(1.5)}px ${theme.spacing(3)}px`,
     background: theme.palette.grey[800],
     boxShadow:
       '2px -3px 4px 0px rgba(0,0,0,0.2), -2px 0px 5px 0px rgba(0,0,0,0.14), -2px 0px 10px 0px rgba(0,0,0,0.12)',

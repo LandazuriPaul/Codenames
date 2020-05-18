@@ -4,8 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { cleanRoomIdFromInput } from '@codenames/lib';
 
-import { Board } from '~/components/Board';
-import { Chat } from '~/components/Chat';
+import { Dashboard } from '~/components/Dashboard';
 import { Layout } from '~/components/Layout';
 import { UsernameDialog } from '~/components/UsernameDialog';
 import { useStores } from '~/hooks';
@@ -26,8 +25,7 @@ export const Game: FC<{}> = observer(() => {
   return (
     <Layout>
       {!uiStore.username && <UsernameDialog />}
-      <Board />
-      <Chat />
+      <Dashboard />
     </Layout>
   );
 });

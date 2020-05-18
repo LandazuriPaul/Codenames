@@ -1,5 +1,15 @@
 import React, { FC } from 'react';
 
+import { MessageInput } from './MessageInput';
+import { MessageList } from './MessageList';
+
+import { ChatContainer } from './chat.styles';
+
 export const Chat: FC<{}> = () => {
-  return <div>un beau chat</div>;
+  return (
+    <ChatContainer elevation={5} square>
+      <MessageList />
+      <MessageInput />
+    </ChatContainer>
+  );
 };
