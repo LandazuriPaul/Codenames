@@ -3,13 +3,13 @@ import React, {
   FC,
   FormEvent,
   KeyboardEvent,
+  useContext,
   useState,
 } from 'react';
-import { observer } from 'mobx-react-lite';
 import { IconButton } from '@material-ui/core';
 import { Send } from '@material-ui/icons';
 
-import { useStores } from '~/hooks';
+import { chatControlsContext } from '~/contexts';
 
 import {
   MessageInputContainer,
@@ -18,9 +18,9 @@ import {
   MessageInputProps,
 } from './messageInput.styles';
 
-export const MessageInput: FC<{}> = observer(() => {
+export const MessageInput: FC<{}> = () => {
   const [message, setMessage] = useState<string>('');
-  const { gameStore } = useStores();
+  const { activeTab, userColor } = useContext(chatControlsContext);
 
   function handleInputChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -53,11 +53,11 @@ export const MessageInput: FC<{}> = observer(() => {
           onChange={handleInputChange}
           placeholder="Send a message..."
           inputProps={MessageInputProps}
-          userColor={gameStore.userColor}
+          userColor={activeTab === 0 ? 'default' : userColor}
         />
         <IconButton
           disabled={message.length === 0}
-          color={gameStore.userColor}
+          color={activeTab === 0 ? 'default' : userColor}
           type="submit"
           size="small"
         >
@@ -66,4 +66,4 @@ export const MessageInput: FC<{}> = observer(() => {
       </MessageInputForm>
     </MessageInputContainer>
   );
-});
+};

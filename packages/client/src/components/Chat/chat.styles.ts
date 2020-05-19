@@ -1,5 +1,5 @@
 import { styled } from '@material-ui/core/styles';
-import { Paper, Tabs } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 
 export const ChatContainer = styled(Paper)(({ theme }) => ({
   height: `calc(100vh - ${theme.spacing(8)}px)`,
@@ -23,8 +23,4 @@ export const ChatContainer = styled(Paper)(({ theme }) => ({
       minWidth: 'unset',
     },
   },
-}));
-
-export const ChatTabs = styled(Tabs)(({ theme }) => ({
-  background: theme.palette.grey[200],
 }));
