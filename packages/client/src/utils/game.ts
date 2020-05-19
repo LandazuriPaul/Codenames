@@ -4,8 +4,8 @@ import {
   CellStatus,
   CellType,
   MasterViewCellType,
-  UserTeam,
   UserColor,
+  UserTeam,
 } from '@codenames/domain';
 
 import { MASTER_VIEW_DIMMING_COEFFICIENT } from '~/config';

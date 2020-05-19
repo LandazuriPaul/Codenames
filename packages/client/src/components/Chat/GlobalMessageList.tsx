@@ -1,10 +1,16 @@
-import React, { FC } from 'react';
+import React, { FC, MutableRefObject } from 'react';
 
 import { GlobalChatMessage, UserTeam } from '@codenames/domain';
 import { MessageList } from './MessageList';
 
-export const GlobalMessageList: FC<{}> = () => {
-  return <MessageList messageList={messageList} />;
+interface GlobalMessageListProps {
+  forwardRef: MutableRefObject<HTMLDivElement>;
+}
+
+export const GlobalMessageList: FC<GlobalMessageListProps> = ({
+  forwardRef,
+}) => {
+  return <MessageList messageList={messageList} forwardRef={forwardRef} />;
 };
 
 const messageList: GlobalChatMessage[] = [

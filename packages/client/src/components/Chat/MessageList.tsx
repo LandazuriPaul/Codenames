@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useRef, useEffect } from 'react';
+import React, { FC, MutableRefObject, ReactElement } from 'react';
 
 import { UserColor } from '@codenames/domain';
 
@@ -6,6 +6,7 @@ import { GenericChatMessage, Message } from './Message';
 import { MessageListContainer } from './messageList.styles';
 
 interface MessageListProps {
+  forwardRef: MutableRefObject<HTMLDivElement>;
   messageList: GenericChatMessage[];
   teamColor?: UserColor;
 }
@@ -13,13 +14,8 @@ interface MessageListProps {
 export const MessageList: FC<MessageListProps> = ({
   messageList,
   teamColor,
+  forwardRef,
 }) => {
-  const containerRef = useRef<HTMLDivElement>();
-
-  useEffect(() => {
-    containerRef.current.scrollTop = containerRef.current.scrollHeight;
-  }, []);
-
   function renderMessage({ ...message }: GenericChatMessage): ReactElement {
     const messageProps = { ...message };
 
@@ -33,7 +29,7 @@ export const MessageList: FC<MessageListProps> = ({
   }
 
   return (
-    <MessageListContainer ref={containerRef}>
+    <MessageListContainer defaultDisplay={!teamColor} forwardRef={forwardRef}>
       <ul>{messageList.map(renderMessage)}</ul>
     </MessageListContainer>
   );

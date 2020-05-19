@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, MutableRefObject } from 'react';
 
 import { TeamChatMessage } from '@codenames/domain';
 
@@ -6,11 +6,19 @@ import { useStores } from '~/hooks';
 
 import { MessageList } from './MessageList';
 
-export const TeamMessageList: FC<{}> = () => {
+interface TeamMessageListProps {
+  forwardRef: MutableRefObject<HTMLDivElement>;
+}
+
+export const TeamMessageList: FC<TeamMessageListProps> = ({ forwardRef }) => {
   const { gameStore } = useStores();
 
   return (
-    <MessageList teamColor={gameStore.userColor} messageList={messageList} />
+    <MessageList
+      teamColor={gameStore.userColor}
+      messageList={messageList}
+      forwardRef={forwardRef}
+    />
   );
 };
 

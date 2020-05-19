@@ -9,7 +9,7 @@ import {
   UserTeam,
 } from '@codenames/domain';
 
-import { masterView, getTeamColor } from '~/utils';
+import { getTeamColor, masterView } from '~/utils';
 
 import { ChildStore } from './child.store';
 import { RootStore } from './root.store';
