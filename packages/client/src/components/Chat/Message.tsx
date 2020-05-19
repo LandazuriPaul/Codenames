@@ -1,47 +1,44 @@
 import React, { FC } from 'react';
 import dayjs from 'dayjs';
-import { Tooltip } from '@material-ui/core';
+import { Tooltip, Typography } from '@material-ui/core';
 
-import {
-  From,
-  MessageContainer,
-  Text,
-  TooltipFrom,
-  TooltipTime,
-} from './message.styles';
+import { ChatMessage } from '@codenames/domain';
 
-interface MessageProps {
-  from: string;
-  text: string;
-  timestamp: number;
-}
+import { getTeamColor } from '~/utils';
 
-export const Message: FC<MessageProps> = ({ from, text, timestamp }) => {
+import { MessageContainer, TooltipTime, Username } from './message.styles';
+
+type MessageProps = Omit<ChatMessage, 'socketId'>;
+
+export const Message: FC<MessageProps> = ({
+  team,
+  text,
+  timestamp,
+  username,
+}) => {
   return (
     <MessageContainer>
       <Tooltip
         placement="left"
-        title={<MessageTooltip from={from} timestamp={timestamp} />}
+        title={<MessageTooltip timestamp={timestamp} />}
       >
-        <div>
-          <From variant="caption">{from}</From>
-        </div>
+        <span>
+          <Username senderColour={getTeamColor(team)} variant="caption">
+            {username}
+          </Username>
+        </span>
       </Tooltip>
-      <Text variant="body2">{text}</Text>
+      <Typography component="span" variant="body2">
+        {text}
+      </Typography>
     </MessageContainer>
   );
 };
 
 interface MessageTooltipProps {
-  from: string;
   timestamp: number;
 }
 
-const MessageTooltip: FC<MessageTooltipProps> = ({ from, timestamp }) => {
-  return (
-    <div>
-      <TooltipFrom>{from}</TooltipFrom>
-      <TooltipTime>{dayjs(timestamp).format('HH:mm:ss')}</TooltipTime>
-    </div>
-  );
+const MessageTooltip: FC<MessageTooltipProps> = ({ timestamp }) => {
+  return <TooltipTime>{dayjs(timestamp).format('HH:mm:ss')}</TooltipTime>;
 };

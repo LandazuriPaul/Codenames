@@ -1,8 +1,26 @@
 import { Theme, lighten } from '@material-ui/core/styles';
 
-import { CellStatus, CellType, MasterViewCellType } from '@codenames/domain';
+import {
+  CellStatus,
+  CellType,
+  MasterViewCellType,
+  UserTeam,
+  UserColor,
+} from '@codenames/domain';
 
 import { MASTER_VIEW_DIMMING_COEFFICIENT } from '~/config';
+
+export function getTeamColor(team: UserTeam): UserColor {
+  switch (team) {
+    case UserTeam.TeamA:
+      return 'primary';
+    case UserTeam.TeamB:
+      return 'secondary';
+    default:
+    case UserTeam.Observer:
+      return 'default';
+  }
+}
 
 export function setTileBackground(status: CellStatus, theme: Theme): string {
   switch (status) {

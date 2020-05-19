@@ -1,42 +1,33 @@
 import React from 'react';
 import { styled } from '@material-ui/core/styles';
-import { Typography, TypographyProps } from '@material-ui/core';
+import { Theme, Typography, TypographyProps } from '@material-ui/core';
 
-export const From = styled(({ ...rest }: TypographyProps) => (
-  <Typography component="span" {...rest} />
-))(({ theme }) => ({
-  display: 'inline-block',
+import { UserColor } from '@codenames/domain';
+
+export const Username = styled(
+  ({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    senderColour,
+    ...rest
+  }: TypographyProps & { senderColour: UserColor }) => (
+    <Typography component="span" {...rest} />
+  )
+)(({ theme, senderColour }: { theme: Theme; senderColour: UserColor }) => ({
   marginRight: theme.spacing(1 / 2),
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  width: theme.spacing(4),
-  flexBasis: 'auto',
-  flexGrow: 0,
-  flexShrink: 0,
+  fontWeight: 'lighter',
+  color: `${
+    senderColour === 'default'
+      ? theme.palette.grey[600]
+      : theme.palette[senderColour].main
+  }`,
 }));
 
-export const MessageContainer = styled('li')({
-  display: 'flex',
-  alignItems: 'flex-start',
-});
-
-export const Text = styled(({ ...rest }: TypographyProps) => (
-  <Typography component="span" {...rest} />
-))(({ theme }) => ({
-  display: 'inline-block',
-  flexBasis: 'auto',
-  flexGrow: 0,
-  textOverflow: 'wrap',
-  width: `calc(100% - ${theme.spacing(4.5)})`,
+export const MessageContainer = styled('li')(({ theme }) => ({
+  margin: `${theme.spacing(1 / 2)}px 0px`,
 }));
-
-export const TooltipFrom = styled(Typography)({
-  fontSize: '1em',
-  textAlign: 'right',
-});
 
 export const TooltipTime = styled(Typography)({
-  fontSize: '0.8em',
+  fontSize: '0.9em',
   textAlign: 'right',
-  fontStyle: 'italic',
+  fontWeight: 'lighter',
 });

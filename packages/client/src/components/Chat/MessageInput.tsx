@@ -20,7 +20,7 @@ import {
 
 export const MessageInput: FC<{}> = observer(() => {
   const [message, setMessage] = useState<string>('');
-  const { uiStore } = useStores();
+  const { gameStore } = useStores();
 
   function handleInputChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -53,11 +53,11 @@ export const MessageInput: FC<{}> = observer(() => {
           onChange={handleInputChange}
           placeholder="Send a message..."
           inputProps={MessageInputProps}
-          userColor={uiStore.userColor}
+          userColor={gameStore.userColor}
         />
         <IconButton
           disabled={message.length === 0}
-          color={uiStore.userColor}
+          color={gameStore.userColor}
           type="submit"
           size="small"
         >

@@ -20,25 +20,23 @@ type MessageInputFieldProps = TextFieldProps & {
 export const MessageInputField = styled(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ({ userColor, ...rest }: MessageInputFieldProps) => <TextField {...rest} />
-)(({ theme, userColor }: { theme: Theme; userColor: UserColor }) => {
-  return {
-    padding: 0,
-    width: `calc(100% - ${theme.spacing(2)}px)`,
+)(({ theme, userColor }: { theme: Theme; userColor: UserColor }) => ({
+  padding: 0,
+  width: `calc(100% - ${theme.spacing(2)}px)`,
 
-    '& > .MuiInput-underline:after': {
-      borderBottomColor: `${
-        userColor === 'default'
-          ? theme.palette.grey[700]
-          : theme.palette[userColor].main
-      }`,
-    },
+  '& > .MuiInput-underline:after': {
+    borderBottomColor: `${
+      userColor === 'default'
+        ? theme.palette.grey[700]
+        : theme.palette[userColor].main
+    }`,
+  },
 
-    '& textarea': {
-      maxHeight: theme.spacing(8),
-      overflowY: 'auto',
-    },
-  };
-});
+  '& textarea': {
+    maxHeight: theme.spacing(8),
+    overflowY: 'auto',
+  },
+}));
 
 export const MessageInputForm = styled('form')(({ theme }) => ({
   display: 'flex',

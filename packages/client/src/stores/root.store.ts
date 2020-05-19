@@ -37,7 +37,11 @@ export class RootStore {
     const rootStore = new RootStore();
 
     // specify which stores need to be persisted into the localstorage
-    await hydrate(UiStore.LOCALSTORAGE_KEY, rootStore.uiStore);
+    await hydrate(
+      `codenames_${GameStore.LOCALSTORAGE_KEY}`,
+      rootStore.gameStore
+    );
+    await hydrate(`codenames_${UiStore.LOCALSTORAGE_KEY}`, rootStore.uiStore);
 
     // singleton instance
     RootStore.instance = rootStore;

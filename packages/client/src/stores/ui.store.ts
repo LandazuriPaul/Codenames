@@ -1,4 +1,4 @@
-import { action, computed, observable } from 'mobx';
+import { action, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 import io from 'socket.io-client';
 
@@ -6,8 +6,6 @@ import {
   RoomJoinedMessage,
   SocketEvent,
   SocketNamespace,
-  UserColor,
-  UserTeam,
 } from '@codenames/domain';
 
 import { Logger, getNamespaceSocketUrl } from '~/utils';
@@ -16,7 +14,7 @@ import { ChildStore } from './child.store';
 import { RootStore } from './root.store';
 
 export class UiStore extends ChildStore {
-  static LOCALSTORAGE_KEY = 'codenames';
+  static LOCALSTORAGE_KEY = 'ui';
 
   @persist
   @observable
@@ -37,10 +35,6 @@ export class UiStore extends ChildStore {
   @observable
   username: string;
 
-  @persist
-  @observable
-  userTeam: UserTeam;
-
   private socket: SocketIOClient.Socket;
 
   constructor(rootStore: RootStore) {
@@ -55,20 +49,6 @@ export class UiStore extends ChildStore {
     this.roomSize = 0;
     this.socketId = undefined;
     this.username = undefined;
-    this.userTeam = UserTeam.Observer;
-  }
-
-  @computed
-  get userColor(): UserColor {
-    switch (this.userTeam) {
-      case UserTeam.TeamA:
-        return 'primary';
-      case UserTeam.TeamB:
-        return 'secondary';
-      default:
-      case UserTeam.Observer:
-        return 'default';
-    }
   }
 
   connect(): void {

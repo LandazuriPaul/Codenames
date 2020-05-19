@@ -1,18 +1,32 @@
 import { action, computed, observable } from 'mobx';
+import { persist } from 'mobx-persist';
 
-import { Cell, CellStatus, CellType } from '@codenames/domain';
+import {
+  Cell,
+  CellStatus,
+  CellType,
+  UserColor,
+  UserTeam,
+} from '@codenames/domain';
 
-import { masterView } from '~/utils';
+import { masterView, getTeamColor } from '~/utils';
 
 import { ChildStore } from './child.store';
 import { RootStore } from './root.store';
 
 export class GameStore extends ChildStore {
+  static LOCALSTORAGE_KEY = 'game';
+
   @observable
   board: Cell[];
 
+  @persist
   @observable
   isSpyMaster: boolean;
+
+  @persist
+  @observable
+  userTeam: UserTeam;
 
   @observable
   winnerTeam: CellType.TeamA | CellType.TeamB | undefined;
@@ -25,6 +39,7 @@ export class GameStore extends ChildStore {
   @action
   init(): void {
     this.isSpyMaster = false;
+    this.userTeam = UserTeam.Observer;
   }
 
   getCellStatus(cellIndex: number): CellStatus {
@@ -45,5 +60,10 @@ export class GameStore extends ChildStore {
   @computed
   get remainingTeamBCount(): number {
     return 8;
+  }
+
+  @computed
+  get userColor(): UserColor {
+    return getTeamColor(this.userTeam);
   }
 }
