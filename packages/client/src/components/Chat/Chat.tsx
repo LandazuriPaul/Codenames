@@ -37,7 +37,7 @@ export const Chat: FC<{}> = observer(() => {
           role="message-filter"
           scrollButtons="off"
         >
-          <Tooltip placement="top" title="Full room">
+          <Tooltip disableFocusListener placement="top" title="Full room">
             <Tab
               icon={
                 // @ts-ignore
@@ -45,7 +45,7 @@ export const Chat: FC<{}> = observer(() => {
               }
             />
           </Tooltip>
-          <Tooltip placement="top" title="Team only">
+          <Tooltip disableFocusListener placement="top" title="Team only">
             <Tab
               icon={
                 // @ts-ignore
