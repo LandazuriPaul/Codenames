@@ -8,28 +8,28 @@ import { UserColor } from '@codenames/domain';
 export const Username = styled(
   ({
     isSpyMaster,
-    senderColour,
+    senderColor,
     ...rest
   }: TypographyProps & {
     isSpyMaster: boolean;
-    senderColour: UserColor;
+    senderColor: UserColor;
   }) => <Typography component="span" {...rest} />
 )(
   ({
     isSpyMaster,
-    senderColour,
+    senderColor,
     theme,
   }: {
     isSpyMaster: boolean;
-    senderColour: UserColor;
+    senderColor: UserColor;
     theme: Theme;
   }) => ({
     marginRight: theme.spacing(1 / 2),
     fontWeight: 'lighter',
     color: `${
-      senderColour === 'default'
+      senderColor === 'default'
         ? theme.palette.grey[600]
-        : theme.palette[senderColour].main
+        : theme.palette[senderColor].main
     }`,
     textDecoration: `${isSpyMaster ? 'underline' : 'none'}`,
   })

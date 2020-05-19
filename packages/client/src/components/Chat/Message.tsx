@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import dayjs from 'dayjs';
 import { Tooltip, Typography } from '@material-ui/core';
 
-import { ChatMessage } from '@codenames/domain';
+import { TeamChatMessage, UserColor, UserTeam } from '@codenames/domain';
 
 import { getTeamColor } from '~/utils';
 
@@ -13,10 +13,17 @@ import {
   Username,
 } from './message.styles';
 
-type MessageProps = Omit<ChatMessage, 'socketId'>;
+export interface GenericChatMessage extends TeamChatMessage {
+  senderColor?: UserColor;
+  isSpyMaster?: boolean;
+  team?: UserTeam;
+}
+
+type MessageProps = Omit<GenericChatMessage, 'socketId'>;
 
 export const Message: FC<MessageProps> = ({
   isSpyMaster = false,
+  senderColor,
   team,
   text,
   timestamp,
@@ -33,7 +40,7 @@ export const Message: FC<MessageProps> = ({
         <span>
           <Username
             isSpyMaster={isSpyMaster}
-            senderColour={getTeamColor(team)}
+            senderColor={senderColor || getTeamColor(team)}
             variant="caption"
           >
             {username}

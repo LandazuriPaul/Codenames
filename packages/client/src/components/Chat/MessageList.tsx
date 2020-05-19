@@ -1,71 +1,40 @@
-import React, { FC } from 'react';
-import { observer } from 'mobx-react-lite';
+import React, { FC, ReactElement, useRef, useEffect } from 'react';
 
-import { ChatMessage, UserTeam } from '@codenames/domain';
+import { UserColor } from '@codenames/domain';
 
-import { useStores } from '~/hooks';
-
-import { Message } from './Message';
+import { GenericChatMessage, Message } from './Message';
 import { MessageListContainer } from './messageList.styles';
 
 interface MessageListProps {
-  teamOnly?: boolean;
+  messageList: GenericChatMessage[];
+  teamColor?: UserColor;
 }
 
-export const MessageList: FC<MessageListProps> = observer(
-  ({ teamOnly = false }) => {
-    const { gameStore } = useStores();
-    let msgList;
-    if (teamOnly) {
-      msgList = messageList.filter(({ team }) => team === gameStore.userTeam);
-    } else {
-      msgList = messageList;
-    }
+export const MessageList: FC<MessageListProps> = ({
+  messageList,
+  teamColor,
+}) => {
+  const containerRef = useRef<HTMLDivElement>();
+
+  useEffect(() => {
+    containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  }, []);
+
+  function renderMessage({ ...message }: GenericChatMessage): ReactElement {
+    const messageProps = { ...message };
 
     return (
-      <MessageListContainer>
-        <ul>
-          {msgList.map(message => (
-            <Message
-              key={`${message.socketId}@${message.timestamp}`}
-              {...message}
-            />
-          ))}
-        </ul>
-      </MessageListContainer>
+      <Message
+        key={`${message.socketId}@${message.timestamp}`}
+        {...messageProps}
+        senderColor={teamColor}
+      />
     );
   }
-);
 
-const messageList: ChatMessage[] = [
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: UserTeam.TeamB,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: UserTeam.TeamA,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
-  },
-  {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: UserTeam.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
-  },
-  {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: UserTeam.TeamA,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
-  },
-];
+  return (
+    <MessageListContainer ref={containerRef}>
+      <ul>{messageList.map(renderMessage)}</ul>
+    </MessageListContainer>
+  );
+};

@@ -8,8 +8,9 @@ import { UserTeam } from '@codenames/domain';
 
 import { useStores } from '~/hooks';
 
+import { GlobalMessageList } from './GlobalMessageList';
+import { TeamMessageList } from './TeamMessageList';
 import { MessageInput } from './MessageInput';
-import { MessageList } from './MessageList';
 
 import { ChatContainer, ChatTabs } from './chat.styles';
 
@@ -26,7 +27,8 @@ export const Chat: FC<{}> = observer(() => {
 
   return (
     <ChatContainer elevation={5} square>
-      <MessageList teamOnly={isTabsEnabled && activeTab === 1} />
+      {(!isTabsEnabled || activeTab === 0) && <GlobalMessageList />}
+      {isTabsEnabled && activeTab === 1 && <TeamMessageList />}
       {isTabsEnabled && (
         <ChatTabs
           value={activeTab}
