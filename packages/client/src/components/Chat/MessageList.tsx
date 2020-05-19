@@ -60,4 +60,12 @@ const messageList: ChatMessage[] = [
     timestamp: 1589867900032,
     username: 'Antoine',
   },
+  {
+    isSpyMaster: true,
+    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
+    team: UserTeam.TeamA,
+    text: 'Moi je peux pas voir votre petite convers',
+    timestamp: 1589867874019,
+    username: 'Robert',
+  },
 ];

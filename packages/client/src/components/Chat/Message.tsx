@@ -6,11 +6,17 @@ import { ChatMessage } from '@codenames/domain';
 
 import { getTeamColor } from '~/utils';
 
-import { MessageContainer, TooltipTime, Username } from './message.styles';
+import {
+  MessageContainer,
+  MessageTooltipContainer,
+  TooltipTime,
+  Username,
+} from './message.styles';
 
 type MessageProps = Omit<ChatMessage, 'socketId'>;
 
 export const Message: FC<MessageProps> = ({
+  isSpyMaster = false,
   team,
   text,
   timestamp,
@@ -20,10 +26,16 @@ export const Message: FC<MessageProps> = ({
     <MessageContainer>
       <Tooltip
         placement="left"
-        title={<MessageTooltip timestamp={timestamp} />}
+        title={
+          <MessageTooltip isSpyMaster={isSpyMaster} timestamp={timestamp} />
+        }
       >
         <span>
-          <Username senderColour={getTeamColor(team)} variant="caption">
+          <Username
+            isSpyMaster={isSpyMaster}
+            senderColour={getTeamColor(team)}
+            variant="caption"
+          >
             {username}
           </Username>
         </span>
@@ -36,9 +48,18 @@ export const Message: FC<MessageProps> = ({
 };
 
 interface MessageTooltipProps {
+  isSpyMaster: boolean;
   timestamp: number;
 }
 
-const MessageTooltip: FC<MessageTooltipProps> = ({ timestamp }) => {
-  return <TooltipTime>{dayjs(timestamp).format('HH:mm:ss')}</TooltipTime>;
+const MessageTooltip: FC<MessageTooltipProps> = ({
+  isSpyMaster,
+  timestamp,
+}) => {
+  return (
+    <MessageTooltipContainer>
+      {isSpyMaster && <Typography variant="caption">Spy Master</Typography>}
+      <TooltipTime>{dayjs(timestamp).format('HH:mm:ss')}</TooltipTime>
+    </MessageTooltipContainer>
+  );
 };
