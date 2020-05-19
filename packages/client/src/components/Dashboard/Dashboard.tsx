@@ -9,10 +9,10 @@ import { DashboardContainer } from './dashboard.styles';
 export const Dashboard: FC<{}> = () => {
   return (
     <DashboardContainer container alignItems="stretch">
-      <Grid item sm={9}>
+      <Grid item md={8} sm={9}>
         <Board />
       </Grid>
-      <Grid item sm={3}>
+      <Grid item md={4} sm={3}>
         <Chat />
       </Grid>
     </DashboardContainer>
