@@ -26,8 +26,8 @@
     "build:lib": "yarn workspace @codenames/lib build",
     "build:common": "(yarn build:domain & yarn build:lib)",
     "build:domain": "yarn workspace @codenames/domain build",
-    "build-push:api": "PACKAGE=api ./scripts/build_and_push.sh",
-    "build-push:frontend": "PACKAGE=frontend ./scripts/build_and_push.sh",
+    "build-push:server": "PACKAGE=server ./scripts/build_and_push.sh",
+    "build-push:client": "PACKAGE=client ./scripts/build_and_push.sh",
     "lint": "yarn workspaces run lint"
   }
 }
