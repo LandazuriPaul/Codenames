@@ -12,10 +12,10 @@ import { AllInclusive, GroupWork } from '@material-ui/icons';
 
 import { UserColor } from '@codenames/domain';
 
-import { MessageInput } from './MessageInput';
-
-import { ChatTabs } from './chatControls.styles';
 import { chatControlsContext } from '~/contexts';
+
+import { MessageInput } from './MessageInput';
+import { ChatTabs } from './chatControls.styles';
 
 interface ChatControlsProps {
   globalChatRef: MutableRefObject<HTMLDivElement>;
@@ -79,7 +79,7 @@ const TabsHandler: FC<{}> = () => {
       onChange={handleChangeTab}
       variant="fullWidth"
       userColor={activeTab === 0 ? 'default' : userColor}
-      role="message-filter"
+      role="chat-control"
       scrollButtons="off"
     >
       <Tooltip disableFocusListener placement="top" title="Full room">

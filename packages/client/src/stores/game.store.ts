@@ -5,11 +5,12 @@ import {
   Cell,
   CellStatus,
   CellType,
+  GameSettings,
   UserColor,
   UserTeam,
 } from '@codenames/domain';
 
-import { getTeamColor, masterView } from '~/utils';
+import { Logger, getTeamColor, masterView } from '~/utils';
 
 import { ChildStore } from './child.store';
 import { RootStore } from './root.store';
@@ -19,6 +20,10 @@ export class GameStore extends ChildStore {
 
   @observable
   board: Cell[];
+
+  @persist
+  @observable
+  isPlaying: boolean;
 
   @persist
   @observable
@@ -38,8 +43,25 @@ export class GameStore extends ChildStore {
 
   @action
   init(): void {
+    this.board = [];
+    this.isPlaying = false;
     this.isSpyMaster = false;
     this.userTeam = UserTeam.Observer;
+  }
+
+  @action
+  generateGame(settings: GameSettings): void {
+    Logger.info('requesting for board generation with the following settings');
+    Logger.info(settings);
+    this.board = [
+      {
+        index: 0,
+        type: CellType.TeamA,
+        isRevealed: false,
+        word: 'papa',
+      },
+      { index: 1, type: CellType.TeamB, isRevealed: false, word: 'pipi' },
+    ];
   }
 
   getCellStatus(cellIndex: number): CellStatus {

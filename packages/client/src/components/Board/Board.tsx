@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { Indicators } from '~/components/Indicators';
+import { Indicators } from './Indicators';
 // import { Tile } from '~/components/Tile';
 
 import { Container } from './board.styles';

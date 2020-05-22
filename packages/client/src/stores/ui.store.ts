@@ -18,10 +18,6 @@ export class UiStore extends ChildStore {
 
   @persist
   @observable
-  isPlaying: boolean;
-
-  @persist
-  @observable
   roomId: string;
 
   @observable
@@ -44,7 +40,6 @@ export class UiStore extends ChildStore {
 
   @action
   init(): void {
-    this.isPlaying = false;
     this.roomId = undefined;
     this.roomSize = 0;
     this.socketId = undefined;
@@ -62,9 +57,8 @@ export class UiStore extends ChildStore {
 
   joinRoom(roomId: string): void {
     this.connect();
-    Logger.log(`joining room ${roomId}`);
-    // TODO: add username?
-    this.socket.emit(SocketEvent.JoinRoom, roomId);
+    Logger.log(`joining room ${roomId} as ${this.username}`);
+    this.socket.emit(SocketEvent.JoinRoom, { roomId, username: this.username });
   }
 
   @action

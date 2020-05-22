@@ -1,1 +1,0 @@
-export { MasterSwitch } from './MasterSwitch';

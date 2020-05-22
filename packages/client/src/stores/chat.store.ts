@@ -14,8 +14,8 @@ export class ChatStore extends ChildStore {
 
   connect(): void {
     this.socket = io(getNamespaceSocketUrl(SocketNamespace.Chat));
-    this.socket.on(ChatEvent.MESSAGE, this.handleMessage.bind(this));
-    this.socket.on(ChatEvent.USER_LIST, this.handleUserList.bind(this));
+    this.socket.on(ChatEvent.Message, this.handleMessage.bind(this));
+    this.socket.on(ChatEvent.UserList, this.handleUserList.bind(this));
   }
 
   handleMessage(): void {

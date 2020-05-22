@@ -1,7 +1,7 @@
 import React, { FC, MouseEvent, useState } from 'react';
 import { Link, Typography } from '@material-ui/core';
 
-import { RoomForm } from '~/components/RoomForm';
+import { RoomForm } from './RoomForm';
 
 import { Container, Or } from './homeForm.styles';
 

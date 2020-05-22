@@ -1,1 +1,0 @@
-export { Indicators } from './Indicators';
