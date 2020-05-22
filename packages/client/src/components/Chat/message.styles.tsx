@@ -4,6 +4,7 @@ import { styled } from '@material-ui/core/styles';
 import { Theme, Typography, TypographyProps } from '@material-ui/core';
 
 import { UserColor } from '@codenames/domain';
+import { getThemeUserColor } from '~/styles';
 
 export const Username = styled(
   ({
@@ -24,23 +25,26 @@ export const Username = styled(
     senderColor: UserColor;
     theme: Theme;
   }) => ({
-    marginRight: theme.spacing(1 / 2),
-    fontWeight: 'lighter',
-    color: `${
-      senderColor === 'default'
-        ? theme.palette.grey[600]
-        : theme.palette[senderColor].main
-    }`,
+    marginRight: theme.spacing(1.5),
+    color: `${getThemeUserColor(theme, senderColor)}AA`,
+    fontSize: '0.75em',
+    fontWeight: 'bolder',
     textDecoration: `${isSpyMaster ? 'underline' : 'none'}`,
   })
 );
 
 export const MessageContainer = styled('li')(({ theme }) => ({
-  margin: `${theme.spacing(1 / 2)}px 0px`,
+  margin: `${theme.spacing()}px 0px`,
 }));
 
 export const MessageTooltipContainer = styled('div')({
   textAlign: 'right',
+});
+
+export const Text = styled((props: TypographyProps) => (
+  <Typography component="span" {...props} />
+))({
+  // fontWeight: 'lighter',
 });
 
 export const TooltipTime = styled(Typography)({

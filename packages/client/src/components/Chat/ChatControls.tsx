@@ -66,11 +66,9 @@ const TabsHandler: FC<{}> = () => {
     if (newValue === 0) {
       globalChatRef.current.style.display = 'block';
       teamChatRef.current.style.display = 'none';
-      globalChatRef.current.scrollTop = globalChatRef.current.scrollHeight;
     } else {
       globalChatRef.current.style.display = 'none';
       teamChatRef.current.style.display = 'block';
-      teamChatRef.current.scrollTop = teamChatRef.current.scrollHeight;
     }
   }
 
@@ -88,12 +86,7 @@ const TabsHandler: FC<{}> = () => {
         <Tab icon={<AllInclusive />} />
       </Tooltip>
       <Tooltip disableFocusListener placement="top" title="Team only">
-        <Tab
-          icon={
-            // @ts-ignore
-            <GroupWork color={userColor} />
-          }
-        />
+        <Tab icon={<GroupWork />} />
       </Tooltip>
     </ChatTabs>
   );

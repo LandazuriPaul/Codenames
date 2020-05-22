@@ -9,6 +9,7 @@ import { getTeamColor } from '~/utils';
 import {
   MessageContainer,
   MessageTooltipContainer,
+  Text,
   TooltipTime,
   Username,
 } from './message.styles';
@@ -41,15 +42,13 @@ export const Message: FC<MessageProps> = ({
           <Username
             isSpyMaster={isSpyMaster}
             senderColor={senderColor || getTeamColor(team)}
-            variant="caption"
+            variant="body2"
           >
             {username}
           </Username>
         </span>
       </Tooltip>
-      <Typography component="span" variant="body2">
-        {text}
-      </Typography>
+      <Text variant="body2">{text}</Text>
     </MessageContainer>
   );
 };

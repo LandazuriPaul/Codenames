@@ -4,6 +4,8 @@ import { Paper, TextField, TextFieldProps, Theme } from '@material-ui/core';
 
 import { UserColor } from '@codenames/domain';
 
+import { getThemeUserColor } from '~/styles';
+
 export const MessageInputProps = { style: { overflow: 'auto' } };
 
 export const MessageInputContainer = styled(Paper)(({ theme }) => ({
@@ -25,11 +27,7 @@ export const MessageInputField = styled(
   width: `calc(100% - ${theme.spacing(2)}px)`,
 
   '& > .MuiInput-underline:after': {
-    borderBottomColor: `${
-      userColor === 'default'
-        ? theme.palette.grey[700]
-        : theme.palette[userColor].main
-    }`,
+    borderBottomColor: getThemeUserColor(theme, userColor),
   },
 
   '& textarea': {
