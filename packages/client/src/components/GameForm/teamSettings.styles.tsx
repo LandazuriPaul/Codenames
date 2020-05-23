@@ -29,7 +29,7 @@ export const ListContainer = styled(
     ...rest
   }: ListProps & { teamColor: TeamColor }) => <List {...rest} />
 )(({ teamColor, theme }: { teamColor: TeamColor; theme: Theme }) => ({
-  background: `${getThemeTeamColor(theme, teamColor)}77`,
+  background: `${getThemeTeamColor(theme, teamColor)}30`,
   color: theme.palette.grey[800],
   height: theme.spacing(30),
   overflowY: 'auto',

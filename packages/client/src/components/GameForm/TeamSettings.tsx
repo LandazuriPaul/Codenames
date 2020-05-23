@@ -1,13 +1,23 @@
-import React, { FC, useContext } from 'react';
+import React, {
+  FC,
+  MouseEvent,
+  ReactElement,
+  useContext,
+  useState,
+} from 'react';
 import {
   Card,
   Grid,
+  IconButton,
   ListItem,
+  ListItemSecondaryAction,
   ListItemText,
   Typography,
 } from '@material-ui/core';
+import { MyLocation } from '@material-ui/icons';
 import {
   DragDropContext,
+  DragStart,
   Draggable,
   DropResult,
   Droppable,
@@ -52,6 +62,7 @@ type ColumnEntries = Record<Team, { userList: string[] }>;
 const COLUMN_ORDER = [Team.A, Team.Observer, Team.B];
 
 export const TeamSettings: FC<{}> = () => {
+  const [fromColumn, setFromColumn] = useState<Team | null>(null);
   const {
     setSetting,
     settings: { teams },
@@ -59,17 +70,19 @@ export const TeamSettings: FC<{}> = () => {
 
   const columnEntries = formatToColumnEntries(teams);
 
+  function onDragStart(start: DragStart): void {
+    setFromColumn(start.source.droppableId as Team);
+  }
+
   function onDragEnd(result: DropResult): void {
+    setFromColumn(null);
     const { destination, draggableId, source } = result;
 
     if (!destination) {
       return;
     }
 
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
+    if (destination.droppableId === source.droppableId) {
       return;
     }
 
@@ -90,13 +103,17 @@ export const TeamSettings: FC<{}> = () => {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <Grid container spacing={2}>
         {COLUMN_ORDER.map((columnId, index) => {
           const column = columnEntries[columnId];
           return (
             <Grid key={index} item xs={4}>
-              <Column team={columnId} userList={column.userList} />
+              <Column
+                sourceColumn={fromColumn}
+                team={columnId}
+                userList={column.userList}
+              />
             </Grid>
           );
         })}
@@ -106,11 +123,12 @@ export const TeamSettings: FC<{}> = () => {
 };
 
 interface ColumnProps {
+  sourceColumn: Team;
   team: Team;
   userList: string[];
 }
 
-const Column: FC<ColumnProps> = ({ team, userList }) => {
+const Column: FC<ColumnProps> = ({ sourceColumn, team, userList }) => {
   function generateTitle(): string {
     switch (team) {
       case Team.A:
@@ -136,7 +154,7 @@ const Column: FC<ColumnProps> = ({ team, userList }) => {
           </Typography>
         }
       />
-      <Droppable droppableId={team}>
+      <Droppable droppableId={team} isDropDisabled={sourceColumn === team}>
         {provided => (
           <ListContainer
             teamColor={getTeamColor(team)}
@@ -146,7 +164,7 @@ const Column: FC<ColumnProps> = ({ team, userList }) => {
             {...provided.droppableProps}
           >
             {userList.map((user, index) => (
-              <UserEntry key={user} username={user} index={index} />
+              <UserEntry key={user} team={team} username={user} index={index} />
             ))}
             {provided.placeholder}
           </ListContainer>
@@ -158,10 +176,50 @@ const Column: FC<ColumnProps> = ({ team, userList }) => {
 
 interface UserEntryProps {
   index: number;
+  team: Team;
   username: string;
 }
 
-const UserEntry: FC<UserEntryProps> = ({ index, username }) => {
+const UserEntry: FC<UserEntryProps> = ({ index, team, username }) => {
+  const {
+    setSetting,
+    settings: { teams },
+  } = useContext(gameSettingsContext);
+
+  function setSpy(event: MouseEvent<HTMLButtonElement>): void {
+    let newSpy: 'spyA' | 'spyB';
+    switch (team) {
+      case Team.A:
+      default:
+        newSpy = 'spyA';
+        break;
+      case Team.B:
+        newSpy = 'spyB';
+        break;
+    }
+    event.preventDefault();
+    setSetting('teams', {
+      ...teams,
+      [newSpy]: username,
+    });
+  }
+
+  let icon: ReactElement = null;
+  if (team === Team.A || team === Team.B) {
+    const color = getTeamColor(team) as 'primary' | 'secondary';
+    icon = (
+      <ListItemSecondaryAction>
+        {username === teams.spyA || username === teams.spyB ? (
+          <MyLocation color={color} />
+        ) : (
+          <IconButton edge="end" aria-label="make-spy-master" onClick={setSpy}>
+            <MyLocation color="disabled" />
+          </IconButton>
+        )}
+      </ListItemSecondaryAction>
+    );
+  }
+
   return (
     <Draggable draggableId={username} index={index}>
       {provided => (
@@ -170,9 +228,9 @@ const UserEntry: FC<UserEntryProps> = ({ index, username }) => {
           button
           innerRef={provided.innerRef}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
         >
-          <ListItemText primary={username} />
+          <ListItemText primary={username} {...provided.dragHandleProps} />
+          {icon}
         </ListItem>
       )}
     </Draggable>
@@ -204,9 +262,16 @@ function formatToSettings(
   oldTeams: ITeamSettings,
   columnEntries: ColumnEntries
 ): ITeamSettings {
-  return {
+  const newTeams = {
     ...oldTeams,
     [Team.A]: columnEntries[Team.A].userList,
     [Team.B]: columnEntries[Team.B].userList,
   };
+  if (newTeams.spyA && !newTeams[Team.A].includes(newTeams.spyA)) {
+    newTeams.spyA = '';
+  }
+  if (newTeams.spyB && !newTeams[Team.B].includes(newTeams.spyB)) {
+    newTeams.spyB = '';
+  }
+  return newTeams;
 }
