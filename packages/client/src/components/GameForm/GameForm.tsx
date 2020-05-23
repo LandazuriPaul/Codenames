@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, { ChangeEvent, FC, FormEvent, useContext, useState } from 'react';
 import {
   Button,
@@ -70,7 +69,7 @@ export const GameForm: FC<{}> = () => {
               <DialogActions>
                 <Button
                   type="submit"
-                  // TODO!
+                  // TODO
                   // disabled={!isGameSettingsValid(settings)}
                   color="secondary"
                   variant="contained"
@@ -97,6 +96,7 @@ const TabsHandler: FC<{}> = () => {
   return (
     <Tabs
       value={activeTab}
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
       onChange={handleChangeTab}
       variant="fullWidth"
