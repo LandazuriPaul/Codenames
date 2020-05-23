@@ -11,18 +11,18 @@ import {
 } from '@material-ui/core';
 import { AccessAlarm, Apps, GroupWork, PlayArrow } from '@material-ui/icons';
 
-import { AvailableLanguages, GameSettings } from '@codenames/domain';
+import { GameSettings, ValueOf } from '@codenames/domain';
 
 import { DEFAULT_GAME_SETTINGS } from '~/config';
 import { useStores } from '~/hooks';
 import { gameSettingsContext } from '~/contexts';
-import { isGameSettingsValid } from '~/utils';
+// import { isGameSettingsValid } from '~/utils';
 
 import { BoardSettings } from './BoardSettings';
 import { TimerSettings } from './TimerSettings';
 import { TeamSettings } from './TeamSettings';
 
-import { GameSettingsContainer, TabContent } from './gameForm.styles';
+import { GameSettingsContainer, TabContent, Title } from './gameForm.styles';
 
 export const GameForm: FC<{}> = () => {
   const [activeTab, setActiveTab] = useState<0 | 1 | 2>(0);
@@ -32,7 +32,7 @@ export const GameForm: FC<{}> = () => {
 
   function setSetting(
     setting: keyof GameSettings,
-    value: number | AvailableLanguages
+    value: ValueOf<GameSettings>
   ): void {
     setSettings({ ...settings, [setting]: value });
   }
@@ -55,30 +55,34 @@ export const GameForm: FC<{}> = () => {
   }
 
   return (
-    <gameSettingsContext.Provider
-      value={{ activeTab, setActiveTab, setSetting, settings }}
-    >
-      <GameSettingsContainer container justify="center" alignItems="center">
-        <Grid item sm={10}>
-          <form onSubmit={onSettingsSubmit}>
-            <Paper>
+    <GameSettingsContainer container justify="center">
+      <Grid item sm={10}>
+        <form onSubmit={onSettingsSubmit}>
+          <Title variant="h5" align="center">
+            New game settings
+          </Title>
+          <Paper elevation={6}>
+            <gameSettingsContext.Provider
+              value={{ activeTab, setActiveTab, setSetting, settings }}
+            >
               <TabsHandler />
               <TabContent>{renderTab()}</TabContent>
               <DialogActions>
                 <Button
                   type="submit"
-                  disabled={!isGameSettingsValid(settings)}
+                  // TODO!
+                  // disabled={!isGameSettingsValid(settings)}
                   color="secondary"
                   variant="contained"
                 >
                   Start game <PlayArrow />
                 </Button>
               </DialogActions>
-            </Paper>
-          </form>
-        </Grid>
-      </GameSettingsContainer>
-    </gameSettingsContext.Provider>
+            </gameSettingsContext.Provider>
+          </Paper>
+        </form>
+      </Grid>
+    </GameSettingsContainer>
   );
 };
 

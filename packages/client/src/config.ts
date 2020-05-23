@@ -5,7 +5,7 @@ import { getApiUrl } from '~/utils/getApiUrl';
 export const API_URL = getApiUrl();
 export const APP_ROOT = 'root';
 export const DEFAULT_GAME_SETTINGS: GameSettings = {
-  boardDimensions: { height: 5, width: 5 },
+  board: { height: 5, width: 5 },
   language: AvailableLanguages.English,
   rudeRatio: 0,
   teams: {
@@ -13,6 +13,10 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
     b: [],
     spyA: '',
     spyB: '',
+  },
+  timer: {
+    hint: 0,
+    guess: 0,
   },
 };
 export const LOGGER_PREFIX = 'codenames';

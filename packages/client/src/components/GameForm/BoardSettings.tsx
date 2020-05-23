@@ -7,7 +7,7 @@ import { gameSettingsContext } from '~/contexts';
 
 export const BoardSettings: FC<{}> = () => {
   const { setSetting, settings } = useContext(gameSettingsContext);
-  const [rudeRatio, setRudeRatio] = useState(settings.rudeRatio);
+  const [rudeRatio, setRudeRatio] = useState<number>(settings.rudeRatio);
 
   function onLanguageChange(
     event: ChangeEvent<{ name?: string; value: unknown }>
@@ -37,10 +37,10 @@ export const BoardSettings: FC<{}> = () => {
   return (
     <Grid container spacing={4}>
       <Grid item container justify="center" alignItems="center" spacing={2}>
-        <Grid item xs>
+        <Grid item xs={6}>
           <Typography align="right">Language</Typography>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={6}>
           <Select
             value={settings.language}
             onChange={onLanguageChange}
@@ -52,10 +52,10 @@ export const BoardSettings: FC<{}> = () => {
         </Grid>
       </Grid>
       <Grid item container justify="center" alignItems="center" spacing={2}>
-        <Grid item xs>
+        <Grid item xs={6}>
           <Typography align="right">Rude word ratio</Typography>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={6}>
           <Slider
             value={rudeRatio}
             onChange={onSliderChange}

@@ -53,15 +53,6 @@ export class GameStore extends ChildStore {
   generateGame(settings: GameSettings): void {
     Logger.info('requesting for board generation with the following settings');
     Logger.info(settings);
-    this.board = [
-      {
-        index: 0,
-        type: CellType.TeamA,
-        isRevealed: false,
-        word: 'papa',
-      },
-      { index: 1, type: CellType.TeamB, isRevealed: false, word: 'pipi' },
-    ];
   }
 
   getCellStatus(cellIndex: number): CellStatus {
