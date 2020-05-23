@@ -2,6 +2,13 @@ import React, { HTMLProps } from 'react';
 import { Typography } from '@material-ui/core';
 import { Theme, styled } from '@material-ui/core/styles';
 
+export const ExplainedField = styled(Typography)({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  width: '100%',
+});
+
 export const HelperText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[500],
   fontSize: '0.9em',

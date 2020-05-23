@@ -1,6 +1,6 @@
 import React, { FC, MutableRefObject, ReactElement } from 'react';
 
-import { UserColor } from '@codenames/domain';
+import { TeamColor } from '@codenames/domain';
 
 import { GenericChatMessage, Message } from './Message';
 import { MessageListContainer } from './messageList.styles';
@@ -8,7 +8,7 @@ import { MessageListContainer } from './messageList.styles';
 interface MessageListProps {
   forwardRef: MutableRefObject<HTMLDivElement>;
   messageList: GenericChatMessage[];
-  teamColor?: UserColor;
+  teamColor?: TeamColor;
 }
 
 export const MessageList: FC<MessageListProps> = ({

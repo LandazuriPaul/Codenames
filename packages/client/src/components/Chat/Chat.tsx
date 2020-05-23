@@ -1,7 +1,7 @@
 import React, { FC, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 
-import { UserTeam } from '@codenames/domain';
+import { Team } from '@codenames/domain';
 
 import { useStores } from '~/hooks';
 
@@ -17,7 +17,7 @@ export const Chat: FC<{}> = observer(() => {
   const { gameStore } = useStores();
 
   const isTabsEnabled =
-    gameStore.userTeam !== UserTeam.Observer && !gameStore.isSpyMaster;
+    gameStore.userTeam !== Team.Observer && !gameStore.isSpyMaster;
 
   return (
     <ChatContainer elevation={5} square>

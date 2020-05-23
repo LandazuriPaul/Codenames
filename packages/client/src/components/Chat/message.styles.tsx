@@ -3,8 +3,8 @@ import React from 'react';
 import { styled } from '@material-ui/core/styles';
 import { Theme, Typography, TypographyProps } from '@material-ui/core';
 
-import { UserColor } from '@codenames/domain';
-import { getThemeUserColor } from '~/styles';
+import { TeamColor } from '@codenames/domain';
+import { getThemeTeamColor } from '~/styles';
 
 export const Username = styled(
   ({
@@ -13,7 +13,7 @@ export const Username = styled(
     ...rest
   }: TypographyProps & {
     isSpyMaster: boolean;
-    senderColor: UserColor;
+    senderColor: TeamColor;
   }) => <Typography component="span" {...rest} />
 )(
   ({
@@ -22,11 +22,11 @@ export const Username = styled(
     theme,
   }: {
     isSpyMaster: boolean;
-    senderColor: UserColor;
+    senderColor: TeamColor;
     theme: Theme;
   }) => ({
     marginRight: theme.spacing(1.5),
-    color: `${getThemeUserColor(theme, senderColor)}AA`,
+    color: `${getThemeTeamColor(theme, senderColor)}AA`,
     fontSize: '0.75em',
     fontWeight: 'bolder',
     textDecoration: `${isSpyMaster ? 'underline' : 'none'}`,

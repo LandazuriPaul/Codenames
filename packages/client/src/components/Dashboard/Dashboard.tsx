@@ -7,16 +7,16 @@ import { Board } from '~/components/Board';
 import { Chat } from '~/components/Chat';
 import { GameForm } from '~/components/GameForm';
 
-import { DashboardContainer } from './dashboard.styles';
+import { Body, DashboardContainer } from './dashboard.styles';
 
 export const Dashboard: FC<{}> = observer(() => {
   const { gameStore } = useStores();
 
   return (
     <DashboardContainer container alignItems="stretch">
-      <Grid item md={8} sm={9}>
+      <Body item md={8} sm={9}>
         {gameStore.board.length > 0 ? <Board /> : <GameForm />}
-      </Grid>
+      </Body>
       <Grid item md={4} sm={3}>
         <Chat />
       </Grid>

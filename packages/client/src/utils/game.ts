@@ -4,20 +4,20 @@ import {
   CellStatus,
   CellType,
   MasterViewCellType,
-  UserColor,
-  UserTeam,
+  Team,
+  TeamColor,
 } from '@codenames/domain';
 
 import { MASTER_VIEW_DIMMING_COEFFICIENT } from '~/config';
 
-export function getTeamColor(team: UserTeam): UserColor {
+export function getTeamColor(team: Team): TeamColor {
   switch (team) {
-    case UserTeam.TeamA:
+    case Team.A:
       return 'primary';
-    case UserTeam.TeamB:
+    case Team.B:
       return 'secondary';
     default:
-    case UserTeam.Observer:
+    case Team.Observer:
       return 'default';
   }
 }

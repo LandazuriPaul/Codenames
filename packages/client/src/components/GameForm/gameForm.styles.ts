@@ -2,7 +2,7 @@ import { styled } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
 export const GameSettingsContainer = styled(Grid)(({ theme }) => ({
-  marginTop: theme.spacing(8),
+  marginTop: theme.spacing(3),
 }));
 
 export const TabContent = styled('div')(({ theme }) => ({

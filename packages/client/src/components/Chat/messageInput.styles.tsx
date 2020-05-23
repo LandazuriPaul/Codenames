@@ -2,9 +2,9 @@ import React from 'react';
 import { styled } from '@material-ui/core/styles';
 import { Paper, TextField, TextFieldProps, Theme } from '@material-ui/core';
 
-import { UserColor } from '@codenames/domain';
+import { TeamColor } from '@codenames/domain';
 
-import { getThemeUserColor } from '~/styles';
+import { getThemeTeamColor } from '~/styles';
 
 export const MessageInputProps = { style: { overflow: 'auto' } };
 
@@ -16,18 +16,18 @@ export const MessageInputContainer = styled(Paper)(({ theme }) => ({
 }));
 
 type MessageInputFieldProps = TextFieldProps & {
-  userColor: UserColor;
+  userColor: TeamColor;
 };
 
 export const MessageInputField = styled(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ({ userColor, ...rest }: MessageInputFieldProps) => <TextField {...rest} />
-)(({ theme, userColor }: { theme: Theme; userColor: UserColor }) => ({
+)(({ theme, userColor }: { theme: Theme; userColor: TeamColor }) => ({
   padding: 0,
   width: `calc(100% - ${theme.spacing(2)}px)`,
 
   '& > .MuiInput-underline:after': {
-    borderBottomColor: getThemeUserColor(theme, userColor),
+    borderBottomColor: getThemeTeamColor(theme, userColor),
   },
 
   '& textarea': {

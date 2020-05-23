@@ -6,8 +6,8 @@ import {
   CellStatus,
   CellType,
   GameSettings,
-  UserColor,
-  UserTeam,
+  Team,
+  TeamColor,
 } from '@codenames/domain';
 
 import { Logger, getTeamColor, masterView } from '~/utils';
@@ -31,7 +31,7 @@ export class GameStore extends ChildStore {
 
   @persist
   @observable
-  userTeam: UserTeam;
+  userTeam: Team;
 
   @observable
   winnerTeam: CellType.TeamA | CellType.TeamB | undefined;
@@ -46,7 +46,7 @@ export class GameStore extends ChildStore {
     this.board = [];
     this.isPlaying = false;
     this.isSpyMaster = false;
-    this.userTeam = UserTeam.Observer;
+    this.userTeam = Team.Observer;
   }
 
   @action
@@ -76,7 +76,7 @@ export class GameStore extends ChildStore {
   }
 
   @computed
-  get userColor(): UserColor {
+  get userColor(): TeamColor {
     return getTeamColor(this.userTeam);
   }
 }

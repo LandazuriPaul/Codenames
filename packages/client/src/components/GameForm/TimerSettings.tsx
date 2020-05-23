@@ -1,9 +1,10 @@
 import React, { ChangeEvent, FC, useContext, useState } from 'react';
-import { Collapse, Grid, Slider, Switch, Typography } from '@material-ui/core';
+import { Collapse, Grid, Slider, Switch, Tooltip } from '@material-ui/core';
+import { Info } from '@material-ui/icons';
 
 import { gameSettingsContext } from '~/contexts';
 
-import { HelperText, SliderWrapper } from './elements';
+import { ExplainedField, HelperText, SliderWrapper } from './elements';
 
 export const TimerSettings: FC<{}> = () => {
   const { setSetting, settings } = useContext(gameSettingsContext);
@@ -74,7 +75,16 @@ export const TimerSettings: FC<{}> = () => {
     <Grid container spacing={4}>
       <Grid item container justify="center" alignItems="center" spacing={2}>
         <Grid item xs={6}>
-          <Typography align="right">Spy Master&apos;s hint</Typography>
+          <ExplainedField>
+            <Tooltip
+              disableFocusListener
+              placement="left"
+              title="Give a time limit to the Spy Masters' hint"
+            >
+              <Info fontSize="inherit" color="disabled" />
+            </Tooltip>
+            &nbsp;Spy Masters&apos; hint
+          </ExplainedField>
         </Grid>
         <Grid item xs={6}>
           <Switch
@@ -107,7 +117,16 @@ export const TimerSettings: FC<{}> = () => {
       </Grid>
       <Grid item container justify="center" alignItems="center" spacing={2}>
         <Grid item xs={6}>
-          <Typography align="right">Team guess</Typography>
+          <ExplainedField>
+            <Tooltip
+              disableFocusListener
+              placement="left"
+              title="Give a time limit to the Teams' Guess"
+            >
+              <Info fontSize="inherit" color="disabled" />
+            </Tooltip>
+            &nbsp;Teams&apos; guess
+          </ExplainedField>
         </Grid>
         <Grid item xs={6}>
           <Switch

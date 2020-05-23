@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import React, {
   ChangeEvent,
   FC,
@@ -10,7 +9,7 @@ import React, {
 import { Tab, Tooltip } from '@material-ui/core';
 import { AllInclusive, GroupWork } from '@material-ui/icons';
 
-import { UserColor } from '@codenames/domain';
+import { TeamColor } from '@codenames/domain';
 
 import { chatControlsContext } from '~/contexts';
 
@@ -21,7 +20,7 @@ interface ChatControlsProps {
   globalChatRef: MutableRefObject<HTMLDivElement>;
   isTabsEnabled: boolean;
   teamChatRef: MutableRefObject<HTMLDivElement>;
-  userColor: UserColor;
+  userColor: TeamColor;
 }
 
 export const ChatControls: FC<ChatControlsProps> = ({
@@ -75,6 +74,7 @@ const TabsHandler: FC<{}> = () => {
   return (
     <ChatTabs
       value={activeTab}
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
       onChange={handleChangeTab}
       variant="fullWidth"

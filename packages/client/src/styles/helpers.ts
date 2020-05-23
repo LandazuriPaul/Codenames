@@ -1,9 +1,9 @@
 import { Theme } from '@material-ui/core';
 
-import { UserColor } from '@codenames/domain';
+import { TeamColor } from '@codenames/domain';
 
-export function getThemeUserColor(theme: Theme, userColor: UserColor): string {
-  return userColor === 'default'
+export function getThemeTeamColor(theme: Theme, teamColor: TeamColor): string {
+  return teamColor === 'default'
     ? theme.palette.grey[700]
-    : theme.palette[userColor].main;
+    : theme.palette[teamColor].main;
 }
