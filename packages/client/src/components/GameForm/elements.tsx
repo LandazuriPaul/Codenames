@@ -12,6 +12,11 @@ export const ExplainedField = styled(Typography)({
 export const HelperText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[500],
   fontSize: '0.9em',
+  fontStyle: 'italic',
+
+  '& ul': {
+    paddingLeft: theme.spacing(2),
+  },
 }));
 
 export const SliderWrapper = styled(

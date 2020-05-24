@@ -6,15 +6,18 @@ import React, {
   useState,
 } from 'react';
 import {
+  Button,
   Card,
+  Fade,
   Grid,
   IconButton,
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
+  Tooltip,
   Typography,
 } from '@material-ui/core';
-import { MyLocation } from '@material-ui/icons';
+import { Loop, MyLocation } from '@material-ui/icons';
 import {
   DragDropContext,
   DragStart,
@@ -24,11 +27,19 @@ import {
 } from 'react-beautiful-dnd';
 
 import { TeamSettings as ITeamSettings, Team } from '@codenames/domain';
+import { shuffleArray } from '@codenames/lib';
 
 import { gameSettingsContext } from '~/contexts';
 import { getTeamColor } from '~/utils';
 
-import { ColumnHeader, ListContainer } from './teamSettings.styles';
+import { HelperText } from './elements';
+import {
+  ColumnHeader,
+  ColumnTitle,
+  Instructions,
+  ListContainer,
+  UserText,
+} from './teamSettings.styles';
 
 const FULL_USER_LIST = [
   'Marcel',
@@ -37,25 +48,10 @@ const FULL_USER_LIST = [
   'Momo',
   'Mumu',
   'Mama',
-  'Nana',
+  'Nanawdfqsdfqsdfqsdfqsdfqsdfqdsfqsdf',
   'Paul',
   'Antoine',
-  'Alexia',
 ];
-
-// const DEMO_DATA = [
-//   columns: {
-//     [Team.A]: {
-//       userList: []
-//     },
-//     [Team.Observer]: {
-//       userList: DEMO_USER_LIST
-//     },
-//     [Team.B]: {
-//       userList: [];
-//     }
-//   }
-// ]
 
 type ColumnEntries = Record<Team, { userList: string[] }>;
 
@@ -68,7 +64,7 @@ export const TeamSettings: FC<{}> = () => {
     settings: { teams },
   } = useContext(gameSettingsContext);
 
-  const columnEntries = formatToColumnEntries(teams);
+  const columnEntries = formatToColumnEntries(teams, FULL_USER_LIST);
 
   function onDragStart(start: DragStart): void {
     setFromColumn(start.source.droppableId as Team);
@@ -102,23 +98,54 @@ export const TeamSettings: FC<{}> = () => {
     setSetting('teams', newTeams);
   }
 
+  function onShuffleClick(event: MouseEvent<HTMLButtonElement>): void {
+    event.preventDefault();
+    setSetting('teams', shuffleTeams(FULL_USER_LIST));
+  }
+
   return (
-    <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-      <Grid container spacing={2}>
-        {COLUMN_ORDER.map((columnId, index) => {
-          const column = columnEntries[columnId];
-          return (
-            <Grid key={index} item xs={4}>
-              <Column
-                sourceColumn={fromColumn}
-                team={columnId}
-                userList={column.userList}
-              />
-            </Grid>
-          );
-        })}
-      </Grid>
-    </DragDropContext>
+    <>
+      <Instructions>
+        <HelperText>
+          <ul>
+            <li>
+              You can drag and drop the players to the team columns. Or, you
+              can&nbsp;
+              <Button
+                size="small"
+                variant="contained"
+                color="secondary"
+                onClick={onShuffleClick}
+              >
+                Shuffle&nbsp;
+                <Loop />
+              </Button>
+            </li>
+            <li>
+              Each team needs a Spy Master&nbsp;&laquo;&nbsp;
+              <MyLocation fontSize="inherit" />
+              &nbsp;&raquo;.
+            </li>
+          </ul>
+        </HelperText>
+      </Instructions>
+      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+        <Grid container spacing={2}>
+          {COLUMN_ORDER.map((columnId, index) => {
+            const column = columnEntries[columnId];
+            return (
+              <Grid key={index} item xs={4}>
+                <Column
+                  sourceColumn={fromColumn}
+                  team={columnId}
+                  userList={column.userList}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
+      </DragDropContext>
+    </>
   );
 };
 
@@ -129,16 +156,26 @@ interface ColumnProps {
 }
 
 const Column: FC<ColumnProps> = ({ sourceColumn, team, userList }) => {
-  function generateTitle(): string {
+  function generateTitle(): ReactElement {
+    let title: string;
     switch (team) {
       case Team.A:
-        return 'Team A';
+        title = 'Team A';
+        break;
       case Team.B:
-        return 'Team B';
+        title = 'Team B';
+        break;
       case Team.Observer:
       default:
-        return 'Observers';
+        title = 'Observers';
+        break;
     }
+    return (
+      <ColumnTitle>
+        <span>{title}</span>
+        <span>{`(${userList.length})`}</span>
+      </ColumnTitle>
+    );
   }
 
   return (
@@ -148,11 +185,6 @@ const Column: FC<ColumnProps> = ({ sourceColumn, team, userList }) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         title={<Typography variant="button">{generateTitle()}</Typography>}
-        subheader={
-          <Typography variant="caption" component="p">
-            {userList.length} people
-          </Typography>
-        }
       />
       <Droppable droppableId={team} isDropDisabled={sourceColumn === team}>
         {provided => (
@@ -207,31 +239,41 @@ const UserEntry: FC<UserEntryProps> = ({ index, team, username }) => {
   let icon: ReactElement = null;
   if (team === Team.A || team === Team.B) {
     const color = getTeamColor(team) as 'primary' | 'secondary';
-    icon = (
-      <ListItemSecondaryAction>
-        {username === teams.spyA || username === teams.spyB ? (
+    icon =
+      username === teams.spyA || username === teams.spyB ? (
+        <Tooltip placement="right" title={<i>Spy Master</i>}>
           <MyLocation color={color} />
-        ) : (
-          <IconButton edge="end" aria-label="make-spy-master" onClick={setSpy}>
-            <MyLocation color="disabled" />
+        </Tooltip>
+      ) : (
+        <Tooltip placement="right" title="set as Spy Master">
+          <IconButton
+            size="small"
+            aria-label="make-spy-master"
+            onClick={setSpy}
+          >
+            <MyLocation fontSize="inherit" color="disabled" />
           </IconButton>
-        )}
-      </ListItemSecondaryAction>
-    );
+        </Tooltip>
+      );
   }
 
   return (
     <Draggable draggableId={username} index={index}>
-      {provided => (
-        <ListItem
-          role="user"
-          button
-          innerRef={provided.innerRef}
-          {...provided.draggableProps}
-        >
-          <ListItemText primary={username} {...provided.dragHandleProps} />
-          {icon}
-        </ListItem>
+      {(provided, snapshot) => (
+        <div ref={provided.innerRef} {...provided.draggableProps}>
+          <ListItem role="user">
+            <ListItemText
+              primary={<UserText>{username}</UserText>}
+              {...provided.dragHandleProps}
+            />
+            <Fade
+              in={!snapshot.isDragging}
+              timeout={{ appear: 0, enter: 200, exit: 0 }}
+            >
+              <ListItemSecondaryAction>{icon}</ListItemSecondaryAction>
+            </Fade>
+          </ListItem>
+        </div>
       )}
     </Draggable>
   );
@@ -244,13 +286,16 @@ function remainingUserList(
   return fullUserList.filter(user => !a.includes(user) && !b.includes(user));
 }
 
-function formatToColumnEntries(teams: ITeamSettings): ColumnEntries {
+function formatToColumnEntries(
+  teams: ITeamSettings,
+  fullUserList: string[]
+): ColumnEntries {
   return {
     [Team.A]: {
       userList: teams.a,
     },
     [Team.Observer]: {
-      userList: remainingUserList(FULL_USER_LIST, teams),
+      userList: remainingUserList(fullUserList, teams),
     },
     [Team.B]: {
       userList: teams.b,
@@ -274,4 +319,26 @@ function formatToSettings(
     newTeams.spyB = '';
   }
   return newTeams;
+}
+
+function shuffleTeams(fullUserList: string[]): ITeamSettings {
+  const shuffledUserList = shuffleArray(fullUserList);
+  const limit = Math.floor(shuffledUserList.length / 2);
+  const rand = Math.random();
+  const teamA =
+    rand > 0.5
+      ? shuffledUserList.slice(0, limit)
+      : shuffledUserList.slice(limit);
+  const teamB =
+    rand > 0.5
+      ? shuffledUserList.slice(limit)
+      : shuffledUserList.slice(0, limit);
+  const spyA = shuffleArray(teamA)[0];
+  const spyB = shuffleArray(teamB)[0];
+  return {
+    a: teamA,
+    b: teamB,
+    spyA,
+    spyB,
+  };
 }

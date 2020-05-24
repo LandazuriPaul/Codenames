@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { styled } from '@material-ui/core/styles';
 import {
@@ -6,6 +7,7 @@ import {
   List,
   ListProps,
   Theme,
+  Typography,
 } from '@material-ui/core';
 
 import { TeamColor } from '@codenames/domain';
@@ -13,7 +15,6 @@ import { TeamColor } from '@codenames/domain';
 import { getThemeTeamColor } from '~/styles';
 
 export const ColumnHeader = styled(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ({ teamColor, ...rest }: CardHeaderProps & { teamColor: TeamColor }) => (
     <CardHeader {...rest} />
   )
@@ -22,15 +23,31 @@ export const ColumnHeader = styled(
   color: theme.palette.grey[200],
 }));
 
+export const ColumnTitle = styled('div')({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
+
+export const Instructions = styled('div')(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+}));
+
 export const ListContainer = styled(
-  ({
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    teamColor,
-    ...rest
-  }: ListProps & { teamColor: TeamColor }) => <List {...rest} />
+  ({ teamColor, ...rest }: ListProps & { teamColor: TeamColor }) => (
+    <List {...rest} />
+  )
 )(({ teamColor, theme }: { teamColor: TeamColor; theme: Theme }) => ({
   background: `${getThemeTeamColor(theme, teamColor)}30`,
   color: theme.palette.grey[800],
   height: theme.spacing(30),
   overflowY: 'auto',
 }));
+
+export const UserText = styled(Typography)({
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  width: '80%',
+});
