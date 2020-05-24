@@ -6,14 +6,20 @@ import { AvailableLanguages } from '@codenames/domain';
 import { gameSettingsContext } from '~/contexts';
 
 export const BoardSettings: FC<{}> = () => {
-  const { setSetting, settings } = useContext(gameSettingsContext);
-  const [rudeRatio, setRudeRatio] = useState<number>(settings.rudeRatio);
+  const {
+    setSetting,
+    settings: { board },
+  } = useContext(gameSettingsContext);
+  const [rudeRatio, setRudeRatio] = useState<number>(board.rudeRatio);
 
   function onLanguageChange(
     event: ChangeEvent<{ name?: string; value: unknown }>
   ): void {
     event.preventDefault();
-    setSetting('language', event.target.value as AvailableLanguages);
+    setSetting('board', {
+      ...board,
+      language: event.target.value as AvailableLanguages,
+    });
   }
 
   function onRudeRatioChange(
@@ -22,7 +28,10 @@ export const BoardSettings: FC<{}> = () => {
   ): void {
     event.preventDefault();
     const ratio = typeof value === 'number' ? value : value[0];
-    setSetting('rudeRatio', ratio);
+    setSetting('board', {
+      ...board,
+      rudeRatio: ratio,
+    });
   }
 
   function onSliderChange(
@@ -42,7 +51,7 @@ export const BoardSettings: FC<{}> = () => {
         </Grid>
         <Grid item xs={6}>
           <Select
-            value={settings.language}
+            value={board.language}
             onChange={onLanguageChange}
             color="secondary"
           >

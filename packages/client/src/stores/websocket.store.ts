@@ -17,10 +17,10 @@ export class WebsocketStore extends ChildStore {
 
   connect(): void {
     this.socket = io(getNamespaceSocketUrl(SocketNamespace.Default));
-    this.socket.on(SocketEvent.CONNECT, this.handleConnect.bind(this));
-    this.socket.on(SocketEvent.EVENT, this.handleEvent.bind(this));
-    this.socket.on(SocketEvent.EXCEPTION, this.handleException.bind(this));
-    this.socket.on(SocketEvent.DISCONNECT, this.handleDisconnect.bind(this));
+    this.socket.on(SocketEvent.Connect, this.handleConnect.bind(this));
+    this.socket.on(SocketEvent.Event, this.handleEvent.bind(this));
+    this.socket.on(SocketEvent.Exception, this.handleException.bind(this));
+    this.socket.on(SocketEvent.Disconnect, this.handleDisconnect.bind(this));
   }
 
   @action

@@ -106,7 +106,11 @@ export const TeamSettings: FC<{}> = () => {
   return (
     <>
       <Instructions>
-        <HelperText>
+        <HelperText
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+          component="div"
+        >
           <ul>
             <li>
               You can drag and drop the players to the team columns. Or, you
