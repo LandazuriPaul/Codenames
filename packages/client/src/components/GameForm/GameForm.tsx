@@ -15,7 +15,7 @@ import { GameSettings, ValueOf } from '@codenames/domain';
 import { DEFAULT_GAME_SETTINGS } from '~/config';
 import { useStores } from '~/hooks';
 import { gameSettingsContext } from '~/contexts';
-// import { isGameSettingsValid } from '~/utils';
+import { isGameSettingsValid } from '~/utils';
 
 import { BoardSettings } from './BoardSettings';
 import { TimerSettings } from './TimerSettings';
@@ -69,8 +69,7 @@ export const GameForm: FC<{}> = () => {
               <DialogActions>
                 <Button
                   type="submit"
-                  // TODO
-                  // disabled={!isGameSettingsValid(settings)}
+                  disabled={!isGameSettingsValid(settings)}
                   color="secondary"
                   variant="contained"
                 >
