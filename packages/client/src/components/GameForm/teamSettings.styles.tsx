@@ -59,6 +59,7 @@ export const UserRow = styled(
   borderRadius: isDragging ? theme.shape.borderRadius : 0,
   background: isDragging ? 'white' : 'unset',
   transition: '0.2s',
+  boxShadow: isDragging ? theme.shadows[3] : 'unset',
 
   '&:hover': {
     boxShadow: theme.shadows[3],
