@@ -38,6 +38,7 @@ import {
   ColumnTitle,
   Instructions,
   ListContainer,
+  UserRow,
   UserText,
 } from './teamSettings.styles';
 
@@ -112,19 +113,7 @@ export const TeamSettings: FC<{}> = () => {
           component="div"
         >
           <ul>
-            <li>
-              You can drag and drop the players to the team columns. Or, you
-              can&nbsp;
-              <Button
-                size="small"
-                variant="contained"
-                color="secondary"
-                onClick={onShuffleClick}
-              >
-                Shuffle&nbsp;
-                <Loop />
-              </Button>
-            </li>
+            <li>Drag and drop the players to the teams.</li>
             <li>
               Each team needs a Spy Master&nbsp;&laquo;&nbsp;
               <MyLocation fontSize="inherit" />
@@ -133,8 +122,8 @@ export const TeamSettings: FC<{}> = () => {
           </ul>
         </HelperText>
       </Instructions>
-      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-        <Grid container spacing={2}>
+      <Grid container spacing={2}>
+        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
           {COLUMN_ORDER.map((columnId, index) => {
             const column = columnEntries[columnId];
             return (
@@ -147,8 +136,14 @@ export const TeamSettings: FC<{}> = () => {
               </Grid>
             );
           })}
+        </DragDropContext>
+        <Grid container item xs justify="center">
+          <Button size="small" variant="contained" onClick={onShuffleClick}>
+            Shuffle&nbsp;
+            <Loop />
+          </Button>
         </Grid>
-      </DragDropContext>
+      </Grid>
     </>
   );
 };
@@ -264,12 +259,14 @@ const UserEntry: FC<UserEntryProps> = ({ index, team, username }) => {
   return (
     <Draggable draggableId={username} index={index}>
       {(provided, snapshot) => (
-        <div ref={provided.innerRef} {...provided.draggableProps}>
+        <UserRow
+          innerRef={provided.innerRef}
+          isDragging={snapshot.isDragging}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
           <ListItem role="user">
-            <ListItemText
-              primary={<UserText>{username}</UserText>}
-              {...provided.dragHandleProps}
-            />
+            <ListItemText primary={<UserText>{username}</UserText>} />
             <Fade
               in={!snapshot.isDragging}
               timeout={{ appear: 0, enter: 200, exit: 0 }}
@@ -277,7 +274,7 @@ const UserEntry: FC<UserEntryProps> = ({ index, team, username }) => {
               <ListItemSecondaryAction>{icon}</ListItemSecondaryAction>
             </Fade>
           </ListItem>
-        </div>
+        </UserRow>
       )}
     </Draggable>
   );

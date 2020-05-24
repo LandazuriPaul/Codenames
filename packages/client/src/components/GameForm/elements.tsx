@@ -16,6 +16,10 @@ export const HelperText = styled(Typography)(({ theme }) => ({
 
   '& ul': {
     paddingLeft: theme.spacing(2),
+
+    '& li': {
+      marginBottom: theme.spacing(),
+    },
   },
 }));
 

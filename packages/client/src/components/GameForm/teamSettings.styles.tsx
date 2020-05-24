@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React, { HTMLProps, Ref } from 'react';
 import { styled } from '@material-ui/core/styles';
 import {
   CardHeader,
@@ -43,6 +43,26 @@ export const ListContainer = styled(
   color: theme.palette.grey[800],
   height: theme.spacing(30),
   overflowY: 'auto',
+  padding: 0,
+}));
+
+export const UserRow = styled(
+  ({
+    innerRef,
+    isDragging,
+    ...rest
+  }: HTMLProps<HTMLDivElement> & {
+    innerRef: Ref<HTMLDivElement>;
+    isDragging: boolean;
+  }) => <div ref={innerRef} {...rest} />
+)(({ isDragging, theme }: { isDragging: boolean; theme: Theme }) => ({
+  borderRadius: isDragging ? theme.shape.borderRadius : 0,
+  background: isDragging ? 'white' : 'unset',
+  transition: '0.2s',
+
+  '&:hover': {
+    boxShadow: theme.shadows[3],
+  },
 }));
 
 export const UserText = styled(Typography)({
