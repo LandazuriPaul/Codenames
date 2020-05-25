@@ -9,7 +9,7 @@ import { Layout } from '~/components/Layout';
 import { UsernameDialog } from '~/components/UsernameDialog';
 import { useStores } from '~/hooks';
 
-export const Game: FC<{}> = observer(() => {
+export const Room: FC<{}> = observer(() => {
   const { roomId } = useParams();
   const { uiStore } = useStores();
 
