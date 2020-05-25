@@ -13,7 +13,7 @@ export const SnackbarProvider: FC<{}> = ({ children }) => {
       ref={notistackRef}
       action={key => (
         <IconButton color="inherit" size="small" onClick={onClickDismiss(key)}>
-          <Close />
+          <Close fontSize="inherit" />
         </IconButton>
       )}
       anchorOrigin={{
