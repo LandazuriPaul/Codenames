@@ -1,11 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { SnackbarProvider } from 'notistack';
 import 'mobx-react-lite/batchingForReactDom';
 
 import { App } from '~/components/App';
 import { APP_ROOT } from '~/config';
+import { SnackbarProvider } from '~/contexts';
 import { StoresProvider } from '~/stores';
 import { DefaultTheme, useGlobalStyles } from '~/styles';
 
@@ -17,12 +17,7 @@ function ReactApp(): JSX.Element {
   return (
     <ThemeProvider theme={DefaultTheme}>
       <StoresProvider>
-        <SnackbarProvider
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-        >
+        <SnackbarProvider>
           <App />
         </SnackbarProvider>
       </StoresProvider>
