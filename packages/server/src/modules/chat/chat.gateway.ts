@@ -10,27 +10,21 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-import { ChatEvent, SocketEvent, SocketNamespace } from '@codenames/domain';
+import { ChatEvent, SocketNamespace } from '@codenames/domain';
 
 @WebSocketGateway({ namespace: SocketNamespace.Chat, serveClient: false })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
 
-  roomList = [];
-
-  private logger: Logger;
-
-  constructor() {
-    this.logger = new Logger(ChatGateway.name);
-  }
+  private logger = new Logger(ChatGateway.name);
 
   async handleConnection(): Promise<void> {
-    this.logger.log('1 new connection');
+    this.logger.log('1 new chat connection');
   }
 
   async handleDisconnect(): Promise<void> {
-    this.logger.log('1 connection closed');
+    this.logger.log('1 chat connection closed');
   }
 
   @SubscribeMessage(ChatEvent.Message)
@@ -39,11 +33,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() message: string
   ): Promise<void> {
     this.logger.log(message);
-
-    client.broadcast.emit(SocketEvent.Event, {
-      message,
-      timestamp: new Date(),
-      id: '123',
-    });
+    // TODO
   }
 }

@@ -4,25 +4,29 @@ import {
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-import { SocketEvent, SocketNamespace } from '@codenames/domain';
+import { JoinRoomMessage, SocketEvent } from '@codenames/domain';
 
-import { RoomService } from '~/modules/room/room.service';
+import { SocketService } from '~/modules/socket/socket.service';
 
-@WebSocketGateway({ namespace: SocketNamespace.Game, serveClient: false })
-export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
+@WebSocketGateway({ serveClient: false })
+export class RoomGateway
+  implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
   @WebSocketServer()
-  server: Server;
+  public server: Server;
 
-  private logger: Logger;
+  private logger = new Logger(RoomGateway.name);
 
-  constructor(private readonly roomService: RoomService) {
-    this.logger = new Logger(GameGateway.name);
+  constructor(private readonly socketService: SocketService) {}
+
+  afterInit(server: Server): void {
+    this.socketService.server = server;
   }
 
   async handleConnection(): Promise<void> {
@@ -36,16 +40,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage(SocketEvent.JoinRoom)
   async onJoinRoom(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() roomId: string
+    @MessageBody() { roomId }: JoinRoomMessage
   ): Promise<void> {
-    this.roomService.allocateSocketToRoom(socket, roomId);
-    const roomSize = this.roomService.getRoomInServer(this.server, roomId)
-      .length;
+    // TODO
+    this.socketService.allocateSocketToRoom(socket, roomId);
     socket.emit(SocketEvent.RoomJoined, {
       socketId: socket.client.id,
       roomId: roomId,
-      roomSize,
     });
-    socket.to(roomId).emit('userList', roomSize);
   }
 }

@@ -6,7 +6,7 @@ import { cleanRoomIdFromInput } from '@codenames/lib';
 
 import { Dashboard } from '~/components/Dashboard';
 import { Layout } from '~/components/Layout';
-import { UsernameDialog } from '~/components/UsernameDialog';
+import { UsernameForm } from '~/components/UsernameForm';
 import { useStores } from '~/hooks';
 
 export const Room: FC<{}> = observer(() => {
@@ -18,13 +18,13 @@ export const Room: FC<{}> = observer(() => {
     return <Redirect to={`/${cleanRoomId}`} />;
   }
 
-  if (uiStore.username) {
+  if (uiStore.token) {
     uiStore.joinRoom(roomId);
   }
 
   return (
     <Layout>
-      {!uiStore.username && <UsernameDialog />}
+      {!uiStore.token && <UsernameForm roomId={roomId} />}
       <Dashboard />
     </Layout>
   );

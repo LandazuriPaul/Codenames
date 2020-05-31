@@ -1,3 +1,4 @@
+import { HexBase64Latin1Encoding } from 'crypto';
 import { join } from 'path';
 import { readFileSync, readdirSync } from 'fs';
 
@@ -10,15 +11,21 @@ export class ConfigService {
   public runningDir: string;
 
   private readonly configSchema = object({
+    CORS_WHITELIST: string().required(),
     HOST: string().required(),
+    JWT_EXPIRES_IN: string().default('1d'),
     PORT: number().default(4000),
-    SECRET_JWT_KEY: string().default('AVeryPrivateJWTKey'),
+    SOCKET_ROOM_ENCRYPTION_FORMAT: string()
+      .lowercase()
+      .valid('latin1', 'hex', 'base64')
+      .required(),
+    SOCKET_ROOM_HASH_ALGORITHM: string().default('sha1'),
+    SECRET_JWT_KEY: string().required(),
   });
   private envConfig: DotenvParseOutput;
-  private logger: Logger;
+  private logger = new Logger(ConfigService.name);
 
   constructor() {
-    this.logger = new Logger(ConfigService.name);
     this.rootDir = `${join(process.cwd())}`;
     this.runningDir = `${join(this.rootDir, process.env.baseUrl || '')}`;
 
@@ -133,11 +140,33 @@ export class ConfigService {
    * Config getters
    */
 
+  get corsWhiteList(): string[] {
+    return this.envConfig.CORS_WHITELIST.split(',');
+  }
+
   get host(): string {
     return String(this.envConfig.HOST);
   }
 
+  get jwtExpiresIn(): string {
+    return String(this.envConfig.JWT_EXPIRES_IN);
+  }
+
   get port(): number {
     return parseInt(this.envConfig.PORT, 10);
+  }
+
+  get socketRoomEncryptionFormat(): HexBase64Latin1Encoding {
+    return String(
+      this.envConfig.SOCKET_ROOM_ENCRYPTION_FORMAT
+    ) as HexBase64Latin1Encoding;
+  }
+
+  get socketRoomHashAlgorithm(): string {
+    return String(this.envConfig.SOCKET_ROOM_HASH_ALGORITHM);
+  }
+
+  get secretJwtKey(): string {
+    return String(this.envConfig.SECRET_JWT_KEY);
   }
 }

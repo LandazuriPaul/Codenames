@@ -2,11 +2,7 @@ import { action, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 import io from 'socket.io-client';
 
-import {
-  RoomJoinedMessage,
-  SocketEvent,
-  SocketNamespace,
-} from '@codenames/domain';
+import { RoomJoinedMessage, SocketEvent } from '@codenames/domain';
 
 import { Logger, getNamespaceSocketUrl } from '~/utils';
 
@@ -29,6 +25,10 @@ export class UiStore extends ChildStore {
 
   @persist
   @observable
+  token: string;
+
+  @persist
+  @observable
   username: string;
 
   private socket: SocketIOClient.Socket;
@@ -43,11 +43,15 @@ export class UiStore extends ChildStore {
     this.roomId = undefined;
     this.roomSize = 0;
     this.socketId = undefined;
+    this.token = undefined;
     this.username = undefined;
   }
 
   connect(): void {
-    this.socket = io(getNamespaceSocketUrl(SocketNamespace.Game));
+    this.socket = io(getNamespaceSocketUrl(), {
+      query: { token: this.token },
+    });
+    this.socket.on(SocketEvent.ConnectError, this.connectError.bind(this));
     this.socket.on(SocketEvent.RoomJoined, this.roomJoined.bind(this));
     this.socket.on(SocketEvent.RoomLeft, this.roomLeft.bind(this));
     this.socket.on(SocketEvent.UserJoined, this.userJoined.bind(this));
@@ -58,7 +62,17 @@ export class UiStore extends ChildStore {
   joinRoom(roomId: string): void {
     this.connect();
     Logger.log(`joining room ${roomId} as ${this.username}`);
-    this.socket.emit(SocketEvent.JoinRoom, { roomId, username: this.username });
+    this.socket.emit(SocketEvent.JoinRoom, {
+      roomId,
+      username: this.username,
+    });
+  }
+
+  @action
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  connectError(err: any): void {
+    Logger.error(err);
+    this.token = undefined;
   }
 
   @action
@@ -88,6 +102,11 @@ export class UiStore extends ChildStore {
   @action
   setUsername(username: string): void {
     this.username = username;
+  }
+
+  @action
+  setToken(token: string): void {
+    this.token = token;
   }
 
   @action
