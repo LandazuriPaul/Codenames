@@ -2,17 +2,13 @@ import { action, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 import io from 'socket.io-client';
 
-import {
-  ChatEvent,
-  RoomEvent,
-  SocketEvent,
-  SocketNamespace,
-} from '@codenames/domain';
+import { ChatEvent, RoomEvent, SocketEvent } from '@codenames/domain';
 
-import { Logger, getNamespaceSocketUrl } from '~/utils';
+import { Logger } from '~/utils';
 
 import { RootStore } from './root.store';
 import { ChildStore } from './child.store';
+import { API_URL } from '~/config';
 
 export class WebsocketStore extends ChildStore {
   static LOCALSTORAGE_KEY = 'ws';
@@ -21,7 +17,7 @@ export class WebsocketStore extends ChildStore {
   @observable
   token: string;
 
-  private sockets: Record<SocketNamespace, SocketIOClient.Socket>;
+  private _socket: SocketIOClient.Socket;
 
   constructor(rootStore: RootStore) {
     super(rootStore);
@@ -30,59 +26,33 @@ export class WebsocketStore extends ChildStore {
 
   @action
   init(): void {
-    this.sockets = {
-      [SocketNamespace.Chat]: undefined,
-      [SocketNamespace.Default]: undefined,
-      [SocketNamespace.Game]: undefined,
-      [SocketNamespace.Room]: undefined,
-    };
+    this._socket = undefined;
     this.token = undefined;
   }
 
   connect(): void {
-    const connectionOptions = {
+    this._socket = io(API_URL, {
       query: { token: this.token },
-    };
-    this.sockets[SocketNamespace.Default] = io(
-      getNamespaceSocketUrl(SocketNamespace.Default),
-      connectionOptions
-    );
-    this.sockets[SocketNamespace.Room] = io(
-      getNamespaceSocketUrl(SocketNamespace.Room),
-      connectionOptions
-    );
-    this.sockets[SocketNamespace.Chat] = io(
-      getNamespaceSocketUrl(SocketNamespace.Chat),
-      connectionOptions
-    );
-    this.sockets[SocketNamespace.Game] = io(
-      getNamespaceSocketUrl(SocketNamespace.Game),
-      connectionOptions
-    );
+    });
     this.attachSocketListeners();
   }
 
   attachSocketListeners(): void {
-    // Default
-    this.sockets[SocketNamespace.Default]
+    const { chatStore, uiStore } = this.rootStore;
+    this._socket
+      // Default
       .on(SocketEvent.Connect, this.handleConnect.bind(this))
       .on(SocketEvent.ConnectError, this.handleConnectError.bind(this))
       .on(SocketEvent.Exception, this.handleException.bind(this))
-      .on(SocketEvent.Disconnect, this.handleDisconnect.bind(this));
+      .on(SocketEvent.Disconnect, this.handleDisconnect.bind(this))
 
-    // Room
-    const { uiStore } = this.rootStore;
-    this.sockets[SocketNamespace.Room]
+      // UiStore
       .on(RoomEvent.RoomJoined, uiStore.roomJoined.bind(uiStore))
       .on(RoomEvent.RoomLeft, uiStore.roomLeft.bind(uiStore))
-      .on(RoomEvent.UserJoined, uiStore.userJoined.bind(uiStore));
+      .on(RoomEvent.UserJoined, uiStore.userJoined.bind(uiStore))
 
-    // Chat
-    const { chatStore } = this.rootStore;
-    this.sockets[SocketNamespace.Chat].on(
-      ChatEvent.Message,
-      chatStore.handleMessage.bind(chatStore)
-    );
+      // Chat
+      .on(ChatEvent.Message, chatStore.handleMessage.bind(chatStore));
 
     // TODO: gamestore
   }
@@ -96,8 +66,8 @@ export class WebsocketStore extends ChildStore {
     this.token = token;
   }
 
-  getSocket(namespace: SocketNamespace): SocketIOClient.Socket {
-    return this.sockets[namespace];
+  get socket(): SocketIOClient.Socket {
+    return this._socket;
   }
 
   /*

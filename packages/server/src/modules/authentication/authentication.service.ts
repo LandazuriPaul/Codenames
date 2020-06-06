@@ -6,7 +6,8 @@ import { Room } from 'socket.io';
 import { JwtPayload, TokenPayload } from '@codenames/domain';
 
 import { ConfigService } from '~/modules/config/config.service';
-import { SocketService } from '~/modules/socket/socket.service';
+import { RoomService } from '~/modules/room/room.service';
+import { SocketRoomHash } from '~/modules/socket/socketRoomHash.type';
 
 @Injectable()
 export class AuthenticationService {
@@ -16,7 +17,7 @@ export class AuthenticationService {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-    private readonly socketService: SocketService
+    private readonly roomService: RoomService
   ) {
     this.jwtSignOptions = {
       expiresIn: configService.jwtExpiresIn,
@@ -33,18 +34,12 @@ export class AuthenticationService {
     return token;
   }
 
-  validatePayload(payload: JwtPayload): Room {
-    if (payload.username && payload.roomId) {
-      const userRoom = this.socketService.getUserInRoom(
-        payload.roomId,
-        payload.username
-      );
-      if (!userRoom) {
-        throw new ForbiddenException();
-      }
-      return userRoom;
+  validatePayload(payload: JwtPayload): SocketRoomHash {
+    try {
+      return this.roomService.getUserInRoom(payload.roomId, payload.username);
+    } catch {
+      this.logger.log(`Invalid user payload: ${JSON.stringify(payload)}`);
+      throw new ForbiddenException();
     }
-    this.logger.log(`Invalid user payload: ${JSON.stringify(payload)}`);
-    throw new ForbiddenException();
   }
 }

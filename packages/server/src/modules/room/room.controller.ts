@@ -14,29 +14,35 @@ import { ConnectDto, TokenPayload } from '@codenames/domain';
 
 import { AuthenticationService } from '~/modules/authentication/authentication.service';
 
-import { SocketService } from '~/modules/socket/socket.service';
+import { RoomService } from './room.service';
 
 @Controller('room')
 export class RoomController {
   constructor(
     private readonly authenticationService: AuthenticationService,
-    private readonly socketService: SocketService
+    private readonly roomService: RoomService
   ) {}
 
   @Get(':roomId')
   getRoom(@Param('roomId') roomId: string, @Res() res: Response): void {
-    const previousRoom = this.socketService.getRoom(roomId);
-    const status =
-      previousRoom === undefined ? HttpStatus.NO_CONTENT : HttpStatus.OK;
-    res.status(status).send();
+    try {
+      this.roomService.getRoom(roomId);
+      res.status(HttpStatus.OK).send();
+    } catch {
+      res.status(HttpStatus.NO_CONTENT).send();
+    }
   }
 
   @Post()
   connect(@Body() { roomId, username }: ConnectDto): TokenPayload {
-    const previousUser = this.socketService.getUserInRoom(roomId, username);
-    if (previousUser) {
+    try {
+      this.roomService.getUserInRoom(roomId, username);
       throw new ConflictException('Username already used in this room.');
+    } catch (err) {
+      if (err instanceof ConflictException) {
+        throw err;
+      }
+      return this.authenticationService.createAccessToken({ roomId, username });
     }
-    return this.authenticationService.createAccessToken({ roomId, username });
   }
 }

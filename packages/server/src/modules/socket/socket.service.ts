@@ -1,10 +1,11 @@
 import { createHash } from 'crypto';
 import { Injectable, Logger } from '@nestjs/common';
-import { Room, Server, Socket } from 'socket.io';
-
-import { Team } from '@codenames/domain';
+import { Server, Socket } from 'socket.io';
 
 import { ConfigService } from '~/modules/config/config.service';
+import { SocketRoomNotFound } from './socket.exceptions';
+import { SocketRoomIdentifier } from './socketRoomIdentifier.interface';
+import { SocketRoomHash } from './socketRoomHash.type';
 
 @Injectable()
 export class SocketService {
@@ -13,33 +14,29 @@ export class SocketService {
 
   constructor(private readonly configService: ConfigService) {}
 
-  getRoom(roomId: string): Room | undefined {
-    const hash = this.socketRoomHash({ roomId });
-    return this.server.sockets.adapter.rooms[hash];
+  pushSocketToRoom(
+    socket: Socket,
+    identifier: SocketRoomIdentifier
+  ): SocketRoomHash {
+    const hash = this.socketRoomHash(identifier);
+    socket.join(hash);
+    return this.getSocketRoom(identifier);
   }
 
-  getTeamInRoom(roomId: string, team: Team): Room | undefined {
-    const hash = this.socketRoomHash({ roomId, team });
-    return this.server.sockets.adapter.rooms[hash];
-  }
-
-  getUserInRoom(roomId: string, username: string): Room | undefined {
-    const hash = this.socketRoomHash({ roomId, username });
-    return this.server.sockets.adapter.rooms[hash];
-  }
-
-  // pushUserToRoom(roomId: string, username: string) {}
-
-  allocateSocketToRoom(socket: Socket, roomId: string): Socket {
-    socket.join(roomId);
-    return socket;
+  getSocketRoom(identifier: SocketRoomIdentifier): SocketRoomHash {
+    const hash = this.socketRoomHash(identifier);
+    const room = this.server.sockets.adapter.rooms[hash];
+    if (!room) {
+      throw new SocketRoomNotFound();
+    }
+    return hash;
   }
 
   private socketRoomHash({
     roomId,
     team,
     username,
-  }: SocketRoomIdentifier): string {
+  }: SocketRoomIdentifier): SocketRoomHash {
     let base = roomId;
     if (team) {
       base = `${team}@${base}`;
@@ -48,12 +45,6 @@ export class SocketService {
     }
     return createHash(this.configService.socketRoomHashAlgorithm)
       .update(base)
-      .digest(this.configService.socketRoomEncryptionFormat);
+      .digest(this.configService.socketRoomEncryptionFormat) as SocketRoomHash;
   }
-}
-
-interface SocketRoomIdentifier {
-  roomId: string;
-  team?: Team;
-  username?: string;
 }

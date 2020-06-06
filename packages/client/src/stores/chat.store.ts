@@ -3,7 +3,6 @@ import { action, observable } from 'mobx';
 import {
   ChatEvent,
   GlobalChatMessage,
-  SocketNamespace,
   Team,
   TeamChatMessage,
 } from '@codenames/domain';
@@ -14,8 +13,6 @@ import { RootStore } from './root.store';
 import { SocketEmitterStore } from './socketEmitter.store';
 
 export class ChatStore extends SocketEmitterStore {
-  static namespace = SocketNamespace.Chat;
-
   @observable
   globalMessageList: GlobalChatMessage[];
 
@@ -31,6 +28,8 @@ export class ChatStore extends SocketEmitterStore {
   init(): void {
     this.globalMessageList = [];
     this.teamMessageList = [];
+    // this.globalMessageList = fakeGlobalMessageList;
+    // this.teamMessageList = fakeTeamMessageList;
   }
 
   /*

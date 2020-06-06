@@ -1,11 +1,7 @@
 import { action, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 
-import {
-  RoomEvent,
-  RoomJoinedMessage,
-  SocketNamespace,
-} from '@codenames/domain';
+import { RoomEvent, RoomJoinedMessage } from '@codenames/domain';
 
 import { Logger } from '~/utils';
 
@@ -14,7 +10,6 @@ import { SocketEmitterStore } from './socketEmitter.store';
 
 export class UiStore extends SocketEmitterStore {
   static LOCALSTORAGE_KEY = 'ui';
-  static namespace = SocketNamespace.Room;
 
   @persist
   @observable
@@ -78,8 +73,8 @@ export class UiStore extends SocketEmitterStore {
   }
 
   @action
-  userJoined(userId: string): void {
-    Logger.log(`new user joined: ${userId}`);
+  userJoined(newUsername: string): void {
+    Logger.log(`new user joined: ${newUsername}`);
   }
 
   userList(roomSize: number): void {

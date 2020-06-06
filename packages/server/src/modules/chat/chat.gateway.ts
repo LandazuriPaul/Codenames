@@ -7,15 +7,15 @@ import {
 } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 
-import { ChatEvent, SocketNamespace } from '@codenames/domain';
+import { ChatEvent } from '@codenames/domain';
 
-import { SocketService } from '~/modules/socket/socket.service';
+import { RoomService } from '~/modules/room/room.service';
 
-@WebSocketGateway({ namespace: SocketNamespace.Chat, serveClient: false })
+@WebSocketGateway({ serveClient: false })
 export class ChatGateway {
   private logger = new Logger(ChatGateway.name);
 
-  constructor(private readonly socketService: SocketService) {}
+  constructor(private readonly roomService: RoomService) {}
 
   @SubscribeMessage(ChatEvent.Message)
   async onMessage(

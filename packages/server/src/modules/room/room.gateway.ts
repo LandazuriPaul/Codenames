@@ -4,26 +4,34 @@ import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
-import { JoinRoomMessage, RoomEvent, SocketNamespace } from '@codenames/domain';
+import { JoinRoomMessage, RoomEvent } from '@codenames/domain';
 
-import { SocketService } from '~/modules/socket/socket.service';
+import { RoomService } from './room.service';
 
-@WebSocketGateway({ namespace: SocketNamespace.Room, serveClient: false })
+@WebSocketGateway({ serveClient: false })
 export class RoomGateway {
+  @WebSocketServer()
+  private server: Server;
   private logger = new Logger(RoomGateway.name);
 
-  constructor(private readonly socketService: SocketService) {}
+  constructor(private readonly roomService: RoomService) {}
 
   @SubscribeMessage(RoomEvent.JoinRoom)
   async onJoinRoom(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() { roomId }: JoinRoomMessage
+    @MessageBody() { roomId, username }: JoinRoomMessage
   ): Promise<void> {
-    this.logger.log(`client: ${socket.client.id}`);
-    socket.emit(RoomEvent.RoomJoined, roomId);
-    // TODO
+    const userHash = this.roomService.pushSocketToUser(
+      socket,
+      roomId,
+      username
+    );
+    const roomHash = this.roomService.pushSocketToRoom(socket, roomId);
+    this.server.to(userHash).emit(RoomEvent.RoomJoined, roomId);
+    this.server.to(roomHash).emit(RoomEvent.UserJoined, username);
   }
 }
