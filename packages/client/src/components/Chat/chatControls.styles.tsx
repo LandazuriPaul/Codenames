@@ -15,6 +15,9 @@ export const ChatTabs = styled(
   ({ userColor, ...rest }: ChatTabsProps) => <Tabs {...rest} />
 )(({ theme, userColor }: { theme: Theme; userColor: TeamColor }) => ({
   background: theme.palette.grey[200],
+  height: theme.spacing(5),
+  overflow: 'unset',
+  minHeight: 'unset !important',
 
   '& .MuiButtonBase-root': {
     transition: '0.4s ease',

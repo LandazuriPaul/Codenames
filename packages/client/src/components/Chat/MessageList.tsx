@@ -29,7 +29,7 @@ export const MessageList: FC<MessageListProps> = ({
   }
 
   return (
-    <MessageListContainer defaultDisplay={!teamColor} forwardRef={forwardRef}>
+    <MessageListContainer forwardRef={forwardRef}>
       <ul>{messageList.map(renderMessage)}</ul>
     </MessageListContainer>
   );

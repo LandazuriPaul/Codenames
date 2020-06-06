@@ -24,3 +24,8 @@ export const ChatContainer = styled(Paper)(({ theme }) => ({
     },
   },
 }));
+
+export const MessageListContainer = styled('div')(({ theme }) => ({
+  height: `calc(100% - ${theme.spacing(5)}px)`,
+  overflow: 'hidden',
+}));

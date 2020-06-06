@@ -9,7 +9,7 @@ import { ChatControls } from './ChatControls';
 import { GlobalMessageList } from './GlobalMessageList';
 import { TeamMessageList } from './TeamMessageList';
 
-import { ChatContainer } from './chat.styles';
+import { ChatContainer, MessageListContainer } from './chat.styles';
 
 export const Chat: FC<{}> = observer(() => {
   const globalChatRef = useRef<HTMLDivElement>();
@@ -21,8 +21,10 @@ export const Chat: FC<{}> = observer(() => {
 
   return (
     <ChatContainer elevation={5} square>
-      <GlobalMessageList forwardRef={globalChatRef} />
-      <TeamMessageList forwardRef={teamChatRef} />
+      <MessageListContainer>
+        <GlobalMessageList forwardRef={globalChatRef} />
+        <TeamMessageList forwardRef={teamChatRef} />
+      </MessageListContainer>
       <ChatControls
         globalChatRef={globalChatRef}
         teamChatRef={teamChatRef}

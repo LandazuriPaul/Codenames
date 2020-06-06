@@ -1,15 +1,10 @@
 import React from 'react';
-import { Theme } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 
-export const MessageListContainer = styled(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ({ defaultDisplay, forwardRef, ...rest }) => (
-    <div ref={forwardRef} {...rest} />
-  )
-)(({ defaultDisplay, theme }: { defaultDisplay: boolean; theme: Theme }) => ({
-  display: `${defaultDisplay ? 'block' : 'none'}`,
-  height: `calc(100% - ${theme.spacing(5)}px)`,
+export const MessageListContainer = styled(({ forwardRef, ...rest }) => (
+  <div ref={forwardRef} {...rest} />
+))(({ theme }) => ({
+  height: '100%',
   margin: 0,
   overflowY: 'auto',
 
