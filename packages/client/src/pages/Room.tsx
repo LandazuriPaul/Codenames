@@ -24,8 +24,7 @@ export const Room: FC<{}> = observer(() => {
 
   return (
     <Layout>
-      {!uiStore.token && <UsernameForm roomId={roomId} />}
-      <Dashboard />
+      {uiStore.token ? <Dashboard /> : <UsernameForm roomId={roomId} />}
     </Layout>
   );
 });

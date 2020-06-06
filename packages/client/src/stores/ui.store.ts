@@ -73,6 +73,7 @@ export class UiStore extends ChildStore {
   connectError(err: any): void {
     Logger.error(err);
     this.token = undefined;
+    // TODO: retry with new token
   }
 
   @action

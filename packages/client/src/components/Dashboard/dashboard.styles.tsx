@@ -7,6 +7,10 @@ export const Body = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
 
+export const ChatContainer = styled(Grid)({
+  height: '100%',
+});
+
 export const DashboardContainer = styled(Grid)({
   height: '100%',
 });

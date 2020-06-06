@@ -1,13 +1,12 @@
 import React, { FC } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Grid } from '@material-ui/core';
 
 import { useStores } from '~/hooks';
 import { Board } from '~/components/Board';
 import { Chat } from '~/components/Chat';
 import { GameForm } from '~/components/GameForm';
 
-import { Body, DashboardContainer } from './dashboard.styles';
+import { Body, ChatContainer, DashboardContainer } from './dashboard.styles';
 
 export const Dashboard: FC<{}> = observer(() => {
   const { gameStore } = useStores();
@@ -17,9 +16,9 @@ export const Dashboard: FC<{}> = observer(() => {
       <Body item md={8} sm={9}>
         {gameStore.board.length > 0 ? <Board /> : <GameForm />}
       </Body>
-      <Grid item md={4} sm={3}>
+      <ChatContainer item md={4} sm={3}>
         <Chat />
-      </Grid>
+      </ChatContainer>
     </DashboardContainer>
   );
 });
