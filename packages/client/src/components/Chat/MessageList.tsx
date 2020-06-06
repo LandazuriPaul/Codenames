@@ -21,7 +21,7 @@ export const MessageList: FC<MessageListProps> = ({
 
     return (
       <Message
-        key={`${message.socketId}@${message.timestamp}`}
+        key={`${message.username}@${message.timestamp}`}
         {...messageProps}
         senderColor={teamColor}
       />
