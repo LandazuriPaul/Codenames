@@ -123,7 +123,7 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-throw-literal": "error",
     "@typescript-eslint/no-unnecessary-type-assertion": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/prefer-for-of": "error",
     "@typescript-eslint/promise-function-async": "error",

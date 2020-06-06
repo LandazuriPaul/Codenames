@@ -10,6 +10,7 @@ import { IconButton } from '@material-ui/core';
 import { Send } from '@material-ui/icons';
 
 import { chatControlsContext } from '~/contexts';
+import { useStores } from '~/hooks';
 
 import {
   MessageInputContainer,
@@ -21,6 +22,7 @@ import {
 export const MessageInput: FC<{}> = () => {
   const [message, setMessage] = useState<string>('');
   const { activeTab, userColor } = useContext(chatControlsContext);
+  const { chatStore } = useStores();
 
   function handleInputChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -39,7 +41,7 @@ export const MessageInput: FC<{}> = () => {
     if (event) {
       event.preventDefault();
     }
-    // TODO: send message
+    chatStore.sendMessage(message);
     setMessage('');
   }
 

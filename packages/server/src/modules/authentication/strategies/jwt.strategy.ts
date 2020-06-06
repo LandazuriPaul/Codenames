@@ -19,11 +19,4 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   validate(payload: JwtPayload): JwtPayload {
     return payload;
   }
-  // async validate(req: Request, payload: JwtPayload, done: any): Promise<Room> {
-  //   const userRoom = this.authenticationService.validatePayload(payload);
-  //   if (!userRoom) {
-  //     return done(null, false, { message: 'invalid token' });
-  //   }
-  //   return done(null, userRoom);
-  // }
 }

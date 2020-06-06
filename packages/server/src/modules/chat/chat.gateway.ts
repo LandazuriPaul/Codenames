@@ -2,37 +2,29 @@ import { Logger } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
 
 import { ChatEvent, SocketNamespace } from '@codenames/domain';
 
-@WebSocketGateway({ namespace: SocketNamespace.Chat, serveClient: false })
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer()
-  server: Server;
+import { SocketService } from '~/modules/socket/socket.service';
 
+@WebSocketGateway({ namespace: SocketNamespace.Chat, serveClient: false })
+export class ChatGateway {
   private logger = new Logger(ChatGateway.name);
 
-  async handleConnection(): Promise<void> {
-    this.logger.log('1 new chat connection');
-  }
-
-  async handleDisconnect(): Promise<void> {
-    this.logger.log('1 chat connection closed');
-  }
+  constructor(private readonly socketService: SocketService) {}
 
   @SubscribeMessage(ChatEvent.Message)
   async onMessage(
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() socket: Socket,
     @MessageBody() message: string
   ): Promise<void> {
+    this.logger.log(`client: ${socket.client.id}`);
     this.logger.log(message);
     // TODO
+    socket.broadcast.emit(ChatEvent.Message, message);
   }
 }

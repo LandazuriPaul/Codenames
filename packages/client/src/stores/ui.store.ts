@@ -1,37 +1,28 @@
 import { action, observable } from 'mobx';
 import { persist } from 'mobx-persist';
-import io from 'socket.io-client';
 
-import { RoomJoinedMessage, SocketEvent } from '@codenames/domain';
+import {
+  RoomEvent,
+  RoomJoinedMessage,
+  SocketNamespace,
+} from '@codenames/domain';
 
-import { Logger, getNamespaceSocketUrl } from '~/utils';
+import { Logger } from '~/utils';
 
-import { ChildStore } from './child.store';
 import { RootStore } from './root.store';
+import { SocketEmitterStore } from './socketEmitter.store';
 
-export class UiStore extends ChildStore {
+export class UiStore extends SocketEmitterStore {
   static LOCALSTORAGE_KEY = 'ui';
+  static namespace = SocketNamespace.Room;
 
   @persist
   @observable
   roomId: string;
 
-  @observable
-  roomSize: number;
-
-  @persist
-  @observable
-  socketId: string;
-
-  @persist
-  @observable
-  token: string;
-
   @persist
   @observable
   username: string;
-
-  private socket: SocketIOClient.Socket;
 
   constructor(rootStore: RootStore) {
     super(rootStore);
@@ -41,57 +32,43 @@ export class UiStore extends ChildStore {
   @action
   init(): void {
     this.roomId = undefined;
-    this.roomSize = 0;
-    this.socketId = undefined;
-    this.token = undefined;
     this.username = undefined;
   }
 
-  connect(): void {
-    this.socket = io(getNamespaceSocketUrl(), {
-      query: { token: this.token },
-    });
-    this.socket.on(SocketEvent.ConnectError, this.connectError.bind(this));
-    this.socket.on(SocketEvent.RoomJoined, this.roomJoined.bind(this));
-    this.socket.on(SocketEvent.RoomLeft, this.roomLeft.bind(this));
-    this.socket.on(SocketEvent.UserJoined, this.userJoined.bind(this));
-    this.socket.on(SocketEvent.UserLeft, this.userLeft.bind(this));
-    this.socket.on('userList', this.userList.bind(this));
+  /*
+   * Getters / setters
+   */
+
+  @action
+  setUsername(username: string): void {
+    this.username = username;
   }
 
+  /*
+   * Emitters
+   */
+
   joinRoom(roomId: string): void {
-    this.connect();
+    this.rootStore.websocketStore.connect();
     Logger.log(`joining room ${roomId} as ${this.username}`);
-    this.socket.emit(SocketEvent.JoinRoom, {
+    this.emit(RoomEvent.JoinRoom, {
       roomId,
       username: this.username,
     });
   }
 
-  @action
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  connectError(err: any): void {
-    Logger.error(err);
-    this.token = undefined;
-    // TODO: retry with new token
-  }
-
-  @action
-  roomJoined({ roomId, socketId, roomSize }: RoomJoinedMessage): void {
-    this.roomId = roomId;
-    this.socketId = socketId;
-    this.roomSize = roomSize;
-    Logger.log(
-      `room ${this.roomId} (${this.roomSize} users) joined with self userId: ${this.socketId}`
-    );
-  }
-
   leaveRoom(): void {
-    if (!this.socket) {
-      return;
-    }
-    Logger.log(`leaving room ${this.roomId}`);
-    this.socket.emit(SocketEvent.LeaveRoom, this.roomId);
+    this.emit(RoomEvent.LeaveRoom, this.roomId);
+  }
+
+  /*
+   * Listeners
+   */
+
+  @action
+  roomJoined(roomId: string): void {
+    this.roomId = roomId;
+    Logger.log(`room ${this.roomId} joined`);
   }
 
   @action
@@ -101,24 +78,8 @@ export class UiStore extends ChildStore {
   }
 
   @action
-  setUsername(username: string): void {
-    this.username = username;
-  }
-
-  @action
-  setToken(token: string): void {
-    this.token = token;
-  }
-
-  @action
   userJoined(userId: string): void {
     Logger.log(`new user joined: ${userId}`);
-  }
-
-  @action
-  userLeft(userId: string): void {
-    Logger.log(`self user ${userId} left`);
-    this.socketId = undefined;
   }
 
   userList(roomSize: number): void {

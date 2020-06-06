@@ -11,20 +11,20 @@ import { useStores } from '~/hooks';
 
 export const Room: FC<{}> = observer(() => {
   const { roomId } = useParams();
-  const { uiStore } = useStores();
+  const { uiStore, websocketStore } = useStores();
 
   const cleanRoomId = cleanRoomIdFromInput(roomId);
   if (roomId !== cleanRoomId) {
     return <Redirect to={`/${cleanRoomId}`} />;
   }
 
-  if (uiStore.token) {
+  if (websocketStore.token) {
     uiStore.joinRoom(roomId);
   }
 
   return (
     <Layout>
-      {uiStore.token ? <Dashboard /> : <UsernameForm roomId={roomId} />}
+      {websocketStore.token ? <Dashboard /> : <UsernameForm roomId={roomId} />}
     </Layout>
   );
 });
