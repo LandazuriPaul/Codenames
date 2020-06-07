@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-import { JoinRoomMessage, RoomEvent } from '@codenames/domain';
+import { JoinRoomEnvelope, RoomEvent } from '@codenames/domain';
 
 import { RoomService } from './room.service';
 
@@ -23,7 +23,7 @@ export class RoomGateway {
   @SubscribeMessage(RoomEvent.JoinRoom)
   async onJoinRoom(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() { roomId, username }: JoinRoomMessage
+    @MessageBody() { roomId, username }: JoinRoomEnvelope
   ): Promise<void> {
     const userHash = this.roomService.pushSocketToUser(
       socket,

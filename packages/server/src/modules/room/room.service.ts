@@ -18,7 +18,7 @@ export class RoomService {
     try {
       return this.socketService.getSocketRoom({ roomId });
     } catch (err) {
-      throw new RoomNotFound();
+      throw new RoomNotFound(roomId);
     }
   }
 
@@ -26,7 +26,7 @@ export class RoomService {
     try {
       return this.socketService.getSocketRoom({ roomId, team });
     } catch (err) {
-      throw new TeamNotFound();
+      throw new TeamNotFound(roomId, team);
     }
   }
 
@@ -34,16 +34,16 @@ export class RoomService {
     try {
       return this.socketService.getSocketRoom({ roomId, username });
     } catch (err) {
-      throw new UserNotFound();
+      throw new UserNotFound(roomId, username);
     }
   }
 
   pushSocketToRoom(socket: Socket, roomId: string): SocketRoomHash {
-    return this.socketService.pushSocketToRoom(socket, { roomId });
+    return this.socketService.pushSocketToSocketRoom(socket, { roomId });
   }
 
   pushSocketToTeam(socket: Socket, roomId: string, team: Team): SocketRoomHash {
-    return this.socketService.pushSocketToRoom(socket, { roomId, team });
+    return this.socketService.pushSocketToSocketRoom(socket, { roomId, team });
   }
 
   pushSocketToUser(
@@ -51,6 +51,9 @@ export class RoomService {
     roomId: string,
     username: string
   ): SocketRoomHash {
-    return this.socketService.pushSocketToRoom(socket, { roomId, username });
+    return this.socketService.pushSocketToSocketRoom(socket, {
+      roomId,
+      username,
+    });
   }
 }

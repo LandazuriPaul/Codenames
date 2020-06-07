@@ -17,7 +17,7 @@ export const GeneralChatMessageList: FC<GeneralMessageListProps> = observer(
 
     return (
       <MessageList
-        messageList={generalChatMessageList}
+        messageList={[...generalChatMessageList]}
         forwardRef={forwardRef}
       />
     );

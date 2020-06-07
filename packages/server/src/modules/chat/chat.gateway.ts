@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { Logger } from '@nestjs/common';
 import {
   ConnectedSocket,
@@ -7,7 +8,12 @@ import {
 } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 
-import { ChatEvent } from '@codenames/domain';
+import {
+  ChatEvent,
+  GeneralChatEnvelope,
+  Team,
+  TeamChatEnvelope,
+} from '@codenames/domain';
 
 import { RoomService } from '~/modules/room/room.service';
 
@@ -17,14 +23,32 @@ export class ChatGateway {
 
   constructor(private readonly roomService: RoomService) {}
 
-  @SubscribeMessage(ChatEvent.Message)
-  async onMessage(
+  @SubscribeMessage(ChatEvent.GeneralMessage)
+  async onGeneralMessage(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() message: string
+    @MessageBody() { message, roomId }: { message: string; roomId: string }
   ): Promise<void> {
-    this.logger.log(`client: ${socket.client.id}`);
-    this.logger.log(message);
-    // TODO
-    socket.broadcast.emit(ChatEvent.Message, message);
+    const envelope: GeneralChatEnvelope = {
+      team: Team.A,
+      text: message,
+      timestamp: dayjs().valueOf(),
+      username: 'Frodo',
+    };
+    const room = this.roomService.getRoom(roomId);
+    socket.server.to(room).emit(ChatEvent.GeneralMessage, envelope);
+  }
+
+  @SubscribeMessage(ChatEvent.TeamMessage)
+  async onTeamMessage(
+    @ConnectedSocket() socket: Socket,
+    @MessageBody() { message, roomId }: { message: string; roomId: string }
+  ): Promise<void> {
+    const envelope: TeamChatEnvelope = {
+      text: message,
+      timestamp: dayjs().valueOf(),
+      username: 'Gandalf',
+    };
+    const room = this.roomService.getRoom(roomId);
+    socket.server.to(room).emit(ChatEvent.TeamMessage, envelope);
   }
 }

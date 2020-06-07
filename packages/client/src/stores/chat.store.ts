@@ -1,9 +1,14 @@
 import { action, observable } from 'mobx';
 
-import { ChatEvent, Team, Timestamp } from '@codenames/domain';
+import {
+  ChatEvent,
+  GeneralChatEnvelope,
+  Team,
+  TeamChatEnvelope,
+  Timestamp,
+} from '@codenames/domain';
 
-import { GeneralChatMessage, TeamChatMessage } from '~/domain';
-import { Logger } from '~/utils';
+import { ChatMessage, GeneralChatMessage, TeamChatMessage } from '~/domain';
 
 import { RootStore } from './root.store';
 import { SocketEmitterStore } from './socketEmitter.store';
@@ -31,16 +36,48 @@ export class ChatStore extends SocketEmitterStore {
   /*
    * Emitters
    */
-  sendMessage(message: string): void {
-    this.emit(ChatEvent.Message, message);
+  sendMessage(chanel: 'team' | 'general', message: string): void {
+    const event =
+      chanel === 'team' ? ChatEvent.TeamMessage : ChatEvent.GeneralMessage;
+    this.emit(event, { message, roomId: this.rootStore.uiStore.roomId });
   }
 
   /*
    * Listeners
    */
 
-  handleMessage(message: string): void {
-    Logger.log(`new message: ${message}`);
+  @action
+  handleMessage(envelope: GeneralChatEnvelope): void {
+    const message = this.generateChatMessageFromChatEnvelope(envelope);
+    if (envelope.team) {
+      this.generalChatMessageList.push(message as GeneralChatMessage);
+    } else {
+      this.teamChatMessageList.push(message as TeamChatMessage);
+    }
+  }
+
+  /*
+   * Helpers
+   */
+
+  generateChatMessageFromChatEnvelope(
+    envelope: TeamChatEnvelope | GeneralChatEnvelope
+  ): ChatMessage {
+    const message: ChatMessage = {
+      type: 'expression',
+      message: envelope,
+    };
+    this.addOptionalIsOwnToChatMessage(envelope, message);
+    return message;
+  }
+
+  addOptionalIsOwnToChatMessage(
+    envelope: GeneralChatEnvelope | TeamChatEnvelope,
+    chatMessage: ChatMessage
+  ): void {
+    if (envelope.username === this.rootStore.uiStore.username) {
+      chatMessage.isOwn = true;
+    }
   }
 }
 

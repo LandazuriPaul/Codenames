@@ -41,7 +41,7 @@ export const MessageInput: FC<{}> = () => {
     if (event) {
       event.preventDefault();
     }
-    chatStore.sendMessage(message);
+    chatStore.sendMessage(activeTab === 0 ? 'general' : 'team', message);
     setMessage('');
   }
 

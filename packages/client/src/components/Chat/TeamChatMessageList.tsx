@@ -16,7 +16,10 @@ export const TeamChatMessageList: FC<TeamMessageListProps> = observer(
     } = useStores();
 
     return (
-      <MessageList messageList={teamChatMessageList} forwardRef={forwardRef} />
+      <MessageList
+        messageList={[...teamChatMessageList]}
+        forwardRef={forwardRef}
+      />
     );
   }
 );

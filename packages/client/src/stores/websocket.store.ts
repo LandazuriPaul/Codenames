@@ -52,7 +52,8 @@ export class WebsocketStore extends ChildStore {
       .on(RoomEvent.UserJoined, uiStore.userJoined.bind(uiStore))
 
       // Chat
-      .on(ChatEvent.Message, chatStore.handleMessage.bind(chatStore));
+      .on(ChatEvent.GeneralMessage, chatStore.handleMessage.bind(chatStore))
+      .on(ChatEvent.TeamMessage, chatStore.handleMessage.bind(chatStore));
 
     // TODO: gamestore
   }

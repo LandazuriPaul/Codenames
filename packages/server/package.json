@@ -31,6 +31,7 @@
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/platform-socket.io": "^7.0.9",
     "@nestjs/websockets": "^7.0.9",
+    "dayjs": "^1.8.28",
     "dotenv": "^8.2.0",
     "git-last-commit": "^1.0.0",
     "passport": "^0.4.1",

@@ -1,5 +1,5 @@
 export class SocketRoomNotFound extends Error {
-  constructor(message = 'Socket room not found') {
-    super(message);
+  constructor(hash: string) {
+    super(`Socket ${hash} room not found`);
   }
 }

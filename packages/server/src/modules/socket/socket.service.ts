@@ -14,7 +14,7 @@ export class SocketService {
 
   constructor(private readonly configService: ConfigService) {}
 
-  pushSocketToRoom(
+  pushSocketToSocketRoom(
     socket: Socket,
     identifier: SocketRoomIdentifier
   ): SocketRoomHash {
@@ -27,7 +27,7 @@ export class SocketService {
     const hash = this.socketRoomHash(identifier);
     const room = this.server.sockets.adapter.rooms[hash];
     if (!room) {
-      throw new SocketRoomNotFound();
+      throw new SocketRoomNotFound(hash);
     }
     return hash;
   }

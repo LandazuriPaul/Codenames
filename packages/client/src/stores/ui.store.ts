@@ -1,7 +1,7 @@
 import { action, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 
-import { RoomEvent, RoomJoinedMessage } from '@codenames/domain';
+import { RoomEvent } from '@codenames/domain';
 
 import { Logger } from '~/utils';
 

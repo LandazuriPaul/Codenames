@@ -1,6 +1,10 @@
-import React, { FC, MutableRefObject, ReactElement } from 'react';
-
-import { TeamColor } from '@codenames/domain';
+import React, {
+  FC,
+  MutableRefObject,
+  ReactElement,
+  useEffect,
+  useState,
+} from 'react';
 
 import { ChatMessage } from '~/domain';
 
@@ -16,6 +20,29 @@ export const MessageList: FC<MessageListProps> = ({
   messageList,
   forwardRef,
 }) => {
+  const [isBottomScrolled, setIsBottomScrolled] = useState<boolean>(false);
+
+  useEffect(() => {
+    const messageContainer = forwardRef.current;
+    function detectBottomScroll(this: HTMLDivElement): void {
+      if (this.scrollTop + this.clientHeight === this.scrollHeight) {
+        setIsBottomScrolled(true);
+      } else {
+        setIsBottomScrolled(false);
+      }
+    }
+    messageContainer.addEventListener('scroll', detectBottomScroll);
+    return () => {
+      messageContainer.removeEventListener('scroll', detectBottomScroll);
+    };
+  }, [forwardRef]);
+
+  useEffect(() => {
+    if (isBottomScrolled) {
+      forwardRef.current.scrollTop = forwardRef.current.scrollHeight;
+    }
+  }, [forwardRef, isBottomScrolled, messageList]);
+
   function renderMessage({ ...chatMessage }: ChatMessage): ReactElement {
     return <Message key={chatMessage.message.timestamp} {...chatMessage} />;
   }

@@ -1,17 +1,19 @@
+import { Team } from '@codenames/domain';
+
 export class RoomNotFound extends Error {
-  constructor(message = 'Room not found') {
-    super(message);
+  constructor(roomId: string) {
+    super(`Room ${roomId} not found`);
   }
 }
 
 export class TeamNotFound extends Error {
-  constructor(message = 'team not found') {
-    super(message);
+  constructor(roomId: string, team: Team) {
+    super(`Team ${team} not found in room ${roomId}`);
   }
 }
 
 export class UserNotFound extends Error {
-  constructor(message = 'user not found') {
-    super(message);
+  constructor(roomId: string, username: string) {
+    super(`User ${username} not found in room ${roomId}`);
   }
 }

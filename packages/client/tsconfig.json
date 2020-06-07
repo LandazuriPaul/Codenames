@@ -3,7 +3,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "incremental": false,
     "isolatedModules": true,
     "jsx": "react",

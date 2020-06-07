@@ -1,7 +1,8 @@
 import { Team } from '~/enums';
+
 import { TeamChatEnvelope } from './teamChat.envelope';
 
 export interface GeneralChatEnvelope extends TeamChatEnvelope {
-  isSpyMaster?: boolean;
+  isSpyMaster?: true;
   team: Team;
 }
