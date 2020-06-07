@@ -6,8 +6,8 @@ import { Team } from '@codenames/domain';
 import { useStores } from '~/hooks';
 
 import { ChatControls } from './ChatControls';
-import { GlobalMessageList } from './GlobalMessageList';
-import { TeamMessageList } from './TeamMessageList';
+import { GeneralChatMessageList } from './GeneralChatMessageList';
+import { TeamChatMessageList } from './TeamChatMessageList';
 
 import { ChatContainer, MessageListContainer } from './chat.styles';
 
@@ -22,8 +22,8 @@ export const Chat: FC<{}> = observer(() => {
   return (
     <ChatContainer elevation={5} square>
       <MessageListContainer>
-        <GlobalMessageList forwardRef={globalChatRef} />
-        <TeamMessageList forwardRef={teamChatRef} />
+        <GeneralChatMessageList forwardRef={globalChatRef} />
+        <TeamChatMessageList forwardRef={teamChatRef} />
       </MessageListContainer>
       <ChatControls
         globalChatRef={globalChatRef}

@@ -6,6 +6,25 @@ import { Theme, Typography, TypographyProps } from '@material-ui/core';
 import { TeamColor } from '@codenames/domain';
 import { getThemeTeamColor } from '~/styles';
 
+export const InformationText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.grey[500],
+  width: '100%',
+  display: 'inline-block',
+}));
+
+export const OwnText = styled(
+  ({
+    ownColor,
+    ...rest
+  }: TypographyProps & {
+    ownColor: TeamColor;
+  }) => <Typography component="span" {...rest} />
+)(({ ownColor, theme }: { ownColor: TeamColor; theme: Theme }) => ({
+  color: `${getThemeTeamColor(theme, ownColor)}CC`,
+  width: '100%',
+  display: 'inline-block',
+}));
+
 export const Username = styled(
   ({
     isSpyMaster,

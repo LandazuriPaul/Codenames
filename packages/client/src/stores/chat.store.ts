@@ -1,12 +1,8 @@
 import { action, observable } from 'mobx';
 
-import {
-  ChatEvent,
-  GlobalChatMessage,
-  Team,
-  TeamChatMessage,
-} from '@codenames/domain';
+import { ChatEvent, Team, Timestamp } from '@codenames/domain';
 
+import { GeneralChatMessage, TeamChatMessage } from '~/domain';
 import { Logger } from '~/utils';
 
 import { RootStore } from './root.store';
@@ -14,10 +10,10 @@ import { SocketEmitterStore } from './socketEmitter.store';
 
 export class ChatStore extends SocketEmitterStore {
   @observable
-  globalMessageList: GlobalChatMessage[];
+  generalChatMessageList: GeneralChatMessage[];
 
   @observable
-  teamMessageList: TeamChatMessage[];
+  teamChatMessageList: TeamChatMessage[];
 
   constructor(rootStore: RootStore) {
     super(rootStore);
@@ -26,10 +22,10 @@ export class ChatStore extends SocketEmitterStore {
 
   @action
   init(): void {
-    this.globalMessageList = [];
-    this.teamMessageList = [];
-    // this.globalMessageList = fakeGlobalMessageList;
-    // this.teamMessageList = fakeTeamMessageList;
+    // this.globalMessageList = [];
+    // this.teamMessageList = [];
+    this.generalChatMessageList = fakeGeneralMessageList;
+    this.teamChatMessageList = fakeTeamMessageList;
   }
 
   /*
@@ -49,332 +45,57 @@ export class ChatStore extends SocketEmitterStore {
 }
 
 // FIXME
-const fakeGlobalMessageList: GlobalChatMessage[] = [
+const fakeGeneralMessageList: GeneralChatMessage[] = [
   {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: Team.B,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
+    type: 'expression',
+    message: {
+      team: Team.B,
+      text: 'Heeeey !',
+      timestamp: 1589867860806 as Timestamp,
+      username: 'Marcel',
+    },
   },
   {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: Team.A,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
+    type: 'information',
+    message: {
+      text: 'Bibi est arrivé !',
+      timestamp: 1589867871473 as Timestamp,
+    },
   },
   {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: Team.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
+    type: 'expression',
+    message: {
+      text: 'Je regarde comment vous jouez bande de nuls !',
+      timestamp: 1589867900032 as Timestamp,
+    },
   },
   {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: Team.A,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: Team.B,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: Team.A,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
-  },
-  {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: Team.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
-  },
-  {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: Team.A,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: Team.B,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: Team.A,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
-  },
-  {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: Team.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
-  },
-  {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: Team.A,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: Team.B,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: Team.A,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
-  },
-  {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: Team.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
-  },
-  {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: Team.A,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: Team.B,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: Team.A,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
-  },
-  {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: Team.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
-  },
-  {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: Team.A,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: Team.B,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: Team.A,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
-  },
-  {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: Team.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
-  },
-  {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: Team.A,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: Team.B,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: Team.A,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
-  },
-  {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: Team.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
-  },
-  {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: Team.A,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: Team.B,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: Team.A,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
-  },
-  {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: Team.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
-  },
-  {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: Team.A,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    team: Team.B,
-    text: 'Heeeey !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZjkQKZKYSvHLwAAAB',
-    team: Team.A,
-    text:
-      "Salut la compagnie ! Je vous envoie un très long message parce que j'ai plein de trucs à raconter",
-    timestamp: 1589867871473,
-    username: 'Étienne',
-  },
-  {
-    socketId: 'p2j8RJlaMzAovHLwAAAB',
-    team: Team.Observer,
-    text: 'Je regarde comment vous jouez bande de nuls !',
-    timestamp: 1589867900032,
-    username: 'Antoine',
-  },
-  {
-    isSpyMaster: true,
-    socketId: 'Zk1ZjkQKZ9eMvHLwAAAB',
-    team: Team.A,
-    text: 'Moi je peux pas voir votre petite convers',
-    timestamp: 1589867874019,
-    username: 'Robert',
+    type: 'expression',
+    isOwn: true,
+    message: {
+      team: Team.A,
+      text: 'Moi je peux pas voir votre petite convers',
+      timestamp: 1589867874019 as Timestamp,
+      username: 'Robert',
+    },
   },
 ];
 
 const fakeTeamMessageList: TeamChatMessage[] = [
   {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    text: 'Message privé !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
+    type: 'expression',
+    message: {
+      text: 'Message privé !',
+      timestamp: 1589867860806 as Timestamp,
+      username: 'Marcel',
+    },
   },
+
   {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    text: 'Message privé !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    text: 'Message privé !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    text: 'Message privé !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    text: 'Message privé !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    text: 'Message privé !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    text: 'Message privé !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    text: 'Message privé !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
-  },
-  {
-    socketId: 'Zk1ZcJlaMzAovHLwAAAB',
-    text: 'Message privé !',
-    timestamp: 1589867860806,
-    username: 'Marcel',
+    type: 'information',
+    message: {
+      text: 'Bibi est arrivé !',
+      timestamp: 1589867871473 as Timestamp,
+    },
   },
 ];

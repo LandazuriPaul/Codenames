@@ -5,18 +5,18 @@ import { useStores } from '~/hooks';
 
 import { MessageList } from './MessageList';
 
-interface GlobalMessageListProps {
+interface TeamMessageListProps {
   forwardRef: MutableRefObject<HTMLDivElement>;
 }
 
-export const GlobalMessageList: FC<GlobalMessageListProps> = observer(
+export const TeamChatMessageList: FC<TeamMessageListProps> = observer(
   ({ forwardRef }) => {
     const {
-      chatStore: { globalMessageList },
+      chatStore: { teamChatMessageList },
     } = useStores();
 
     return (
-      <MessageList messageList={globalMessageList} forwardRef={forwardRef} />
+      <MessageList messageList={teamChatMessageList} forwardRef={forwardRef} />
     );
   }
 );

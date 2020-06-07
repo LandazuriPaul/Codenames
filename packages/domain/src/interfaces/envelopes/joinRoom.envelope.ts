@@ -1,4 +1,4 @@
-export interface JoinRoomMessage {
+export interface JoinRoomEnvelope {
   roomId: string;
   username: string;
 }

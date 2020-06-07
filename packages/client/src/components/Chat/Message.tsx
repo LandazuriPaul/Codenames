@@ -1,57 +1,83 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement } from 'react';
+import { observer } from 'mobx-react-lite';
 import dayjs from 'dayjs';
 import { Tooltip, Typography } from '@material-ui/core';
 
-import { Team, TeamChatMessage, TeamColor } from '@codenames/domain';
-
+import { BaseMessage, ChatMessage, GeneralMessage } from '~/domain';
+import { useStores } from '~/hooks';
 import { getTeamColor } from '~/utils';
 
 import {
+  InformationText,
   MessageContainer,
   MessageTooltipContainer,
+  OwnText,
   Text,
   TooltipTime,
   Username,
 } from './message.styles';
 
-export interface GenericChatMessage extends TeamChatMessage {
-  senderColor?: TeamColor;
-  isSpyMaster?: boolean;
-  team?: Team;
-}
+export const Message: FC<ChatMessage> = ({ type, isOwn = false, message }) => {
+  let messageElement: ReactElement;
 
-type MessageProps = Omit<GenericChatMessage, 'socketId'>;
+  if (type === 'information') {
+    messageElement = <InformationMessage {...message} />;
+  } else if (isOwn) {
+    messageElement = <OwnMessage {...message} />;
+  } else {
+    messageElement = <OthersMessage {...(message as GeneralMessage)} />;
+  }
 
-export const Message: FC<MessageProps> = ({
-  isSpyMaster = false,
-  senderColor,
-  team,
-  text,
-  timestamp,
-  username,
-}) => {
+  return <MessageContainer>{messageElement}</MessageContainer>;
+};
+
+const InformationMessage: FC<BaseMessage> = ({ text }) => {
   return (
-    <MessageContainer>
-      <Tooltip
-        placement="left"
-        title={
-          <MessageTooltip isSpyMaster={isSpyMaster} timestamp={timestamp} />
-        }
-      >
-        <span>
-          <Username
-            isSpyMaster={isSpyMaster}
-            senderColor={senderColor || getTeamColor(team)}
-            variant="body2"
-          >
-            {username}
-          </Username>
-        </span>
-      </Tooltip>
-      <Text variant="body2">{text}</Text>
-    </MessageContainer>
+    <InformationText variant="body2" align="center">
+      {text}
+    </InformationText>
   );
 };
+
+const OwnMessage: FC<BaseMessage> = observer(({ text }) => {
+  const {
+    gameStore: { userColor },
+  } = useStores();
+  return (
+    <OwnText variant="body2" align="right" ownColor={userColor}>
+      {text}
+    </OwnText>
+  );
+});
+
+const OthersMessage: FC<GeneralMessage> = observer(
+  ({ isSpyMaster, team, text, timestamp, username }) => {
+    const {
+      gameStore: { userColor },
+    } = useStores();
+    return (
+      <>
+        <Tooltip
+          placement="left"
+          title={
+            <MessageTooltip isSpyMaster={isSpyMaster} timestamp={timestamp} />
+          }
+        >
+          <span>
+            <Username
+              isSpyMaster={isSpyMaster}
+              senderColor={team ? getTeamColor(team) : userColor}
+              variant="body2"
+            >
+              {username}
+            </Username>
+          </span>
+        </Tooltip>
+        <Text variant="body2">{text}</Text>
+      </>
+    );
+  }
+);
 
 interface MessageTooltipProps {
   isSpyMaster: boolean;

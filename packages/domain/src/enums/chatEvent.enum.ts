@@ -1,4 +1,4 @@
 export enum ChatEvent {
-  Message = 'message',
-  UserList = 'userList',
+  GeneralMessage = 'generalMessage',
+  TeamMessage = 'teamMessage',
 }

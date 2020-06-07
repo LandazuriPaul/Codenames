@@ -1,5 +1,5 @@
 export * from './dtos';
-export * from './messages';
+export * from './envelopes';
 export * from './payloads';
 export * from './settings';
 export * from './cell.interface';
