@@ -2,14 +2,8 @@ import { createHash } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { Socket } from 'socket.io';
 
-import { JwtPayload } from '@codenames/domain';
-
 import { ConfigService } from '~/modules/shared/config/config.service';
-
-interface UserIdentifier {
-  roomId: string;
-  username: string;
-}
+import { User } from '~/modules/user/user.class';
 
 @Injectable()
 export class SocketService {
@@ -17,8 +11,8 @@ export class SocketService {
 
   constructor(private readonly configService: ConfigService) {}
 
-  addSocketToUser(payload: JwtPayload, socket: Socket): boolean {
-    const userHash = this.getUserHash(payload);
+  addSocketToUser(user: User, socket: Socket): boolean {
+    const userHash = this.getUserHash(user);
     const existingSockets = this.socketHashMap.get(userHash) || [];
 
     const sockets = [...existingSockets, socket];
@@ -28,13 +22,13 @@ export class SocketService {
     return true;
   }
 
-  getUserSockets(payload: JwtPayload): Socket[] {
-    const userHash = this.getUserHash(payload);
+  getUserSockets(user: User): Socket[] {
+    const userHash = this.getUserHash(user);
     return this.socketHashMap.get(userHash) || [];
   }
 
-  removeSocketFromUser(payload: JwtPayload, socket: Socket): boolean {
-    const userHash = this.getUserHash(payload);
+  removeSocketFromUser(user: User, socket: Socket): boolean {
+    const userHash = this.getUserHash(user);
     const existingSockets = this.socketHashMap.get(userHash);
 
     if (!existingSockets) {
@@ -52,8 +46,8 @@ export class SocketService {
     return true;
   }
 
-  private getUserHash({ roomId, username }: UserIdentifier): string {
-    const input = `${username}@${roomId}`;
+  private getUserHash(user: User): string {
+    const input = `${user.username}@${user.room._id}`;
     return createHash(this.configService.socketRoomHashAlgorithm)
       .update(input)
       .digest(this.configService.socketRoomEncryptionFormat);

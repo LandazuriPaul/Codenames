@@ -30,7 +30,7 @@ export class RedisPropagatorInterceptor<T>
         this.redisPropagatorService.propagateEvent({
           ...data,
           socketId: socket.id,
-          payload: socket.auth,
+          user: socket.user,
         });
       })
     );

@@ -43,4 +43,5 @@ interface User {
   roomId: string;
   team: Team;
   isSpyMaster: boolean;
+  messages: Promise<Message[]>;
 }

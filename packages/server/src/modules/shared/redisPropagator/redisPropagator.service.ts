@@ -39,7 +39,7 @@ export class RedisPropagatorService {
   }
 
   propagateEvent(eventInfo: RedisSocketEventSendDTO): boolean {
-    if (!eventInfo.payload) {
+    if (!eventInfo.user) {
       return false;
     }
 
@@ -64,10 +64,10 @@ export class RedisPropagatorService {
   }
 
   private consumeSendEvent = (eventInfo: RedisSocketEventSendDTO): void => {
-    const { payload, event, data, socketId } = eventInfo;
+    const { user, event, data, socketId } = eventInfo;
 
     return this.socketService
-      .getUserSockets(payload)
+      .getUserSockets(user)
       .filter(socket => socket.id !== socketId)
       .forEach(socket => socket.emit(event, data));
   };

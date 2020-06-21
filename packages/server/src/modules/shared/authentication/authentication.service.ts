@@ -5,7 +5,7 @@ import { SignOptions } from 'jsonwebtoken';
 import { JwtPayload, TokenPayload } from '@codenames/domain';
 
 import { ConfigService } from '~/modules/shared/config/config.service';
-import { User } from '~/modules/user/user.entity';
+import { User } from '~/modules/user/user.class';
 import { UserService } from '~/modules/user/user.service';
 
 @Injectable()

@@ -1,13 +1,16 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
-  PrimaryColumn,
+  ObjectIdColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('room')
+import { Team } from '@codenames/domain';
+
+@Entity('rooms')
 export class Room {
-  @PrimaryColumn()
+  @ObjectIdColumn()
   _id: string;
 
   @CreateDateColumn()
@@ -15,4 +18,15 @@ export class Room {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column()
+  teams: Record<Team, RoomTeam>;
+
+  @Column()
+  usernames: string[];
+}
+
+class RoomTeam {
+  players: string[];
+  sypMaster?: string;
 }

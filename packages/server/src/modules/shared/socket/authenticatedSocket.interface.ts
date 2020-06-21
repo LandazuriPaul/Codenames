@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 
-import { JwtPayload } from '@codenames/domain';
+import { User } from '~/modules/user/user.class';
 
 export interface AuthenticatedSocket extends Socket {
-  auth: JwtPayload;
+  user: User;
 }

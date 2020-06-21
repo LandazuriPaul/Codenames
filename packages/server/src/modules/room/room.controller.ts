@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Logger,
   Param,
   Post,
   Res,
@@ -19,6 +20,8 @@ import { RoomService } from './room.service';
 
 @Controller('room')
 export class RoomController {
+  private logger = new Logger(RoomController.name);
+
   constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly roomService: RoomService,
@@ -49,6 +52,7 @@ export class RoomController {
       if (err instanceof ConflictException) {
         throw err;
       }
+      await this.roomService.addUserToRoom(roomId, username, true);
       return this.authenticationService.createAccessToken({ roomId, username });
     }
   }

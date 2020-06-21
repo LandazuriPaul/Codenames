@@ -1,4 +1,4 @@
-import { Logger, UseInterceptors } from '@nestjs/common';
+import { Logger, UseInterceptors, UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -14,6 +14,7 @@ import { AuthenticatedSocket } from '~/modules/shared/socket/authenticatedSocket
 import { RedisPropagatorInterceptor } from '~/modules/shared/redisPropagator/redisPropagator.interceptor';
 
 import { RoomService } from './room.service';
+import { JwtAuthGuard } from '~/guards/jwtAuth.guard';
 
 @UseInterceptors(RedisPropagatorInterceptor)
 @WebSocketGateway({ serveClient: false })
@@ -24,12 +25,13 @@ export class RoomGateway {
 
   constructor(private readonly roomService: RoomService) {}
 
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage(RoomEvent.JoinRoom)
   async onJoinRoom(
     @ConnectedSocket() socket: AuthenticatedSocket,
     @MessageBody() { roomId, username }: JoinRoomEnvelope
   ): Promise<void> {
-    this.logger.log(`userHash: ${JSON.stringify(socket.auth)}`);
+    this.logger.log(`userHash: ${JSON.stringify(socket.user)}`);
     // this.server.to(userHash).emit(RoomEvent.RoomJoined, roomId);
     // this.server.to(roomHash).emit(RoomEvent.UserJoined, username);
   }

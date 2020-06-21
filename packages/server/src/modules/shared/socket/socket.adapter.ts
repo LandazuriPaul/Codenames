@@ -10,6 +10,7 @@ import { extract, parse } from 'query-string';
 
 import { JwtPayload } from '@codenames/domain';
 
+import { AuthenticationService } from '~/modules/shared/authentication/authentication.service';
 import { RedisPropagatorService } from '~/modules/shared/redisPropagator/redisPropagator.service';
 
 import { SocketService } from './socket.service';
@@ -22,7 +23,8 @@ export class SocketAdapter extends IoAdapter implements WebSocketAdapter {
     app: INestApplicationContext,
     private readonly socketService: SocketService,
     private readonly redisPropagatorService: RedisPropagatorService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly authenticationService: AuthenticationService
   ) {
     super(app);
   }
@@ -38,11 +40,11 @@ export class SocketAdapter extends IoAdapter implements WebSocketAdapter {
 
   bindClientConnect(server: Server, callback: Function): void {
     server.on('connection', (socket: AuthenticatedSocket) => {
-      if (socket.auth) {
-        this.socketService.addSocketToUser(socket.auth, socket);
+      if (socket.user) {
+        this.socketService.addSocketToUser(socket.user, socket);
 
         socket.on('disconnect', () => {
-          this.socketService.removeSocketFromUser(socket.auth, socket);
+          this.socketService.removeSocketFromUser(socket.user, socket);
 
           socket.removeAllListeners('disconnect');
         });
@@ -60,14 +62,13 @@ export class SocketAdapter extends IoAdapter implements WebSocketAdapter {
     const token = parse(extract(socket.request.url))?.token as string;
     try {
       if (!token) {
-        // CLOSE_PROTOCOL_ERROR: Endpoint received a malformed frame
         return next(new Error('No token found'));
       }
-      const authPayload = await this.jwtService.verify<Promise<JwtPayload>>(
-        token
-      );
+      const authPayload = this.jwtService.verify<JwtPayload>(token);
       if (authPayload) {
-        socket.auth = authPayload;
+        socket.user = await this.authenticationService.validatePayload(
+          authPayload
+        );
         return next();
       }
       return next(new Error('Invalid token'));
