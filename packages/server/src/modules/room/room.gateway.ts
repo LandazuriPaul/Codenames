@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UseInterceptors } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -6,12 +6,16 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 
 import { JoinRoomEnvelope, RoomEvent } from '@codenames/domain';
 
+import { AuthenticatedSocket } from '~/modules/shared/socket/authenticatedSocket.interface';
+import { RedisPropagatorInterceptor } from '~/modules/shared/redisPropagator/redisPropagator.interceptor';
+
 import { RoomService } from './room.service';
 
+@UseInterceptors(RedisPropagatorInterceptor)
 @WebSocketGateway({ serveClient: false })
 export class RoomGateway {
   @WebSocketServer()
@@ -22,16 +26,11 @@ export class RoomGateway {
 
   @SubscribeMessage(RoomEvent.JoinRoom)
   async onJoinRoom(
-    @ConnectedSocket() socket: Socket,
+    @ConnectedSocket() socket: AuthenticatedSocket,
     @MessageBody() { roomId, username }: JoinRoomEnvelope
   ): Promise<void> {
-    const userHash = this.roomService.pushSocketToUser(
-      socket,
-      roomId,
-      username
-    );
-    const roomHash = this.roomService.pushSocketToRoom(socket, roomId);
-    this.server.to(userHash).emit(RoomEvent.RoomJoined, roomId);
-    this.server.to(roomHash).emit(RoomEvent.UserJoined, username);
+    this.logger.log(`userHash: ${JSON.stringify(socket.auth)}`);
+    // this.server.to(userHash).emit(RoomEvent.RoomJoined, roomId);
+    // this.server.to(roomHash).emit(RoomEvent.UserJoined, username);
   }
 }

@@ -8,9 +8,47 @@ services:
       - ./packages/api/env/production.env:/usr/src/codenames/packages/api/env/production.env
     expose:
       - '4000'
+    networks:
+      codenames:
     environment:
       - NODE_ENV=production
+
+  # Redis
+  redis:
+    image: redis:alpine
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    networks:
+      codenames:
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/bitnami/redis/data
+
+  # Mongodb
+  mongodb:
+    image: mongo:4
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=init_user
+      - MONGO_INITDB_ROOT_PASSWORD=fkIh!72N#
+    volumes:
+      # Files placed in the docker-entrypoint-initdb.d
+      # will be executed in alphabetical order
+      - ./database/mongodb/credentials.js:/docker-entrypoint-initdb.d/a.js
+      - ./database/mongodb/init.js:/docker-entrypoint-initdb.d/b.js
+      # If there is already a db, previous scripts will be skipped
+      # and the following database will be mounted instead
+      - mongo-data:/data/db
 
   # Frontend
   frontend:
     image: docker.pkg.github.com/landazuripaul/codenames/codenames-frontend:latest
+
+volumes:
+  redis-data:
+  mongo-data:
+
+networks:
+  codenames:
+    name: codenames

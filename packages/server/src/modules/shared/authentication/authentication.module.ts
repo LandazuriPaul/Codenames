@@ -1,9 +1,9 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 
-import { ConfigModule } from '~/modules/config/config.module';
-import { ConfigService } from '~/modules/config/config.service';
-import { RoomModule } from '~/modules/room/room.module';
+import { ConfigModule } from '~/modules/shared/config/config.module';
+import { ConfigService } from '~/modules/shared/config/config.service';
+import { UserModule } from '~/modules/user/user.module';
 
 import { AuthenticationService } from './authentication.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -20,7 +20,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       }),
       inject: [ConfigService],
     }),
-    forwardRef(() => RoomModule),
+    forwardRef(() => UserModule),
   ],
   providers: [AuthenticationService, JwtStrategy],
   exports: [AuthenticationService],

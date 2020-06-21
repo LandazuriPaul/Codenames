@@ -12,7 +12,8 @@ import { Response } from 'express';
 
 import { ConnectDto, TokenPayload } from '@codenames/domain';
 
-import { AuthenticationService } from '~/modules/authentication/authentication.service';
+import { AuthenticationService } from '~/modules/shared/authentication/authentication.service';
+import { UserService } from '~/modules/user/user.service';
 
 import { RoomService } from './room.service';
 
@@ -20,13 +21,17 @@ import { RoomService } from './room.service';
 export class RoomController {
   constructor(
     private readonly authenticationService: AuthenticationService,
-    private readonly roomService: RoomService
+    private readonly roomService: RoomService,
+    private readonly userService: UserService
   ) {}
 
   @Get(':roomId')
-  getRoom(@Param('roomId') roomId: string, @Res() res: Response): void {
+  async getRoom(
+    @Param('roomId') roomId: string,
+    @Res() res: Response
+  ): Promise<void> {
     try {
-      this.roomService.getRoom(roomId);
+      await this.roomService.getRoom(roomId);
       res.status(HttpStatus.OK).send();
     } catch {
       res.status(HttpStatus.NO_CONTENT).send();
@@ -34,9 +39,11 @@ export class RoomController {
   }
 
   @Post()
-  connect(@Body() { roomId, username }: ConnectDto): TokenPayload {
+  async connect(
+    @Body() { roomId, username }: ConnectDto
+  ): Promise<TokenPayload> {
     try {
-      this.roomService.getUserInRoom(roomId, username);
+      await this.userService.getUser(roomId, username);
       throw new ConflictException('Username already used in this room.');
     } catch (err) {
       if (err instanceof ConflictException) {

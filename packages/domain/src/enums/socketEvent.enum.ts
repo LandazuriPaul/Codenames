@@ -1,6 +1,6 @@
 export enum SocketEvent {
   Connect = 'connect',
-  ConnectError = 'connect_error',
+  ConnectError = 'error',
   Disconnect = 'disconnect',
   Exception = 'exception',
 }

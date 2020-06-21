@@ -7,6 +7,7 @@ import { number, object, string } from '@hapi/joi';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 
 export class ConfigService {
+  public envConfig: DotenvParseOutput;
   public rootDir: string;
   public runningDir: string;
 
@@ -21,8 +22,15 @@ export class ConfigService {
       .required(),
     SOCKET_ROOM_HASH_ALGORITHM: string().default('sha1'),
     SECRET_JWT_KEY: string().required(),
+    SECRET_MONGODB_DATABASE: string().required(),
+    SECRET_MONGODB_HOST: string().required(),
+    SECRET_MONGODB_PASSWORD: string().required(),
+    SECRET_MONGODB_PORT: string().required(),
+    SECRET_MONGODB_USERNAME: string().required(),
+    SECRET_REDIS_HOST: string().required(),
+    SECRET_REDIS_PASSWORD: string().required(),
+    SECRET_REDIS_PORT: number().required(),
   });
-  private envConfig: DotenvParseOutput;
   private logger = new Logger(ConfigService.name);
 
   constructor() {
@@ -168,5 +176,36 @@ export class ConfigService {
 
   get secretJwtKey(): string {
     return String(this.envConfig.SECRET_JWT_KEY);
+  }
+
+  get secretMongoDatabase(): string {
+    return String(this.envConfig.SECRET_MONGODB_DATABASE);
+  }
+  get secretMongoHost(): string {
+    return String(this.envConfig.SECRET_MONGODB_HOST);
+  }
+
+  get secretMongoPassword(): string {
+    return String(this.envConfig.SECRET_MONGODB_PASSWORD);
+  }
+
+  get secretMongoPort(): number {
+    return parseInt(this.envConfig.SECRET_MONGODB_PORT, 10);
+  }
+
+  get secretMongoUsername(): string {
+    return String(this.envConfig.SECRET_MONGODB_USERNAME);
+  }
+
+  get secretRedisHost(): string {
+    return String(this.envConfig.SECRET_REDIS_HOST);
+  }
+
+  get secretRedisPassword(): string {
+    return String(this.envConfig.SECRET_REDIS_PASSWORD);
+  }
+
+  get secretRedisPort(): number {
+    return parseInt(this.envConfig.SECRET_REDIS_PORT, 10);
   }
 }

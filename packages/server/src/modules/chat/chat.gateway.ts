@@ -35,7 +35,7 @@ export class ChatGateway {
       username: 'Frodo',
     };
     const room = this.roomService.getRoom(roomId);
-    socket.server.to(room).emit(ChatEvent.GeneralMessage, envelope);
+    // socket.server.to(room).emit(ChatEvent.GeneralMessage, envelope);
   }
 
   @SubscribeMessage(ChatEvent.TeamMessage)
@@ -49,6 +49,6 @@ export class ChatGateway {
       username: 'Gandalf',
     };
     const room = this.roomService.getRoom(roomId);
-    socket.server.to(room).emit(ChatEvent.TeamMessage, envelope);
+    // socket.server.to(room).emit(ChatEvent.TeamMessage, envelope);
   }
 }

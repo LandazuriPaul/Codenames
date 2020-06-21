@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 
-import { ConfigModule } from './config/config.module';
-import { ChatModule } from './chat/chat.module';
+import { DatabaseModule } from './database/database.module';
+// import { ChatModule } from './chat/chat.module';
 import { HelloModule } from './hello/hello.module';
 import { RoomModule } from './room/room.module';
-import { SocketModule } from './socket/socket.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
-  imports: [ConfigModule, ChatModule, HelloModule, RoomModule, SocketModule],
+  imports: [SharedModule, DatabaseModule, HelloModule, RoomModule],
 })
 export class APIModule {}

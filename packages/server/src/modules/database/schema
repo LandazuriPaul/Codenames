@@ -1,0 +1,46 @@
+interface Team {
+  players: string[]; // referring to username
+  remaining: number;
+  spy_master: string; // referring to username
+}
+
+interface Room {
+  _id: string; // the URL
+  created_at: Date;
+  updated_at: Date; // expireAfterSeconds: 3600 * 24
+  usernames: string[];
+  teams?: {
+    a: Team;
+    b: Team;
+    o: Team;
+  };
+  messages: Message;
+}
+
+interface Game {
+  _id: ID;
+  room_id: ID;
+  codenames: string[];
+}
+
+interface Codename {
+  word: string;
+  is_revealed: boolean;
+  type: CellType;
+  is_selected: boolean;
+}
+
+interface Message {
+  _id: ID;
+  timestamp: Date;
+  room_id: ID;
+  username: string;
+}
+
+// NOT DB
+interface User {
+  username: string;
+  roomId: string;
+  team: Team;
+  isSpyMaster: boolean;
+}

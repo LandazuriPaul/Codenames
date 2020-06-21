@@ -11,9 +11,3 @@ export class TeamNotFound extends Error {
     super(`Team ${team} not found in room ${roomId}`);
   }
 }
-
-export class UserNotFound extends Error {
-  constructor(roomId: string, username: string) {
-    super(`User ${username} not found in room ${roomId}`);
-  }
-}

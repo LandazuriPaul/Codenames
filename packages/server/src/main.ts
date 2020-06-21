@@ -1,13 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 
 import { APIModule } from './modules/api.module';
-import { AuthenticatedSocketIoAdapter } from './modules/authentication/authenticatedSocketIo.adapter';
+import { ConfigService } from './modules/shared/config/config.service';
+
+import { initAdapters } from './initAdapters';
 
 async function bootstrap(): Promise<void> {
+  // Instantiate server app
   const app = await NestFactory.create(APIModule);
-  const config = app.get('ConfigService').envConfig;
+
+  // Get server config
+  const config = app.get(ConfigService).envConfig;
+
+  // CORS settings
   app.enableCors({ origin: config.CORS_WHITELIST.split(',') });
-  app.useWebSocketAdapter(new AuthenticatedSocketIoAdapter(app));
+
+  // Attach all adapters
+  initAdapters(app);
+
+  // Listen to configured port
   await app.listen(config.PORT);
 }
 bootstrap();
