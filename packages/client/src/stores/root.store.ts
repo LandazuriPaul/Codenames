@@ -42,6 +42,10 @@ export class RootStore {
       rootStore.gameStore
     );
     await hydrate(`codenames_${UiStore.LOCALSTORAGE_KEY}`, rootStore.uiStore);
+    await hydrate(
+      `codenames_${WebsocketStore.LOCALSTORAGE_KEY}`,
+      rootStore.websocketStore
+    );
 
     // singleton instance
     RootStore.instance = rootStore;
