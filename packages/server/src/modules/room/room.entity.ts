@@ -24,6 +24,10 @@ export class Room {
 
   @Column()
   usernames: string[];
+
+  get size(): number {
+    return this.usernames.length;
+  }
 }
 
 class RoomTeam {

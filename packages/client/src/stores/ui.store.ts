@@ -61,9 +61,10 @@ export class UiStore extends SocketEmitterStore {
    */
 
   @action
-  roomJoined(roomId: string): void {
+  roomJoined({ roomId, roomSize }: { roomId: string; roomSize: number }): void {
     this.roomId = roomId;
     Logger.log(`room ${this.roomId} joined`);
+    Logger.log(`the room has ${roomSize} people`);
   }
 
   @action

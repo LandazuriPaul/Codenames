@@ -27,10 +27,12 @@ export class RoomGateway {
   async onJoinRoom(
     @ConnectedSocket() socket: AuthenticatedSocket
   ): Promise<void> {
-    this.logger.log('user joining');
-    this.logger.log(`joining user: ${JSON.stringify(socket.user)}`);
-    // this.server.to(userHash).emit(RoomEvent.RoomJoined, roomId);
-    // this.server.to(roomHash).emit(RoomEvent.UserJoined, username);
+    const { room, username } = socket.user;
+    if (!room.usernames.includes(username)) {
+      this.roomService.addUserToRoom(room._id, username);
+    }
+    // TODO: send all messages
+    socket.emit(RoomEvent.RoomJoined, { roomSize: room.size });
   }
 
   @SubscribeMessage(RoomEvent.LeaveRoom)
