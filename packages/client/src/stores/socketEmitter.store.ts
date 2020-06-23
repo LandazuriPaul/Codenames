@@ -8,6 +8,9 @@ export abstract class SocketEmitterStore extends ChildStore {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   emit(event: string, ...args: any[]): void {
+    if (!this.rootStore.websocketStore.socket) {
+      return;
+    }
     this.rootStore.websocketStore.socket.emit(event, ...args);
   }
 }

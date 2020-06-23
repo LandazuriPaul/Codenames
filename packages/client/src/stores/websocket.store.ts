@@ -17,7 +17,7 @@ export class WebsocketStore extends ChildStore {
   @observable
   token: string;
 
-  private _socket: SocketIOClient.Socket;
+  _socket: SocketIOClient.Socket;
 
   constructor(rootStore: RootStore) {
     super(rootStore);
@@ -43,6 +43,7 @@ export class WebsocketStore extends ChildStore {
       // Default
       .on(SocketEvent.Connect, this.handleConnect.bind(this))
       .on(SocketEvent.ConnectError, this.handleConnectError.bind(this))
+      .on(SocketEvent.Error, this.handleError.bind(this))
       .on(SocketEvent.Exception, this.handleException.bind(this))
       .on(SocketEvent.Disconnect, this.handleDisconnect.bind(this))
 
@@ -85,16 +86,25 @@ export class WebsocketStore extends ChildStore {
    */
 
   @action
+  handleConnect(): void {
+    Logger.log('ws: connection established');
+  }
+
+  @action
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleConnectError(err: any): void {
+    Logger.log('ws: connection error');
     Logger.error(err);
     this.token = undefined;
     // TODO: retry with new token
   }
 
   @action
-  handleConnect(): void {
-    Logger.log('ws: connection established');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleError(err: any): void {
+    Logger.log('ws: error');
+    Logger.error(err);
+    // TODO: reconnect
   }
 
   @action
@@ -105,7 +115,7 @@ export class WebsocketStore extends ChildStore {
   @action
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleException(exception: any): void {
-    Logger.warn('A WS exception occurred');
+    Logger.log('A WS exception occurred');
     Logger.warn(exception);
   }
 }

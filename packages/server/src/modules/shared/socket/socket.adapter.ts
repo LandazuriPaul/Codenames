@@ -30,11 +30,12 @@ export class SocketAdapter extends IoAdapter implements WebSocketAdapter {
   }
 
   create(port: number, options: ServerOptions = {}): Server {
+    options.allowRequest = this.allowRequest.bind(this);
     const server: Server = super.createIOServer(port, options);
 
-    server.use(this.allowRequest.bind(this));
-    this.redisPropagatorService.injectSocketServer(server);
+    server.use(this.attachUserToSocket.bind(this));
 
+    this.redisPropagatorService.injectSocketServer(server);
     return server;
   }
 
@@ -54,27 +55,41 @@ export class SocketAdapter extends IoAdapter implements WebSocketAdapter {
     });
   }
 
-  private async allowRequest(
+  private async attachUserToSocket(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     socket: any,
     next: (err?: Error) => void
   ): Promise<void> {
-    const token = parse(extract(socket.request.url))?.token as string;
+    const token = this.getRequestToken(socket.request);
+    const authPayload = this.jwtService.verify<JwtPayload>(token);
+    socket.user = await this.authenticationService.validatePayload(authPayload);
+    next();
+  }
+
+  private allowRequest(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    request: any,
+    callback: (err: number, success: boolean) => void
+  ): void {
+    const token = this.getRequestToken(request);
     try {
       if (!token) {
-        return next(new Error('No token found'));
+        // CLOSE_PROTOCOL_ERROR: Endpoint received a malformed frame
+        return callback(1002, false);
       }
       const authPayload = this.jwtService.verify<JwtPayload>(token);
       if (authPayload) {
-        socket.user = await this.authenticationService.validatePayload(
-          authPayload
-        );
-        return next();
+        return callback(0, true);
       }
-      return next(new Error('Invalid token'));
+      return callback(4000, false);
     } catch (err) {
       this.logger.log(err);
-      return next(new Error('Invalid token'));
+      return callback(4000, false);
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private getRequestToken(request: any): string {
+    return parse(extract(request.url))?.token as string;
   }
 }
