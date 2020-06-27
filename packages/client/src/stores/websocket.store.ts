@@ -98,7 +98,8 @@ export class WebsocketStore extends ChildStore {
   handleConnectError(err: any): void {
     Logger.log('ws: connection error');
     Logger.error(err);
-    this.token = undefined;
+    // If after a number of retries it doesn't work
+    // we should let know the user and eventually delete the token
     // TODO: retry with new token
   }
 

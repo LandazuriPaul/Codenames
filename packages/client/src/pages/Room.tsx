@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
@@ -19,13 +19,14 @@ export const Room: FC<{}> = observer(() => {
   }
 
   if (uiStore.roomId && roomId !== uiStore.roomId) {
-    // TODO: ask to change game
     return <Redirect to={`/${uiStore.roomId}`} />;
   }
 
-  if (websocketStore.token) {
-    uiStore.joinRoom(roomId);
-  }
+  useEffect(() => {
+    if (websocketStore.token) {
+      uiStore.joinRoom(roomId);
+    }
+  }, [uiStore, websocketStore, roomId]);
 
   return (
     <Layout>
