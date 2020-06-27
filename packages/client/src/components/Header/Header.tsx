@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import {
   Button,
@@ -27,11 +26,11 @@ export const Header: FC<{}> = observer(() => {
   const [isConfirmHomeModalOpen, setIsConfirmHomeModalOpen] = useState<boolean>(
     false
   );
-  const history = useHistory();
   const { uiStore } = useStores();
 
   function leaveGame(): void {
-    history.push('/');
+    uiStore.leaveRoom();
+    closeMenu();
   }
 
   function onTitleClick(): void {

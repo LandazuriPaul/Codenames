@@ -54,7 +54,7 @@ export class SocketService {
   emitToRoom(
     room: Room,
     event: string | symbol,
-    message: unknown,
+    message?: unknown,
     excludedSocketList: Socket[] = []
   ): void {
     const roomSockets = this.getRoomSockets(room);
@@ -65,14 +65,14 @@ export class SocketService {
     room: Room,
     team: Team,
     event: string | symbol,
-    message: unknown,
+    message?: unknown,
     excludedSocketList: Socket[] = []
   ): void {
     const roomSockets = this.getTeamInRoomSockets(room, team);
     this.emitToSocketList(roomSockets, event, message, excludedSocketList);
   }
 
-  emitToUser(user: User, event: string | symbol, message: unknown): void {
+  emitToUser(user: User, event: string | symbol, message?: unknown): void {
     const userSockets = this.getUserSockets(user);
     this.emitToSocketList(userSockets, event, message);
   }
@@ -103,7 +103,7 @@ export class SocketService {
   private emitToSocketList(
     socketList: Socket[],
     event: string | symbol,
-    message: unknown,
+    message?: unknown,
     excludedSocketList: Socket[] = []
   ): void {
     const excludedSocketIdList = excludedSocketList.map(s => s.id);

@@ -60,8 +60,6 @@ export class RoomGateway {
       user.username,
       userSockets
     );
-    userSockets.forEach(userSocket => {
-      userSocket.disconnect(true);
-    });
+    this.socketService.emitToUser(user, RoomEvent.RoomLeft);
   }
 }

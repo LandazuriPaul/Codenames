@@ -33,6 +33,10 @@ export class WebsocketStore extends ChildStore {
   connect(): void {
     this._socket = io(API_URL, {
       query: { token: this.token },
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: Infinity,
     });
     this.attachSocketListeners();
   }
@@ -49,6 +53,7 @@ export class WebsocketStore extends ChildStore {
 
       // UiStore
       .on(RoomEvent.RoomJoined, uiStore.roomJoined.bind(uiStore))
+      .on(RoomEvent.RoomLeft, uiStore.roomLeft.bind(uiStore))
       .on(RoomEvent.UserJoined, uiStore.userJoined.bind(uiStore))
       .on(RoomEvent.UserLeft, uiStore.userLeft.bind(uiStore))
 
@@ -77,7 +82,7 @@ export class WebsocketStore extends ChildStore {
    */
 
   disconnect(): void {
-    // TODO: send disconnect message? Remove token?
+    this.init();
   }
 
   /*
@@ -101,14 +106,12 @@ export class WebsocketStore extends ChildStore {
   handleError(err: any): void {
     Logger.log('ws: error');
     Logger.error(err);
-    // TODO: reconnect
   }
 
   @action
   handleDisconnect(): void {
     Logger.log('ws: disconnected');
-    this.init();
-    this.rootStore.uiStore.roomId = undefined;
+    setTimeout(this.connect.bind(this), 500);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

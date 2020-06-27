@@ -73,6 +73,15 @@ export class UiStore extends SocketEmitterStore {
   }
 
   @action
+  roomLeft(): void {
+    Logger.log(`room ${this.roomId} left`);
+    this.roomId = undefined;
+    this.userList = [];
+    this.rootStore.websocketStore.disconnect();
+    location.href = '/';
+  }
+
+  @action
   userJoined(newUsername: string): void {
     // TODO: server check?
     if (!this.userList.includes(newUsername)) {
