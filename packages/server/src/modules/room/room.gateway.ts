@@ -10,6 +10,7 @@ import { Server } from 'socket.io';
 import { RoomEvent } from '@codenames/domain';
 
 import { AuthenticatedSocket } from '~/modules/shared/socket/authenticatedSocket.interface';
+import { SocketService } from '~/modules/shared/socket/socket.service';
 import { RedisPropagatorInterceptor } from '~/modules/shared/redisPropagator/redisPropagator.interceptor';
 
 import { RoomService } from './room.service';
@@ -21,27 +22,46 @@ export class RoomGateway {
   private server: Server;
   private logger = new Logger(RoomGateway.name);
 
-  constructor(private readonly roomService: RoomService) {}
+  constructor(
+    private readonly roomService: RoomService,
+    private readonly socketService: SocketService
+  ) {}
 
   @SubscribeMessage(RoomEvent.JoinRoom)
   async onJoinRoom(
     @ConnectedSocket() socket: AuthenticatedSocket
   ): Promise<void> {
-    const { room, username } = socket.user;
+    const { user } = socket;
+    const { room, username } = user;
     if (!room.usernames.includes(username)) {
       this.roomService.addUserToRoom(room._id, username);
     }
-    // TODO: send all messages
-    socket.emit(RoomEvent.RoomJoined, { roomSize: room.size });
+    const userSockets = this.socketService.getUserSockets(user);
+    this.socketService.emitToRoom(
+      room,
+      RoomEvent.UserJoined,
+      username,
+      userSockets
+    );
+    socket.emit(RoomEvent.RoomJoined, {
+      roomId: room._id,
+      usernames: room.usernames,
+    });
   }
 
   @SubscribeMessage(RoomEvent.LeaveRoom)
   async onLeaveRoom(
-    @ConnectedSocket() socket: AuthenticatedSocket
+    @ConnectedSocket() { user }: AuthenticatedSocket
   ): Promise<void> {
-    this.logger.log('user leaving');
-    this.logger.log(`leaving user: ${JSON.stringify(socket.user)}`);
-    // this.server.to(userHash).emit(RoomEvent.RoomJoined, roomId);
-    // this.server.to(roomHash).emit(RoomEvent.UserJoined, username);
+    const userSockets = this.socketService.getUserSockets(user);
+    this.socketService.emitToRoom(
+      user.room,
+      RoomEvent.UserLeft,
+      user.username,
+      userSockets
+    );
+    userSockets.forEach(userSocket => {
+      userSocket.disconnect(true);
+    });
   }
 }

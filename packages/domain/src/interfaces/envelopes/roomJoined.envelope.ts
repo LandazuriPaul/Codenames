@@ -1,4 +1,4 @@
 export interface RoomJoinedEnvelope {
   roomId: string;
-  roomSize: number;
+  usernames: string[];
 }

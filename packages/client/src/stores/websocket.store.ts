@@ -49,8 +49,8 @@ export class WebsocketStore extends ChildStore {
 
       // UiStore
       .on(RoomEvent.RoomJoined, uiStore.roomJoined.bind(uiStore))
-      .on(RoomEvent.RoomLeft, uiStore.roomLeft.bind(uiStore))
       .on(RoomEvent.UserJoined, uiStore.userJoined.bind(uiStore))
+      .on(RoomEvent.UserLeft, uiStore.userLeft.bind(uiStore))
 
       // Chat
       .on(ChatEvent.GeneralMessage, chatStore.handleMessage.bind(chatStore))
@@ -76,7 +76,6 @@ export class WebsocketStore extends ChildStore {
    * Emitters
    */
 
-  @action
   disconnect(): void {
     // TODO: send disconnect message? Remove token?
   }
@@ -85,7 +84,6 @@ export class WebsocketStore extends ChildStore {
    * Listeners
    */
 
-  @action
   handleConnect(): void {
     Logger.log('ws: connection established');
   }
@@ -99,7 +97,6 @@ export class WebsocketStore extends ChildStore {
     // TODO: retry with new token
   }
 
-  @action
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleError(err: any): void {
     Logger.log('ws: error');
@@ -110,9 +107,10 @@ export class WebsocketStore extends ChildStore {
   @action
   handleDisconnect(): void {
     Logger.log('ws: disconnected');
+    this.init();
+    this.rootStore.uiStore.roomId = undefined;
   }
 
-  @action
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleException(exception: any): void {
     Logger.log('A WS exception occurred');

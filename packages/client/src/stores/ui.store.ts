@@ -1,7 +1,7 @@
 import { action, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 
-import { RoomEvent } from '@codenames/domain';
+import { RoomEvent, RoomJoinedEnvelope } from '@codenames/domain';
 
 import { Logger } from '~/utils';
 
@@ -19,6 +19,9 @@ export class UiStore extends SocketEmitterStore {
   @observable
   username: string;
 
+  @observable
+  userList: string[];
+
   constructor(rootStore: RootStore) {
     super(rootStore);
     this.init();
@@ -28,6 +31,7 @@ export class UiStore extends SocketEmitterStore {
   init(): void {
     this.roomId = undefined;
     this.username = undefined;
+    this.userList = [];
   }
 
   /*
@@ -61,24 +65,22 @@ export class UiStore extends SocketEmitterStore {
    */
 
   @action
-  roomJoined({ roomId, roomSize }: { roomId: string; roomSize: number }): void {
+  roomJoined({ roomId, usernames }: RoomJoinedEnvelope): void {
     this.roomId = roomId;
     Logger.log(`room ${this.roomId} joined`);
-    Logger.log(`the room has ${roomSize} people`);
-  }
-
-  @action
-  roomLeft(roomId: string): void {
-    Logger.log(`room ${roomId} left`);
-    this.roomId = undefined;
+    this.userList = usernames;
+    Logger.log(`users already here: ${this.userList.join(', ')}`);
   }
 
   @action
   userJoined(newUsername: string): void {
-    Logger.log(`new user joined: ${newUsername}`);
+    if (!this.userList.includes(newUsername)) {
+      this.userList.push(newUsername);
+      Logger.log(`new user joined: ${newUsername}`);
+    }
   }
 
-  userList(roomSize: number): void {
-    Logger.log(`room size: ${roomSize}`);
+  userLeft(leftUsername: string): void {
+    Logger.log(`${leftUsername} left the game`);
   }
 }
