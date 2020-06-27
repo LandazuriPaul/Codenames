@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import { HomeForm } from '~/components/HomeForm';
 import { Layout } from '~/components/Layout';
@@ -8,7 +9,7 @@ export const Home: FC<{}> = () => {
   const { uiStore } = useStores();
 
   if (uiStore.roomId) {
-    uiStore.leaveRoom();
+    return <Redirect to={`/${uiStore.roomId}`} />;
   }
 
   return (

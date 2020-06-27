@@ -18,6 +18,11 @@ export const Room: FC<{}> = observer(() => {
     return <Redirect to={`/${cleanRoomId}`} />;
   }
 
+  if (uiStore.roomId && roomId !== uiStore.roomId) {
+    // TODO: ask to change game
+    return <Redirect to={`/${uiStore.roomId}`} />;
+  }
+
   if (websocketStore.token) {
     uiStore.joinRoom(roomId);
   }

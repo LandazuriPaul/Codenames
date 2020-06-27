@@ -57,7 +57,7 @@ export class UiStore extends SocketEmitterStore {
   }
 
   leaveRoom(): void {
-    this.emit(RoomEvent.LeaveRoom, this.roomId);
+    this.emit(RoomEvent.LeaveRoom);
   }
 
   /*
@@ -74,6 +74,7 @@ export class UiStore extends SocketEmitterStore {
 
   @action
   userJoined(newUsername: string): void {
+    // TODO: server check?
     if (!this.userList.includes(newUsername)) {
       this.userList.push(newUsername);
       Logger.log(`new user joined: ${newUsername}`);
@@ -81,6 +82,9 @@ export class UiStore extends SocketEmitterStore {
   }
 
   userLeft(leftUsername: string): void {
-    Logger.log(`${leftUsername} left the game`);
+    // TODO: server check?
+    if (this.userList.includes(leftUsername)) {
+      Logger.log(`${leftUsername} left the game`);
+    }
   }
 }
