@@ -86,6 +86,9 @@ export class UiStore extends SocketEmitterStore {
     // TODO: server check?
     if (!this.userList.includes(newUsername)) {
       this.userList.push(newUsername);
+      this.rootStore.chatStore.pushInformationMessage(
+        `${newUsername} just entered the room.`
+      );
       Logger.log(`new user joined: ${newUsername}`);
     }
   }

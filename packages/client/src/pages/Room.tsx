@@ -11,7 +11,10 @@ import { useStores } from '~/hooks';
 
 export const Room: FC<{}> = observer(() => {
   const { roomId } = useParams();
-  const { uiStore, websocketStore } = useStores();
+  const {
+    uiStore,
+    websocketStore: { token },
+  } = useStores();
 
   const cleanRoomId = cleanRoomIdFromInput(roomId);
   if (roomId !== cleanRoomId) {
@@ -23,14 +26,18 @@ export const Room: FC<{}> = observer(() => {
   }
 
   useEffect(() => {
-    if (websocketStore.token) {
+    if (token) {
       uiStore.joinRoom(roomId);
     }
-  }, [uiStore, websocketStore, roomId]);
+  }, [uiStore, token, roomId]);
 
   return (
     <Layout>
-      {websocketStore.token ? <Dashboard /> : <UsernameForm roomId={roomId} />}
+      {uiStore.roomId && token ? (
+        <Dashboard />
+      ) : (
+        <UsernameForm roomId={roomId} />
+      )}
     </Layout>
   );
 });

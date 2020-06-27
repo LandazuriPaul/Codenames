@@ -4,6 +4,7 @@ import {
   ChatEvent,
   GeneralChatEnvelope,
   TeamChatEnvelope,
+  Timestamp,
 } from '@codenames/domain';
 
 import { ChatMessage, GeneralChatMessage, TeamChatMessage } from '~/domain';
@@ -29,6 +30,17 @@ export class ChatStore extends SocketEmitterStore {
     this.teamChatMessageList = [];
   }
 
+  pushInformationMessage(text: string, isForTeam = false): void {
+    const message = {
+      type: 'information' as 'information',
+      message: {
+        text,
+        timestamp: new Date().getTime() as Timestamp,
+      },
+    };
+    this.pushMessage(message, isForTeam);
+  }
+
   /*
    * Emitters
    */
@@ -42,14 +54,9 @@ export class ChatStore extends SocketEmitterStore {
    * Listeners
    */
 
-  @action
   handleMessage(envelope: GeneralChatEnvelope): void {
     const message = this.generateChatMessageFromChatEnvelope(envelope);
-    if (envelope.team) {
-      this.generalChatMessageList.push(message as GeneralChatMessage);
-    } else {
-      this.teamChatMessageList.push(message as TeamChatMessage);
-    }
+    this.pushMessage(message, !envelope.team);
   }
 
   /*
@@ -73,6 +80,18 @@ export class ChatStore extends SocketEmitterStore {
   ): void {
     if (envelope.username === this.rootStore.uiStore.username) {
       chatMessage.isOwn = true;
+    }
+  }
+
+  @action
+  private pushMessage(
+    message: GeneralChatMessage | TeamChatMessage,
+    isForTeam: boolean
+  ): void {
+    if (isForTeam) {
+      this.teamChatMessageList.push(message as TeamChatMessage);
+    } else {
+      this.generalChatMessageList.push(message as GeneralChatMessage);
     }
   }
 }
