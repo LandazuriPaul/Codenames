@@ -1,5 +1,5 @@
 import { createHash } from 'crypto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Socket } from 'socket.io';
 
 import { Team } from '@codenames/domain';
@@ -13,6 +13,7 @@ import { SocketRoomIdentifier } from './socketRoomIdentifier.interface';
 
 @Injectable()
 export class SocketService {
+  private logger = new Logger(SocketService.name);
   private socketHashMap = new Map<string, Socket[]>();
 
   constructor(private readonly configService: ConfigService) {}
@@ -106,12 +107,14 @@ export class SocketService {
     message?: unknown,
     excludedSocketList: Socket[] = []
   ): void {
+    this.logger.log('emitting to socketList');
+    this.logger.log(socketList.length);
     const excludedSocketIdList = excludedSocketList.map(s => s.id);
-    socketList.forEach(socket => {
-      if (!excludedSocketIdList.includes(socket.id)) {
+    socketList
+      .filter(socket => !excludedSocketIdList.includes(socket.id))
+      .forEach(socket => {
         socket.emit(event, message);
-      }
-    });
+      });
   }
 
   private generateUserHashes(

@@ -6,7 +6,6 @@ import {
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
 
 import {
   ChatEvent,
@@ -15,40 +14,50 @@ import {
   TeamChatEnvelope,
 } from '@codenames/domain';
 
+import { AuthenticatedSocket } from '~/modules/shared/socket/authenticatedSocket.interface';
+import { SocketService } from '~/modules/shared/socket/socket.service';
+
 import { RoomService } from '~/modules/room/room.service';
 
 @WebSocketGateway({ serveClient: false })
 export class ChatGateway {
   private logger = new Logger(ChatGateway.name);
 
-  constructor(private readonly roomService: RoomService) {}
+  constructor(
+    private readonly roomService: RoomService,
+    private readonly socketService: SocketService
+  ) {}
 
   @SubscribeMessage(ChatEvent.GeneralMessage)
   async onGeneralMessage(
-    @ConnectedSocket() socket: Socket,
-    @MessageBody() { message, roomId }: { message: string; roomId: string }
+    @ConnectedSocket() { user }: AuthenticatedSocket,
+    @MessageBody() message: string
   ): Promise<void> {
+    this.logger.log('general message');
     const envelope: GeneralChatEnvelope = {
       team: Team.A,
       text: message,
       timestamp: dayjs().valueOf(),
-      username: 'Frodo',
+      username: user.username,
     };
-    const room = this.roomService.getRoom(roomId);
-    // socket.server.to(room).emit(ChatEvent.GeneralMessage, envelope);
+    this.socketService.emitToRoom(
+      user.room,
+      ChatEvent.GeneralMessage,
+      envelope
+    );
   }
 
   @SubscribeMessage(ChatEvent.TeamMessage)
   async onTeamMessage(
-    @ConnectedSocket() socket: Socket,
-    @MessageBody() { message, roomId }: { message: string; roomId: string }
+    @ConnectedSocket() { user }: AuthenticatedSocket,
+    @MessageBody() message: string
   ): Promise<void> {
+    this.logger.log('team message');
     const envelope: TeamChatEnvelope = {
       text: message,
       timestamp: dayjs().valueOf(),
-      username: 'Gandalf',
+      username: user.username,
     };
-    const room = this.roomService.getRoom(roomId);
-    // socket.server.to(room).emit(ChatEvent.TeamMessage, envelope);
+    this.socketService.emitToRoom(user.room, ChatEvent.TeamMessage, envelope);
   }
 }

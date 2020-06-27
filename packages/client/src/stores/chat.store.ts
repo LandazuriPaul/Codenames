@@ -8,6 +8,7 @@ import {
 } from '@codenames/domain';
 
 import { ChatMessage, GeneralChatMessage, TeamChatMessage } from '~/domain';
+import { Logger } from '~/utils';
 
 import { RootStore } from './root.store';
 import { SocketEmitterStore } from './socketEmitter.store';
@@ -44,10 +45,10 @@ export class ChatStore extends SocketEmitterStore {
   /*
    * Emitters
    */
-  sendMessage(chanel: 'team' | 'general', message: string): void {
+  sendMessage(message: string, chanel: 'team' | 'general'): void {
     const event =
       chanel === 'team' ? ChatEvent.TeamMessage : ChatEvent.GeneralMessage;
-    this.emit(event, { message, roomId: this.rootStore.uiStore.roomId });
+    this.emit(event, message);
   }
 
   /*
@@ -55,6 +56,8 @@ export class ChatStore extends SocketEmitterStore {
    */
 
   handleMessage(envelope: GeneralChatEnvelope): void {
+    Logger.log('message received');
+    Logger.log(envelope);
     const message = this.generateChatMessageFromChatEnvelope(envelope);
     this.pushMessage(message, !envelope.team);
   }
