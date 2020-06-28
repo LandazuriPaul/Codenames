@@ -66,8 +66,7 @@ export class RedisPropagatorService {
   private consumeSendEvent = (eventInfo: RedisSocketEventSendDTO): void => {
     const { user, event, data, socketId } = eventInfo;
 
-    return this.socketService
-      .getUserSockets(user)
+    return Array.from(this.socketService.getUserSockets(user))
       .filter(socket => socket.id !== socketId)
       .forEach(socket => socket.emit(event, data));
   };
