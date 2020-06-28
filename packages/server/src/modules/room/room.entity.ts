@@ -1,4 +1,5 @@
 import {
+  AfterLoad,
   Column,
   CreateDateColumn,
   Entity,
@@ -6,31 +7,31 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Team } from '@codenames/domain';
+import { Teams } from './teams.entity';
 
 @Entity('rooms')
 export class Room {
   @ObjectIdColumn()
   _id: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @Column()
-  teams: Record<Team, RoomTeam>;
+  @Column(() => Teams)
+  teams: Teams;
 
   @Column()
-  usernames: string[];
+  usernames: Set<string>;
 
   get size(): number {
-    return this.usernames.length;
+    return this.usernames.size;
   }
-}
 
-class RoomTeam {
-  players: string[];
-  sypMaster?: string;
+  @AfterLoad()
+  mongoToJs(): void {
+    this.usernames = new Set<string>(this.usernames);
+  }
 }

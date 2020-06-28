@@ -35,13 +35,13 @@ export class ChatGateway {
     @ConnectedSocket() { user }: AuthenticatedSocket,
     @MessageBody() message: string
   ): Promise<void> {
-    this.logger.log('general message');
     const envelope: GeneralChatEnvelope = {
       team: Team.A,
       text: message,
       timestamp: dayjs().valueOf(),
       username: user.username,
     };
+    // TODO: save to DB
     this.socketService.emitToRoom(
       user.room,
       ChatEvent.GeneralMessage,
@@ -54,12 +54,12 @@ export class ChatGateway {
     @ConnectedSocket() { user }: AuthenticatedSocket,
     @MessageBody() message: string
   ): Promise<void> {
-    this.logger.log('team message');
     const envelope: TeamChatEnvelope = {
       text: message,
       timestamp: dayjs().valueOf(),
       username: user.username,
     };
+    // TODO: save to DB
     this.socketService.emitToRoom(user.room, ChatEvent.TeamMessage, envelope);
   }
 }

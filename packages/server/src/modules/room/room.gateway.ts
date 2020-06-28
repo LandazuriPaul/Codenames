@@ -33,7 +33,7 @@ export class RoomGateway {
   ): Promise<void> {
     const { user } = socket;
     const { room, username } = user;
-    if (!room.usernames.includes(username)) {
+    if (!room.usernames.has(username)) {
       this.roomService.addUserToRoom(room._id, username);
     }
     const userSockets = this.socketService.getUserSockets(user);
@@ -45,7 +45,7 @@ export class RoomGateway {
     );
     socket.emit(RoomEvent.RoomJoined, {
       roomId: room._id,
-      usernames: room.usernames,
+      usernames: Array.from(room.usernames),
     });
   }
 

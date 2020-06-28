@@ -5,7 +5,8 @@ import { Repository } from 'typeorm';
 import { Team } from '@codenames/domain';
 
 import { Room } from './room.entity';
-import { RoomNotFound, TeamNotFound } from './room.exceptions';
+import { RoomTeam, Teams } from './teams.entity';
+import { RoomNotFound } from './room.exceptions';
 
 @Injectable()
 export class RoomService {
@@ -23,6 +24,9 @@ export class RoomService {
   ): Promise<Room> {
     try {
       const room = await this.getRoom(roomId);
+      if (!room.usernames.has(username)) {
+        room.usernames.add(username);
+      }
       return this.assignUserToRoomTeam(room, username, Team.Observer);
     } catch (err) {
       if (!createIfNotFound) {
@@ -36,8 +40,8 @@ export class RoomService {
   async createRoom(roomId: string, username: string): Promise<Room> {
     const newRoom = this.roomRepository.create({
       _id: roomId,
-      teams: {},
-      usernames: [],
+      teams: new Teams(),
+      usernames: [username],
     });
     return this.assignUserToRoomTeam(newRoom, username, Team.Observer);
   }
@@ -49,32 +53,27 @@ export class RoomService {
     }
     return room;
   }
+
   private async assignUserToRoomTeam(
     room: Room,
     username: string,
     team: Team
   ): Promise<Room> {
-    if (!room.usernames.includes(username)) {
-      room.usernames.push(username);
-    }
     // remove user from other teams
     Object.entries(room.teams)
       .filter(currentRoomTeam => team !== currentRoomTeam[0])
-      .forEach(([currentTeam, { players, sypMaster }]) => {
-        if (players.includes(username)) {
-          const newCurrentTeam = {
-            players: players.filter(player => player !== username),
-            sypMaster: sypMaster === username ? undefined : sypMaster,
-          };
-          room.teams[currentTeam as Team] = newCurrentTeam;
+      .forEach(([currentTeam, roomTeam]: [string, RoomTeam]) => {
+        if (roomTeam.players.has(username)) {
+          roomTeam.players.delete(username);
+          if (roomTeam.sypMaster === username) {
+            delete roomTeam.sypMaster;
+          }
+          room.teams[currentTeam as Team] = roomTeam;
         }
       });
 
     // add user to designated team
-    const roomTeam = room.teams[team] || {
-      players: [],
-    };
-    room.teams[team] = { players: [...roomTeam.players, username] };
+    room.teams[team].players.add(username);
 
     return this.roomRepository.save(room);
   }
