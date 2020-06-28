@@ -62,8 +62,14 @@ export class SocketAdapter extends IoAdapter implements WebSocketAdapter {
   ): Promise<void> {
     const token = this.getRequestToken(socket.request);
     const authPayload = this.jwtService.verify<JwtPayload>(token);
-    socket.user = await this.authenticationService.validatePayload(authPayload);
-    next();
+    try {
+      socket.user = await this.authenticationService.validatePayload(
+        authPayload
+      );
+      next();
+    } catch (err) {
+      next(err);
+    }
   }
 
   private allowRequest(
