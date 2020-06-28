@@ -11,6 +11,7 @@ import { SocketEmitterStore } from './socketEmitter.store';
 export class UiStore extends SocketEmitterStore {
   static LOCALSTORAGE_KEY = 'ui';
 
+  @persist
   @observable
   isHost: boolean;
 
@@ -32,9 +33,14 @@ export class UiStore extends SocketEmitterStore {
 
   @action
   init(): void {
+    this.username = undefined;
+    this.reset();
+  }
+
+  @action
+  reset(): void {
     this.isHost = false;
     this.roomId = undefined;
-    this.username = undefined;
     this.userList = [];
   }
 
@@ -80,8 +86,7 @@ export class UiStore extends SocketEmitterStore {
   @action
   roomLeft(): void {
     Logger.log(`room ${this.roomId} left`);
-    this.roomId = undefined;
-    this.userList = [];
+    this.reset();
     this.rootStore.websocketStore.disconnect();
     location.href = '/';
   }
