@@ -8,6 +8,7 @@ import {
   Tabs,
   Tooltip,
 } from '@material-ui/core';
+import { styled } from '@material-ui/core/styles';
 import { AccessAlarm, Apps, GroupWork, PlayArrow } from '@material-ui/icons';
 
 import { GameSettings, ValueOf } from '@codenames/domain';
@@ -105,14 +106,18 @@ const TabsHandler: FC<{}> = () => {
       textColor="secondary"
     >
       <Tooltip title="Board" placement="top">
-        <Tab icon={<Apps />} />
+        <FlexTab icon={<Apps />} />
       </Tooltip>
       <Tooltip title="Timer" placement="top">
-        <Tab icon={<AccessAlarm />} />
+        <FlexTab icon={<AccessAlarm />} />
       </Tooltip>
       <Tooltip title="Teams" placement="top">
-        <Tab icon={<GroupWork />} />
+        <FlexTab icon={<GroupWork />} />
       </Tooltip>
     </Tabs>
   );
 };
+
+const FlexTab = styled(Tab)({
+  minWidth: 'unset',
+});
