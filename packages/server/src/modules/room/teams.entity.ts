@@ -1,4 +1,11 @@
-import { AfterLoad, Column } from 'typeorm';
+import {
+  AfterInsert,
+  AfterLoad,
+  AfterUpdate,
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+} from 'typeorm';
 
 import { Team } from '@codenames/domain';
 
@@ -14,8 +21,18 @@ export class RoomTeam {
   }
 
   @AfterLoad()
+  @AfterInsert()
+  @AfterUpdate()
   mongoToJs(): void {
-    this.players = new Set<string>(this.players);
+    this.players = new Set(this.players);
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  jsToMongo(): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    this.players = Array.from(this.players);
   }
 }
 

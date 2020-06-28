@@ -1,5 +1,9 @@
 import {
+  AfterInsert,
   AfterLoad,
+  AfterUpdate,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -14,10 +18,10 @@ export class Room {
   @ObjectIdColumn()
   _id: string;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @Column(() => Teams)
@@ -31,7 +35,17 @@ export class Room {
   }
 
   @AfterLoad()
+  @AfterInsert()
+  @AfterUpdate()
   mongoToJs(): void {
-    this.usernames = new Set<string>(this.usernames);
+    this.usernames = new Set(this.usernames);
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  jsToMongo(): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    this.usernames = Array.from(this.usernames);
   }
 }
