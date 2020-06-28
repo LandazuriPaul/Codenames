@@ -10,11 +10,13 @@ import { UserNotFound } from './user.exceptions';
 import { RoomTeam } from '../room/teams.entity';
 
 interface UserRole {
+  isHost: boolean;
   isSpyMaster: boolean;
   team: Team;
 }
 
 const DEFAULT_ROLE: UserRole = {
+  isHost: false,
   isSpyMaster: false,
   team: Team.Observer,
 };
@@ -30,8 +32,11 @@ export class UserService {
     if (!room.usernames.has(username)) {
       throw new UserNotFound(roomId, username);
     }
-    const { team, isSpyMaster } = this.getUserRoleInRoom(room, username);
-    return new User(room, username, team, isSpyMaster);
+    const { team, isHost, isSpyMaster } = this.getUserRoleInRoom(
+      room,
+      username
+    );
+    return new User(room, username, team, isHost, isSpyMaster);
   }
 
   private getUserRoleInRoom(room: Room, username: string): UserRole {
@@ -49,6 +54,7 @@ export class UserService {
         return false;
       }
     );
+    out.isHost = room.host === username;
     return out;
   }
 }

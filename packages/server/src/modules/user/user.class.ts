@@ -6,6 +6,7 @@ export class User {
   room: Room;
   team: Team;
   username: string;
+  isHost: boolean;
   isSpyMaster: boolean;
   //  messages: Promise<Message[]>;
 
@@ -13,11 +14,13 @@ export class User {
     room: Room,
     username: string,
     team: Team = Team.Observer,
+    isHost = false,
     isSpyMaster = false
   ) {
     this.room = room;
     this.username = username;
     this.team = team;
+    this.isHost = isHost;
     this.isSpyMaster = isSpyMaster;
   }
 }

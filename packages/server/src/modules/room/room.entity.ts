@@ -21,6 +21,9 @@ export class Room {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column()
+  host: string;
+
   @UpdateDateColumn()
   updatedAt: Date;
 

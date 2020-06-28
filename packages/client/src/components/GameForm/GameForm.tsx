@@ -1,12 +1,16 @@
 import React, { ChangeEvent, FC, FormEvent, useContext, useState } from 'react';
 import {
   Button,
+  Card,
+  CardContent,
+  CircularProgress,
   DialogActions,
   Grid,
   Paper,
   Tab,
   Tabs,
   Tooltip,
+  Typography,
 } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import { AccessAlarm, Apps, GroupWork, PlayArrow } from '@material-ui/icons';
@@ -28,7 +32,10 @@ export const GameForm: FC<{}> = () => {
   const [activeTab, setActiveTab] = useState<0 | 1 | 2>(0);
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_GAME_SETTINGS);
 
-  const { gameStore } = useStores();
+  const {
+    gameStore,
+    uiStore: { isHost },
+  } = useStores();
 
   function setSetting(
     setting: keyof GameSettings,
@@ -56,31 +63,44 @@ export const GameForm: FC<{}> = () => {
 
   return (
     <GameSettingsContainer container justify="center">
-      <Grid item sm={10}>
-        <form onSubmit={onSettingsSubmit}>
-          <Title variant="h5" align="center">
-            New game settings
-          </Title>
-          <Paper elevation={6}>
-            <gameSettingsContext.Provider
-              value={{ activeTab, setActiveTab, setSetting, settings }}
-            >
-              <TabsHandler />
-              <TabContent>{renderTab()}</TabContent>
-              <DialogActions>
-                <Button
-                  type="submit"
-                  disabled={!isGameSettingsValid(settings)}
-                  color="secondary"
-                  variant="contained"
-                >
-                  Start game <PlayArrow />
-                </Button>
-              </DialogActions>
-            </gameSettingsContext.Provider>
-          </Paper>
-        </form>
-      </Grid>
+      {isHost ? (
+        <Grid item sm={10}>
+          <form onSubmit={onSettingsSubmit}>
+            <Title variant="h5" align="center">
+              New game settings
+            </Title>
+            <Paper elevation={6}>
+              <gameSettingsContext.Provider
+                value={{ activeTab, setActiveTab, setSetting, settings }}
+              >
+                <TabsHandler />
+                <TabContent>{renderTab()}</TabContent>
+                <DialogActions>
+                  <Button
+                    type="submit"
+                    disabled={!isGameSettingsValid(settings)}
+                    color="secondary"
+                    variant="contained"
+                  >
+                    Start game <PlayArrow />
+                  </Button>
+                </DialogActions>
+              </gameSettingsContext.Provider>
+            </Paper>
+          </form>
+        </Grid>
+      ) : (
+        <Card>
+          <CardContent>
+            <FadedTypography variant="body2">
+              Please wait while your host configures the game
+            </FadedTypography>
+            <FadedTypography align="center">
+              <CircularProgress color="inherit" />
+            </FadedTypography>
+          </CardContent>
+        </Card>
+      )}
     </GameSettingsContainer>
   );
 };
@@ -121,3 +141,11 @@ const TabsHandler: FC<{}> = () => {
 const FlexTab = styled(Tab)({
   minWidth: 'unset',
 });
+
+const FadedTypography = styled(Typography)(({ theme }) => ({
+  color: theme.palette.grey[500],
+
+  '&:first-of-type': {
+    marginBottom: theme.spacing(3),
+  },
+}));

@@ -32,7 +32,7 @@ export class RoomGateway {
     @ConnectedSocket() socket: AuthenticatedSocket
   ): Promise<void> {
     const { user } = socket;
-    const { room, username } = user;
+    const { isHost, room, username } = user;
     if (!room.usernames.has(username)) {
       this.roomService.addUserToRoom(room._id, username);
     }
@@ -45,6 +45,7 @@ export class RoomGateway {
     );
     socket.emit(RoomEvent.RoomJoined, {
       roomId: room._id,
+      isHost,
       usernames: Array.from(room.usernames),
     });
   }

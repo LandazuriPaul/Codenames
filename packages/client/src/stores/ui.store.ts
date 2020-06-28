@@ -11,6 +11,9 @@ import { SocketEmitterStore } from './socketEmitter.store';
 export class UiStore extends SocketEmitterStore {
   static LOCALSTORAGE_KEY = 'ui';
 
+  @observable
+  isHost: boolean;
+
   @persist
   @observable
   roomId: string;
@@ -29,6 +32,7 @@ export class UiStore extends SocketEmitterStore {
 
   @action
   init(): void {
+    this.isHost = false;
     this.roomId = undefined;
     this.username = undefined;
     this.userList = [];
@@ -65,7 +69,8 @@ export class UiStore extends SocketEmitterStore {
    */
 
   @action
-  roomJoined({ roomId, usernames }: RoomJoinedEnvelope): void {
+  roomJoined({ isHost, roomId, usernames }: RoomJoinedEnvelope): void {
+    this.isHost = isHost;
     this.roomId = roomId;
     Logger.log(`room ${this.roomId} joined`);
     this.userList = usernames;

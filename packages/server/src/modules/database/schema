@@ -1,19 +1,20 @@
 interface Team {
   players: string[]; // referring to username
   remaining: number;
-  spy_master: string; // referring to username
+  spyMaster: string; // referring to username
 }
 
 interface Room {
   _id: string; // the URL
-  created_at: Date;
-  updated_at: Date; // expireAfterSeconds: 3600 * 24
+  createdAt: Date;
+  updatedAt: Date; // expireAfterSeconds: 3600 * 24
   usernames: string[];
   teams?: {
     a: Team;
     b: Team;
     o: Team;
   };
+  host: string; // referring to username
   messages: Message;
 }
 

@@ -40,6 +40,7 @@ export class RoomService {
   async createRoom(roomId: string, username: string): Promise<Room> {
     const newRoom = this.roomRepository.create({
       _id: roomId,
+      host: username,
       teams: new Teams(),
       usernames: [username],
     });
