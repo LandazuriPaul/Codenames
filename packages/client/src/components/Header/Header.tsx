@@ -16,10 +16,10 @@ import {
 } from '@material-ui/core';
 import { ChevronLeft, Menu } from '@material-ui/icons';
 
-import { GameUrl } from '~/components/GameUrl';
 import { useStores } from '~/hooks';
 
 import { HeaderContainer, MobileMenu, Title } from './header.styles';
+import { Indicators } from './Indicators';
 
 export const Header: FC<{}> = observer(() => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -70,15 +70,15 @@ export const Header: FC<{}> = observer(() => {
                 </MobileMenu>
               </Grid>
             </Hidden>
-            <Grid item md={3} xs={11}>
+            <Grid item md={10} xs={11}>
               <Title component="h1" variant="h4" onClick={onTitleClick}>
                 Codenames
               </Title>
             </Grid>
             {uiStore.roomId && (
               <>
-                <Grid item md={6}>
-                  <GameUrl />
+                <Grid item md={2}>
+                  <Indicators />
                 </Grid>
               </>
             )}
@@ -94,7 +94,7 @@ export const Header: FC<{}> = observer(() => {
           </ListItem>
           {uiStore.roomId && (
             <ListItem>
-              <GameUrl />
+              <Indicators />
             </ListItem>
           )}
         </List>
