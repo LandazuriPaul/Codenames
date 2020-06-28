@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Logger } from '@nestjs/common';
+import { Logger, UseInterceptors } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -15,10 +15,12 @@ import {
 } from '@codenames/domain';
 
 import { AuthenticatedSocket } from '~/modules/shared/socket/authenticatedSocket.interface';
+import { RedisPropagatorInterceptor } from '~/modules/shared/redisPropagator/redisPropagator.interceptor';
 import { SocketService } from '~/modules/shared/socket/socket.service';
 
 import { RoomService } from '~/modules/room/room.service';
 
+@UseInterceptors(RedisPropagatorInterceptor)
 @WebSocketGateway({ serveClient: false })
 export class ChatGateway {
   private logger = new Logger(ChatGateway.name);
