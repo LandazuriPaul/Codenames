@@ -31,6 +31,7 @@ export class WebsocketStore extends ChildStore {
   }
 
   connect(): void {
+    Logger.log('ws: init connection');
     this._socket = io(API_URL, {
       query: { token: this.token },
       reconnection: true,
@@ -82,6 +83,7 @@ export class WebsocketStore extends ChildStore {
    */
 
   disconnect(): void {
+    this._socket.disconnect();
     this.init();
   }
 
@@ -112,7 +114,6 @@ export class WebsocketStore extends ChildStore {
   @action
   handleDisconnect(): void {
     Logger.log('ws: disconnected');
-    setTimeout(this.connect.bind(this), 500);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
