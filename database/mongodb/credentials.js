@@ -1,4 +1,4 @@
-db = db.getSiblingDB('codenames');
+db = db.getSiblingDB('codenamesDB');
 
 db.createUser({
   user: 'api',
