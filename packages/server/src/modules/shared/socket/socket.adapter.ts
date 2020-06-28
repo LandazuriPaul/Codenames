@@ -68,6 +68,7 @@ export class SocketAdapter extends IoAdapter implements WebSocketAdapter {
       );
       next();
     } catch (err) {
+      this.logger.error(err);
       next(err);
     }
   }
