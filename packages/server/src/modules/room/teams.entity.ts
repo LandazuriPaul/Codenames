@@ -13,7 +13,7 @@ export class RoomTeam {
   @Column()
   players: Set<string>;
 
-  @Column({ name: 'spy_master' })
+  @Column()
   sypMaster?: string;
 
   constructor() {
