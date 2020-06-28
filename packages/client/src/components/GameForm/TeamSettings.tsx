@@ -5,6 +5,7 @@ import React, {
   useContext,
   useState,
 } from 'react';
+import { observer } from 'mobx-react-lite';
 import {
   Button,
   Card,
@@ -30,6 +31,7 @@ import { TeamSettings as ITeamSettings, Team } from '@codenames/domain';
 import { shuffleArray } from '@codenames/lib';
 
 import { gameSettingsContext } from '~/contexts';
+import { useStores } from '~/hooks';
 import { getTeamColor } from '~/utils';
 
 import { HelperText } from './elements';
@@ -42,30 +44,21 @@ import {
   UserText,
 } from './teamSettings.styles';
 
-const FULL_USER_LIST = [
-  'Marcel',
-  'Robert',
-  'Mimi',
-  'Momo',
-  'Mumu',
-  'Mama',
-  'Nanawdfqsdfqsdfqsdfqsdfqsdfqdsfqsdf',
-  'Paul',
-  'Antoine',
-];
-
 type ColumnEntries = Record<Team, { userList: string[] }>;
 
 const COLUMN_ORDER = [Team.A, Team.Observer, Team.B];
 
-export const TeamSettings: FC<{}> = () => {
+export const TeamSettings: FC<{}> = observer(() => {
   const [fromColumn, setFromColumn] = useState<Team | null>(null);
   const {
     setSetting,
     settings: { teams },
   } = useContext(gameSettingsContext);
+  const {
+    uiStore: { userList },
+  } = useStores();
 
-  const columnEntries = formatToColumnEntries(teams, FULL_USER_LIST);
+  const columnEntries = formatToColumnEntries(teams, userList);
 
   function onDragStart(start: DragStart): void {
     setFromColumn(start.source.droppableId as Team);
@@ -101,7 +94,7 @@ export const TeamSettings: FC<{}> = () => {
 
   function onShuffleClick(event: MouseEvent<HTMLButtonElement>): void {
     event.preventDefault();
-    setSetting('teams', shuffleTeams(FULL_USER_LIST));
+    setSetting('teams', shuffleTeams(userList));
   }
 
   return (
@@ -146,7 +139,7 @@ export const TeamSettings: FC<{}> = () => {
       </Grid>
     </>
   );
-};
+});
 
 interface ColumnProps {
   sourceColumn: Team;
