@@ -192,6 +192,7 @@ Lap
 Laser
 Lawyer
 Lead
+Leather
 Lemon
 Leprechaun
 Life
@@ -245,6 +246,7 @@ Olympus
 Opera
 Orange
 Organ
+Pain
 Palm
 Pan
 Pants

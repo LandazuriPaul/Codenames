@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { observer } from 'mobx-react-lite';
+import { Typography } from '@material-ui/core';
 
 import { useHover, useStores } from '~/hooks';
+import { Logger } from '~/utils';
 
 import { CellContainer, TilePaper } from './tile.styles';
-import { Typography } from '@material-ui/core';
-import { Logger } from '~/utils';
 
 interface TileProps {
   cellIndex: number;

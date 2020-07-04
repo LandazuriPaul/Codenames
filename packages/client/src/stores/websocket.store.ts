@@ -2,7 +2,12 @@ import { action, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 import io from 'socket.io-client';
 
-import { ChatEvent, RoomEvent, SocketEvent } from '@codenames/domain';
+import {
+  ChatEvent,
+  GameEvent,
+  RoomEvent,
+  SocketEvent,
+} from '@codenames/domain';
 
 import { Logger } from '~/utils';
 
@@ -43,7 +48,7 @@ export class WebsocketStore extends ChildStore {
   }
 
   attachSocketListeners(): void {
-    const { chatStore, uiStore } = this.rootStore;
+    const { chatStore, gameStore, uiStore } = this.rootStore;
     this._socket
       // Default
       .on(SocketEvent.Connect, this.handleConnect.bind(this))
@@ -60,9 +65,10 @@ export class WebsocketStore extends ChildStore {
 
       // Chat
       .on(ChatEvent.GeneralMessage, chatStore.handleMessage.bind(chatStore))
-      .on(ChatEvent.TeamMessage, chatStore.handleMessage.bind(chatStore));
+      .on(ChatEvent.TeamMessage, chatStore.handleMessage.bind(chatStore))
 
-    // TODO: gamestore
+      // Game
+      .on(GameEvent.GameReady, gameStore.handleGameReady.bind(gameStore));
   }
 
   /*

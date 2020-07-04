@@ -4,5 +4,5 @@ export interface BoardSettings {
   height: number;
   width: number;
   language: AvailableLanguages;
-  rudeRatio: number;
+  dirtyRatio: number;
 }

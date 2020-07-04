@@ -1,11 +1,19 @@
 import React, { FC } from 'react';
+import { observer } from 'mobx-react-lite';
+
+import { useStores } from '~/hooks';
 
 import { Indicators } from './Indicators';
-// import { Tile } from '~/components/Tile';
+import { Tile } from './Tile';
 
 import { Container } from './board.styles';
 
-export const Board: FC<{}> = () => {
+export const Board: FC<{}> = observer(() => {
+  const {
+    gameStore: { boardHeight, boardWidth },
+  } = useStores();
+  let counter = -1;
+
   return (
     <Container>
       <Indicators />
@@ -14,20 +22,20 @@ export const Board: FC<{}> = () => {
           <tr>
             <td>Board</td>
           </tr>
-          {/* {Array(GameStore.ROW_COUNT)
+          {Array(boardHeight)
             .fill(null)
             .map((row, rowIndex) => (
               <tr key={rowIndex}>
-                {Array(GameStore.COL_COUNT)
+                {Array(boardWidth)
                   .fill(null)
                   .map((cell, colIndex) => {
                     counter++;
                     return <Tile key={colIndex} cellIndex={counter} />;
                   })}
               </tr>
-            ))} */}
+            ))}
         </tbody>
       </table>
     </Container>
   );
-};
+});

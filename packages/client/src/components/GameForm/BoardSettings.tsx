@@ -10,7 +10,7 @@ export const BoardSettings: FC<{}> = () => {
     setSetting,
     settings: { board },
   } = useContext(gameSettingsContext);
-  const [rudeRatio, setRudeRatio] = useState<number>(board.rudeRatio);
+  const [dirtyRatio, setDirtyRatio] = useState<number>(board.dirtyRatio);
 
   function onLanguageChange(
     event: ChangeEvent<{ name?: string; value: unknown }>
@@ -22,7 +22,7 @@ export const BoardSettings: FC<{}> = () => {
     });
   }
 
-  function onRudeRatioChange(
+  function onDirtyRatioChange(
     event: ChangeEvent<{}>,
     value: number | number[]
   ): void {
@@ -30,7 +30,7 @@ export const BoardSettings: FC<{}> = () => {
     const ratio = typeof value === 'number' ? value : value[0];
     setSetting('board', {
       ...board,
-      rudeRatio: ratio,
+      dirtyRatio: ratio,
     });
   }
 
@@ -40,7 +40,7 @@ export const BoardSettings: FC<{}> = () => {
   ): void {
     event.preventDefault();
     const ratio = typeof value === 'number' ? value : value[0];
-    setRudeRatio(ratio);
+    setDirtyRatio(ratio);
   }
 
   return (
@@ -62,13 +62,13 @@ export const BoardSettings: FC<{}> = () => {
       </Grid>
       <Grid item container justify="center" alignItems="center" spacing={2}>
         <Grid item xs={6}>
-          <Typography align="right">Rude word ratio</Typography>
+          <Typography align="right">Dirty word ratio</Typography>
         </Grid>
         <Grid item xs={6}>
           <Slider
-            value={rudeRatio}
+            value={dirtyRatio}
             onChange={onSliderChange}
-            onChangeCommitted={onRudeRatioChange}
+            onChangeCommitted={onDirtyRatioChange}
             valueLabelDisplay="auto"
             color="secondary"
           />

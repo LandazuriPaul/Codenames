@@ -5,21 +5,29 @@ import {
   Cell,
   CellStatus,
   CellType,
+  GameEvent,
   GameSettings,
+  NewGameEnvelope,
   Team,
   TeamColor,
 } from '@codenames/domain';
 
 import { Logger, getTeamColor, masterView } from '~/utils';
 
-import { ChildStore } from './child.store';
+import { SocketEmitterStore } from './socketEmitter.store';
 import { RootStore } from './root.store';
 
-export class GameStore extends ChildStore {
+export class GameStore extends SocketEmitterStore {
   static LOCALSTORAGE_KEY = 'game';
 
   @observable
   board: Cell[];
+
+  @observable
+  boardHeight: number;
+
+  @observable
+  boardWidth: number;
 
   @persist
   @observable
@@ -49,11 +57,31 @@ export class GameStore extends ChildStore {
     this.userTeam = Team.Observer;
   }
 
-  @action
+  /*
+   * Emitters
+   */
+
   generateGame(settings: GameSettings): void {
-    Logger.info('requesting for board generation with the following settings');
-    Logger.info(settings);
+    Logger.log('requesting for board generation with the following settings');
+    Logger.log({ settings });
+    this.emit(GameEvent.GenerateGame, settings);
   }
+
+  /*
+   * Listeners
+   */
+
+  @action
+  handleGameReady({ board, boardHeight, boardWidth }: NewGameEnvelope): void {
+    this.boardHeight = boardHeight;
+    this.boardWidth = boardWidth;
+    this.board = board;
+    Logger.log('game ready');
+  }
+
+  /**
+   * Helpers
+   */
 
   getCellStatus(cellIndex: number): CellStatus {
     const cell = this.board[cellIndex];

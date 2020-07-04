@@ -13,6 +13,7 @@ export class ConfigService {
 
   private readonly configSchema = object({
     CORS_WHITELIST: string().required(),
+    DICTIONARIES_PATH: string().required(),
     HOST: string().required(),
     JWT_EXPIRES_IN: string().default('1d'),
     PORT: number().default(4000),
@@ -150,6 +151,10 @@ export class ConfigService {
 
   get corsWhiteList(): string[] {
     return this.envConfig.CORS_WHITELIST.split(',');
+  }
+
+  get dictionariesPath(): string {
+    return String(this.envConfig.DICTIONARIES_PATH);
   }
 
   get host(): string {

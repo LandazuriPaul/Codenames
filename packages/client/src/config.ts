@@ -9,7 +9,7 @@ export const DEFAULT_GAME_SETTINGS: GameSettings = {
     height: 5,
     width: 5,
     language: AvailableLanguages.English,
-    rudeRatio: 0,
+    dirtyRatio: 0,
   },
   teams: {
     a: [],
