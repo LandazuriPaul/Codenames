@@ -30,7 +30,7 @@ export const Board: FC<{}> = observer(() => {
                   .fill(null)
                   .map((cell, colIndex) => {
                     counter++;
-                    return <Tile key={colIndex} cellIndex={counter} />;
+                    return <Tile key={colIndex} index={counter} />;
                   })}
               </tr>
             ))}

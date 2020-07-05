@@ -95,7 +95,7 @@ export const GameForm: FC<{}> = () => {
             <FadedTypography variant="body2">
               Please wait while your host configures the game
             </FadedTypography>
-            <FadedTypography align="center">
+            <FadedTypography align="center" component="div">
               <CircularProgress color="inherit" />
             </FadedTypography>
           </CardContent>
@@ -148,4 +148,4 @@ const FadedTypography = styled(Typography)(({ theme }) => ({
   '&:first-of-type': {
     marginBottom: theme.spacing(3),
   },
-}));
+})) as any; // eslint-disable-line @typescript-eslint/no-explicit-any

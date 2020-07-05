@@ -7,14 +7,14 @@ import {
   Column,
 } from 'typeorm';
 
-import { Team } from '@codenames/domain';
+import { Teams as ITeams, Team } from '@codenames/domain';
 
 export class RoomTeam {
   @Column()
   players: Set<string>;
 
   @Column()
-  sypMaster?: string;
+  spyMaster?: string;
 
   constructor() {
     this.players = new Set<string>();
@@ -36,7 +36,7 @@ export class RoomTeam {
   }
 }
 
-export class Teams {
+export class Teams implements ITeams {
   @Column(() => RoomTeam)
   [Team.A]: RoomTeam;
 

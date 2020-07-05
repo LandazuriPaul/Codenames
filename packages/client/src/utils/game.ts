@@ -1,9 +1,9 @@
 import { Theme, lighten } from '@material-ui/core/styles';
 
 import {
-  CellStatus,
-  CellType,
-  MasterViewCellType,
+  CodenameStatus,
+  CodenameType,
+  MasterViewCodenameType,
   Team,
   TeamColor,
 } from '@codenames/domain';
@@ -22,26 +22,29 @@ export function getTeamColor(team: Team): TeamColor {
   }
 }
 
-export function setTileBackground(status: CellStatus, theme: Theme): string {
+export function setTileBackground(
+  status: CodenameStatus,
+  theme: Theme
+): string {
   switch (status) {
-    case CellType.Excluded:
+    case CodenameType.Excluded:
       return 'black';
-    case CellType.Neutral:
+    case CodenameType.Neutral:
       return theme.palette.grey[500];
-    case CellType.TeamA:
+    case CodenameType.TeamA:
       return theme.palette.primary.main;
-    case CellType.TeamB:
+    case CodenameType.TeamB:
       return theme.palette.secondary.main;
-    case MasterViewCellType.MasterViewExcluded:
+    case MasterViewCodenameType.MasterViewExcluded:
       return theme.palette.grey[600];
-    case MasterViewCellType.MasterViewNeutral:
+    case MasterViewCodenameType.MasterViewNeutral:
       return theme.palette.grey[300];
-    case MasterViewCellType.MasterViewTeamA:
+    case MasterViewCodenameType.MasterViewTeamA:
       return lighten(
         theme.palette.primary.main,
         MASTER_VIEW_DIMMING_COEFFICIENT
       );
-    case MasterViewCellType.MasterViewTeamB:
+    case MasterViewCodenameType.MasterViewTeamB:
       return lighten(
         theme.palette.secondary.main,
         MASTER_VIEW_DIMMING_COEFFICIENT
@@ -52,16 +55,16 @@ export function setTileBackground(status: CellStatus, theme: Theme): string {
   }
 }
 
-export function masterView(cellType: CellType): MasterViewCellType {
-  switch (cellType) {
-    case CellType.Excluded:
-      return MasterViewCellType.MasterViewExcluded;
-    case CellType.TeamA:
-      return MasterViewCellType.MasterViewTeamA;
-    case CellType.TeamB:
-      return MasterViewCellType.MasterViewTeamB;
-    case CellType.Neutral:
+export function masterView(codenameType: CodenameType): MasterViewCodenameType {
+  switch (codenameType) {
+    case CodenameType.Excluded:
+      return MasterViewCodenameType.MasterViewExcluded;
+    case CodenameType.TeamA:
+      return MasterViewCodenameType.MasterViewTeamA;
+    case CodenameType.TeamB:
+      return MasterViewCodenameType.MasterViewTeamB;
+    case CodenameType.Neutral:
     default:
-      return MasterViewCellType.MasterViewNeutral;
+      return MasterViewCodenameType.MasterViewNeutral;
   }
 }

@@ -5,11 +5,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   AvailableLanguages,
   BoardSettings,
-  Cell,
-  CellType,
+  Codename,
+  CodenameType,
 } from '@codenames/domain';
 
 import { ConfigService } from '~/modules/shared/config/config.service';
+import { Board } from '~/modules/room/game.entity';
+
 import { getRandomInt, getShuffledSizedSlice, shuffleArray } from './utils';
 
 interface Dictionary {
@@ -27,12 +29,7 @@ export class GameService {
     this.loadDictionaries();
   }
 
-  generateBoard({
-    dirtyRatio,
-    height,
-    language,
-    width,
-  }: BoardSettings): Cell[] {
+  generateBoard({ dirtyRatio, height, language, width }: BoardSettings): Board {
     const size = height * width;
     const dirtyDictLength = this.dictionaries[language as AvailableLanguages]
       .dirty.length;
@@ -46,67 +43,68 @@ export class GameService {
       cleanSize,
       dirtySize
     );
-    return this.getBoardFromWords(words, size);
+    const codenames = this.getBoardFromWords(words, size);
+    return new Board(height, width, codenames);
   }
 
   /**
    * Helpers
    */
 
-  private getBoardFromWords(words: string[], size: number): Cell[] {
+  private getBoardFromWords(words: string[], size: number): Codename[] {
     const turnCount = Math.floor(size / 3);
-    const cellTypeList: CellType[] = [];
-    const remainingByCategory: Map<CellType, number> = new Map([
-      [CellType.TeamA, 0],
-      [CellType.TeamB, 0],
-      [CellType.Neutral, 0],
-      [CellType.Excluded, 1],
+    const CodenameTypeList: CodenameType[] = [];
+    const remainingByCategory: Map<CodenameType, number> = new Map([
+      [CodenameType.TeamA, 0],
+      [CodenameType.TeamB, 0],
+      [CodenameType.Neutral, 0],
+      [CodenameType.Excluded, 1],
     ]);
 
     for (let i = 0; i < turnCount; i++) {
-      cellTypeList.push(CellType.TeamA);
+      CodenameTypeList.push(CodenameType.TeamA);
       remainingByCategory.set(
-        CellType.TeamA,
-        remainingByCategory.get(CellType.TeamA)! + 1
+        CodenameType.TeamA,
+        remainingByCategory.get(CodenameType.TeamA)! + 1
       );
-      cellTypeList.push(CellType.TeamB);
+      CodenameTypeList.push(CodenameType.TeamB);
       remainingByCategory.set(
-        CellType.TeamB,
-        remainingByCategory.get(CellType.TeamB)! + 1
+        CodenameType.TeamB,
+        remainingByCategory.get(CodenameType.TeamB)! + 1
       );
     }
     if (getRandomInt(0, 2) === 0) {
-      cellTypeList.push(CellType.TeamA);
+      CodenameTypeList.push(CodenameType.TeamA);
       remainingByCategory.set(
-        CellType.TeamA,
-        remainingByCategory.get(CellType.TeamA)! + 1
+        CodenameType.TeamA,
+        remainingByCategory.get(CodenameType.TeamA)! + 1
       );
     } else {
-      cellTypeList.push(CellType.TeamB);
+      CodenameTypeList.push(CodenameType.TeamB);
       remainingByCategory.set(
-        CellType.TeamB,
-        remainingByCategory.get(CellType.TeamB)! + 1
+        CodenameType.TeamB,
+        remainingByCategory.get(CodenameType.TeamB)! + 1
       );
     }
 
-    cellTypeList.push(CellType.Excluded);
+    CodenameTypeList.push(CodenameType.Excluded);
     for (let i = 0; i < size - (2 * turnCount + 2); i++) {
-      cellTypeList.push(CellType.Neutral);
+      CodenameTypeList.push(CodenameType.Neutral);
       remainingByCategory.set(
-        CellType.Neutral,
-        remainingByCategory.get(CellType.Neutral)! + 1
+        CodenameType.Neutral,
+        remainingByCategory.get(CodenameType.Neutral)! + 1
       );
     }
 
-    const shuffledCellTypeList = shuffleArray(cellTypeList);
-    const newBoard: Cell[] = [];
+    const shuffledCodenameTypeList = shuffleArray(CodenameTypeList);
+    const newBoard: Codename[] = [];
 
     for (let i = 0; i < size; i++) {
       newBoard.push({
-        index: i,
         word: words[i],
-        type: shuffledCellTypeList[i],
+        type: shuffledCodenameTypeList[i],
         isRevealed: false,
+        isSelected: false,
       });
     }
 

@@ -2,12 +2,13 @@ import { action, computed, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 
 import {
-  Cell,
-  CellStatus,
-  CellType,
+  Codename,
+  CodenameStatus,
+  CodenameType,
   GameEvent,
   GameSettings,
   NewGameEnvelope,
+  RoomTeam,
   Team,
   TeamColor,
 } from '@codenames/domain';
@@ -21,7 +22,7 @@ export class GameStore extends SocketEmitterStore {
   static LOCALSTORAGE_KEY = 'game';
 
   @observable
-  board: Cell[];
+  board: Codename[];
 
   @observable
   boardHeight: number;
@@ -42,7 +43,7 @@ export class GameStore extends SocketEmitterStore {
   userTeam: Team;
 
   @observable
-  winnerTeam: CellType.TeamA | CellType.TeamB | undefined;
+  winnerTeam: CodenameType.TeamA | CodenameType.TeamB | undefined;
 
   constructor(rootStore: RootStore) {
     super(rootStore);
@@ -72,10 +73,22 @@ export class GameStore extends SocketEmitterStore {
    */
 
   @action
-  handleGameReady({ board, boardHeight, boardWidth }: NewGameEnvelope): void {
-    this.boardHeight = boardHeight;
-    this.boardWidth = boardWidth;
-    this.board = board;
+  handleGameReady({ board, teams }: NewGameEnvelope): void {
+    this.boardHeight = board.height;
+    this.boardWidth = board.width;
+    this.board = board.codenames;
+    const { username } = this.rootStore.uiStore;
+    (Object.entries(teams) as [Team, RoomTeam][]).forEach(
+      ([team, { players, spyMaster }]) => {
+        if (players.includes(username)) {
+          this.userTeam = team;
+
+          if (spyMaster === username) {
+            this.isSpyMaster = true;
+          }
+        }
+      }
+    );
     Logger.log('game ready');
   }
 
@@ -83,7 +96,7 @@ export class GameStore extends SocketEmitterStore {
    * Helpers
    */
 
-  getCellStatus(cellIndex: number): CellStatus {
+  getCodenameStatus(cellIndex: number): CodenameStatus {
     const cell = this.board[cellIndex];
     if (cell.isRevealed) {
       return cell.type;

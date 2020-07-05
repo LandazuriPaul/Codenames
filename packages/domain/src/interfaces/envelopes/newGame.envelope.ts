@@ -1,7 +1,9 @@
-import { Cell } from '../cell.interface';
+import { Board } from '../board.interface';
+import { Teams } from '../teams.interface';
+import { TimerSettings } from '../settings';
 
 export interface NewGameEnvelope {
-  board: Cell[];
-  boardHeight: number;
-  boardWidth: number;
+  board: Board;
+  timer: TimerSettings;
+  teams: Teams;
 }

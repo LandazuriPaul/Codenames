@@ -2,11 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Team } from '@codenames/domain';
+import { Team, TeamSettings } from '@codenames/domain';
 
 import { Room } from './room.entity';
 import { RoomTeam, Teams } from './teams.entity';
 import { RoomNotFound } from './room.exceptions';
+import { Game } from './game.entity';
 
 @Injectable()
 export class RoomService {
@@ -55,6 +56,16 @@ export class RoomService {
     return room;
   }
 
+  async initRoomGame(
+    room: Room,
+    game: Game,
+    newTeams: TeamSettings
+  ): Promise<Room> {
+    room.game = game;
+    this.setRoomTeams(room, newTeams);
+    return this.roomRepository.save(room);
+  }
+
   private async assignUserToRoomTeam(
     room: Room,
     username: string,
@@ -66,8 +77,8 @@ export class RoomService {
       .forEach(([currentTeam, roomTeam]: [string, RoomTeam]) => {
         if (roomTeam.players.has(username)) {
           roomTeam.players.delete(username);
-          if (roomTeam.sypMaster === username) {
-            delete roomTeam.sypMaster;
+          if (roomTeam.spyMaster === username) {
+            delete roomTeam.spyMaster;
           }
           room.teams[currentTeam as Team] = roomTeam;
         }
@@ -77,6 +88,23 @@ export class RoomService {
     room.teams[team].players.add(username);
 
     return this.roomRepository.save(room);
+  }
+
+  private setRoomTeams(room: Room, newTeams: TeamSettings): void {
+    room.teams[Team.A].players = new Set(newTeams[Team.A]);
+    room.teams[Team.A].spyMaster = newTeams.spyA;
+
+    room.teams[Team.B].players = new Set(newTeams[Team.B]);
+    room.teams[Team.B].spyMaster = newTeams.spyB;
+
+    const usernames = Array.from(room.usernames);
+    room.teams[Team.Observer].players = new Set(
+      usernames.filter(
+        username =>
+          !room.teams[Team.A].players.has(username) &&
+          !room.teams[Team.B].players.has(username)
+      )
+    );
   }
 
   // getTeamInRoom(roomId: string, team: Team): SocketRoomHash {

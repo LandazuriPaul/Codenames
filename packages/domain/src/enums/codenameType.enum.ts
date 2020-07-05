@@ -1,4 +1,4 @@
-export enum CellType {
+export enum CodenameType {
   TeamA = 'a',
   TeamB = 'b',
   Neutral = 'n',

@@ -1,11 +1,11 @@
 import { styled } from '@material-ui/core/styles';
 import { Paper, Theme } from '@material-ui/core';
 
-import { CellStatus } from '@codenames/domain';
+import { CodenameStatus } from '@codenames/domain';
 
 import { setTileBackground } from '~/utils';
 
-export const CellContainer = styled('td')(({ theme }) => ({
+export const CodenameContainer = styled('td')(({ theme }) => ({
   verticalAlign: 'middle',
   textAlign: 'center',
   width: '20%',
@@ -17,7 +17,7 @@ export const CellContainer = styled('td')(({ theme }) => ({
 }));
 
 export const TilePaper = styled(Paper)(
-  ({ status, theme }: { status: CellStatus; theme: Theme }) => ({
+  ({ status, theme }: { status: CodenameStatus; theme: Theme }) => ({
     background: setTileBackground(status, theme),
     color: status === 'hidden' ? 'black' : 'white',
     padding: `${theme.spacing(2)}px 0`,

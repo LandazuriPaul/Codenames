@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { Game } from './game.entity';
 import { Teams } from './teams.entity';
 
 @Entity('rooms')
@@ -32,6 +33,9 @@ export class Room {
 
   @Column()
   usernames: Set<string>;
+
+  @Column(() => Game)
+  game?: Game;
 
   get size(): number {
     return this.usernames.size;

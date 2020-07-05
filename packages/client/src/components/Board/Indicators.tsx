@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { CellType } from '@codenames/domain';
+import { CodenameType } from '@codenames/domain';
 
 import { useStores } from '~/hooks';
 
@@ -50,13 +50,15 @@ export const Indicators: FC<{}> = observer(() => {
           <DialogContentText>
             <Typography
               color={
-                gameStore.winnerTeam === CellType.TeamA
+                gameStore.winnerTeam === CodenameType.TeamA
                   ? 'primary'
                   : 'secondary'
               }
               component="span"
             >
-              {gameStore.winnerTeam === CellType.TeamA ? 'Team A' : 'Team B'}
+              {gameStore.winnerTeam === CodenameType.TeamA
+                ? 'Team A'
+                : 'Team B'}
             </Typography>
             &nbsp;wins!
           </DialogContentText>
@@ -65,7 +67,9 @@ export const Indicators: FC<{}> = observer(() => {
           <Button
             onClick={handleClose}
             color={
-              gameStore.winnerTeam === CellType.TeamA ? 'primary' : 'secondary'
+              gameStore.winnerTeam === CodenameType.TeamA
+                ? 'primary'
+                : 'secondary'
             }
             autoFocus
           >

@@ -5,33 +5,33 @@ import { Typography } from '@material-ui/core';
 import { useHover, useStores } from '~/hooks';
 import { Logger } from '~/utils';
 
-import { CellContainer, TilePaper } from './tile.styles';
+import { CodenameContainer, TilePaper } from './tile.styles';
 
 interface TileProps {
-  cellIndex: number;
+  index: number;
 }
 
-export const Tile: FC<TileProps> = observer(({ cellIndex }) => {
+export const Tile: FC<TileProps> = observer(({ index }) => {
   const { gameStore } = useStores();
-  const cell = gameStore.board[cellIndex];
+  const codename = gameStore.board[index];
 
   const [isHover, onEnter, onLeave] = useHover();
 
   function handleClick(): void {
-    Logger.log(`tile ${cellIndex} clicked`);
+    Logger.log(`tile ${index} clicked`);
   }
 
   return (
-    <CellContainer>
+    <CodenameContainer>
       <TilePaper
         onClick={handleClick}
         onMouseOver={onEnter}
         onMouseOut={onLeave}
-        status={gameStore.getCellStatus(cellIndex)}
-        elevation={isHover && !cell.isRevealed ? 10 : 2}
+        status={gameStore.getCodenameStatus(index)}
+        elevation={isHover && !codename.isRevealed ? 10 : 2}
       >
-        <Typography>{cell.word}</Typography>
+        <Typography>{codename.word}</Typography>
       </TilePaper>
-    </CellContainer>
+    </CodenameContainer>
   );
 });

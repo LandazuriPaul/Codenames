@@ -42,7 +42,7 @@ export class UserService {
   private getUserRoleInRoom(room: Room, username: string): UserRole {
     const out = DEFAULT_ROLE;
     Object.entries(room.teams).some(
-      ([team, { players, sypMaster }]: [string, RoomTeam]) => {
+      ([team, { players, spyMaster: sypMaster }]: [string, RoomTeam]) => {
         if (sypMaster === username) {
           out.isSpyMaster = true;
           out.team = team as Team;
