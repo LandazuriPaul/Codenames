@@ -19,9 +19,6 @@ export const Board: FC<{}> = observer(() => {
       <Indicators />
       <table>
         <tbody>
-          <tr>
-            <td>Board</td>
-          </tr>
           {Array(boardHeight)
             .fill(null)
             .map((row, rowIndex) => (
