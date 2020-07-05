@@ -7,7 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 
-import { RoomEvent } from '@codenames/domain';
+import { RoomEvent, RoomJoinedEnvelope } from '@codenames/domain';
 
 import { AuthenticatedSocket } from '~/modules/shared/socket/authenticatedSocket.interface';
 import { SocketService } from '~/modules/shared/socket/socket.service';
@@ -47,6 +47,8 @@ export class RoomGateway {
       roomId: room._id,
       isHost,
       usernames: Array.from(room.usernames),
+      teams: room.teams.toJSON(),
+      game: room.game,
     });
   }
 

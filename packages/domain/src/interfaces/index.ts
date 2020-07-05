@@ -5,5 +5,6 @@ export * from './settings';
 export * from './board.interface';
 export * from './codename.interface';
 export * from './dictionary.interface';
+export * from './game.interface';
 export * from './roomTeam.interface';
 export * from './teams.interface';

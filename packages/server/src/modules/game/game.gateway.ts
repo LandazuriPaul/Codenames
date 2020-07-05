@@ -7,9 +7,9 @@ import {
 } from '@nestjs/websockets';
 
 import {
+  GameEnvelope,
   GameEvent,
   GameSettings,
-  NewGameEnvelope,
   Team,
   Teams,
 } from '@codenames/domain';
@@ -43,21 +43,8 @@ export class GameGateway {
     const game = new Game(board, timer);
     this.roomService.initRoomGame(room, game, settings.teams);
 
-    const teams: Teams = {
-      [Team.A]: {
-        players: Array.from(room.teams[Team.A].players),
-        spyMaster: room.teams[Team.A].spyMaster,
-      },
-      [Team.B]: {
-        players: Array.from(room.teams[Team.B].players),
-        spyMaster: room.teams[Team.B].spyMaster,
-      },
-      [Team.Observer]: {
-        players: Array.from(room.teams[Team.Observer].players),
-      },
-    };
-
-    const newGame: NewGameEnvelope = {
+    const teams: Teams = room.teams.toJSON();
+    const newGame: GameEnvelope = {
       board,
       timer,
       teams,

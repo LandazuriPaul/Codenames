@@ -75,12 +75,22 @@ export class UiStore extends SocketEmitterStore {
    */
 
   @action
-  roomJoined({ isHost, roomId, usernames }: RoomJoinedEnvelope): void {
+  roomJoined({
+    game,
+    isHost,
+    roomId,
+    teams,
+    usernames,
+  }: RoomJoinedEnvelope): void {
     this.isHost = isHost;
     this.roomId = roomId;
     Logger.log(`room ${this.roomId} joined`);
     this.userList = usernames;
     Logger.log(`users already here: ${this.userList.join(', ')}`);
+    this.rootStore.gameStore.setUserRoleInGame(teams);
+    if (game) {
+      this.rootStore.gameStore.setBoard(game.board);
+    }
   }
 
   @action

@@ -51,4 +51,20 @@ export class Teams implements ITeams {
     this[Team.B] = new RoomTeam();
     this[Team.Observer] = new RoomTeam();
   }
+
+  toJSON(): ITeams {
+    return {
+      [Team.A]: {
+        players: Array.from(this[Team.A].players),
+        spyMaster: this[Team.A].spyMaster,
+      },
+      [Team.B]: {
+        players: Array.from(this[Team.B].players),
+        spyMaster: this[Team.B].spyMaster,
+      },
+      [Team.Observer]: {
+        players: Array.from(this[Team.Observer].players),
+      },
+    };
+  }
 }

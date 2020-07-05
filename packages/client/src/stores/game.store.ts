@@ -2,15 +2,17 @@ import { action, computed, observable } from 'mobx';
 import { persist } from 'mobx-persist';
 
 import {
+  Board,
   Codename,
   CodenameStatus,
   CodenameType,
+  GameEnvelope,
   GameEvent,
   GameSettings,
-  NewGameEnvelope,
   RoomTeam,
   Team,
   TeamColor,
+  Teams,
 } from '@codenames/domain';
 
 import { Logger, getTeamColor, masterView } from '~/utils';
@@ -73,10 +75,23 @@ export class GameStore extends SocketEmitterStore {
    */
 
   @action
-  handleGameReady({ board, teams }: NewGameEnvelope): void {
+  handleGameReady({ board, teams }: GameEnvelope): void {
+    this.setBoard(board);
+    this.setUserRoleInGame(teams);
+    Logger.log('game ready');
+  }
+
+  /**
+   * Helpers
+   */
+
+  setBoard(board: Board): void {
     this.boardHeight = board.height;
     this.boardWidth = board.width;
     this.board = board.codenames;
+  }
+
+  setUserRoleInGame(teams: Teams): void {
     const { username } = this.rootStore.uiStore;
     (Object.entries(teams) as [Team, RoomTeam][]).forEach(
       ([team, { players, spyMaster }]) => {
@@ -89,12 +104,7 @@ export class GameStore extends SocketEmitterStore {
         }
       }
     );
-    Logger.log('game ready');
   }
-
-  /**
-   * Helpers
-   */
 
   getCodenameStatus(cellIndex: number): CodenameStatus {
     const cell = this.board[cellIndex];

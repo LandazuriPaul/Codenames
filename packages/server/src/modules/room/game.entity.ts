@@ -4,6 +4,7 @@ import {
   CodenameType,
   Board as IBoard,
   Codename as ICodename,
+  Game as IGame,
   TimerSettings,
 } from '@codenames/domain';
 
@@ -51,7 +52,7 @@ export class Timer implements TimerSettings {
   }
 }
 
-export class Game {
+export class Game implements IGame {
   @Column(() => Board)
   board: Board;
 
