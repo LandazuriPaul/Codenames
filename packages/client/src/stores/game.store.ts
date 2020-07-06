@@ -107,23 +107,60 @@ export class GameStore extends SocketEmitterStore {
   }
 
   getCodenameStatus(cellIndex: number): CodenameStatus {
-    const cell = this.board[cellIndex];
-    if (cell.isRevealed) {
-      return cell.type;
-    } else if (!this.isSpyMaster) {
-      return 'hidden';
+    const codename = this.board[cellIndex];
+    if (this.isSpyMaster) {
+      if (codename.isRevealed) {
+        return masterView(codename.type);
+      } else {
+        return codename.type;
+      }
+    } else {
+      if (codename.isRevealed) {
+        return codename.type;
+      } else {
+        return 'hidden';
+      }
     }
-    return masterView(cell.type);
   }
 
   @computed
   get remainingTeamACount(): number {
-    return 9;
+    return this.board.reduce((count, codename) => {
+      if (codename.type === CodenameType.TeamA && !codename.isRevealed) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
   }
 
   @computed
   get remainingTeamBCount(): number {
-    return 8;
+    return this.board.reduce((count, codename) => {
+      if (codename.type === CodenameType.TeamB && !codename.isRevealed) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
+  }
+
+  @computed
+  get teamACodenamesCount(): number {
+    return this.board.reduce((count, codename) => {
+      if (codename.type === CodenameType.TeamA) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
+  }
+
+  @computed
+  get teamBCodenamesCount(): number {
+    return this.board.reduce((count, codename) => {
+      if (codename.type === CodenameType.TeamB) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
   }
 
   @computed

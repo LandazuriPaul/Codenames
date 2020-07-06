@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  LinearProgress,
   Tooltip,
   Typography,
 } from '@material-ui/core';
@@ -14,17 +15,31 @@ import { CodenameType } from '@codenames/domain';
 
 import { useStores } from '~/hooks';
 
-import { IndicatorsContainer, TeamCount, Versus } from './indicators.styles';
+import {
+  IndicatorsContainer,
+  TeamCount,
+  TeamIndicator,
+  TeamIndicatorContainer,
+  Versus,
+} from './indicators.styles';
 
 export const Indicators: FC<{}> = observer(() => {
   const [isEndModalOpen, setIsEndModalOpen] = useState<boolean>(false);
-  const { gameStore } = useStores();
+  const {
+    gameStore: {
+      remainingTeamACount,
+      remainingTeamBCount,
+      teamACodenamesCount,
+      teamBCodenamesCount,
+      winnerTeam,
+    },
+  } = useStores();
 
   useEffect(() => {
-    if (gameStore.winnerTeam) {
+    if (winnerTeam) {
       setIsEndModalOpen(true);
     }
-  }, [gameStore.winnerTeam]);
+  }, [winnerTeam]);
 
   function handleClose(): void {
     setIsEndModalOpen(false);
@@ -33,16 +48,36 @@ export const Indicators: FC<{}> = observer(() => {
   return (
     <>
       <IndicatorsContainer>
-        <Tooltip title="Team A">
-          <TeamCount variant="body1" color="primary">
-            {gameStore.remainingTeamACount} remaining
-          </TeamCount>
+        <Tooltip
+          title={`${remainingTeamACount} codenames remaining`}
+          placement="top"
+        >
+          <TeamIndicatorContainer>
+            <TeamIndicator>
+              <TeamCount>{remainingTeamACount}</TeamCount>
+              <LinearProgress
+                variant="determinate"
+                value={(1 - remainingTeamACount / teamACodenamesCount) * 100}
+                color="primary"
+              />
+            </TeamIndicator>
+          </TeamIndicatorContainer>
         </Tooltip>
-        <Versus>&nbsp;VS&nbsp;</Versus>
-        <Tooltip title="Team B">
-          <TeamCount variant="body1" color="secondary">
-            {gameStore.remainingTeamBCount} remaining
-          </TeamCount>
+        <Versus>&nbsp;?&nbsp;</Versus>
+        <Tooltip
+          title={`${remainingTeamBCount} codenames remaining`}
+          placement="top"
+        >
+          <TeamIndicatorContainer>
+            <TeamIndicator isReversed>
+              <TeamCount>{remainingTeamBCount}</TeamCount>
+              <LinearProgress
+                variant="determinate"
+                value={(1 - remainingTeamBCount / teamBCodenamesCount) * 100}
+                color="secondary"
+              />
+            </TeamIndicator>
+          </TeamIndicatorContainer>
         </Tooltip>
       </IndicatorsContainer>
       <Dialog open={isEndModalOpen} onClose={handleClose}>
@@ -50,15 +85,11 @@ export const Indicators: FC<{}> = observer(() => {
           <DialogContentText>
             <Typography
               color={
-                gameStore.winnerTeam === CodenameType.TeamA
-                  ? 'primary'
-                  : 'secondary'
+                winnerTeam === CodenameType.TeamA ? 'primary' : 'secondary'
               }
               component="span"
             >
-              {gameStore.winnerTeam === CodenameType.TeamA
-                ? 'Team A'
-                : 'Team B'}
+              {winnerTeam === CodenameType.TeamA ? 'Team A' : 'Team B'}
             </Typography>
             &nbsp;wins!
           </DialogContentText>
@@ -66,11 +97,7 @@ export const Indicators: FC<{}> = observer(() => {
         <DialogActions>
           <Button
             onClick={handleClose}
-            color={
-              gameStore.winnerTeam === CodenameType.TeamA
-                ? 'primary'
-                : 'secondary'
-            }
+            color={winnerTeam === CodenameType.TeamA ? 'primary' : 'secondary'}
             autoFocus
           >
             OK
