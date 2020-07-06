@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@material-ui/core/styles';
-import { Theme, Typography } from '@material-ui/core';
+import { IconButton, Theme, Typography } from '@material-ui/core';
 
 export const IndicatorsContainer = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -21,16 +21,21 @@ export const TeamIndicator = styled(
   display: 'flex',
   flexDirection: isReversed ? 'row-reverse' : 'row',
   alignItems: 'center',
+  position: 'relative',
+  height: theme.spacing(8),
   width: '100%',
 
-  '& div': {
-    width: '80%',
+  '& > div': {
+    width: '100%',
     margin: 0,
+    marginLeft: isReversed ? 0 : theme.spacing(6),
+    marginRight: isReversed ? theme.spacing(6) : 0,
     transform: isReversed ? 'scaleX(-1)' : 'none',
   },
 
   '& p': {
     color: theme.palette.primary.contrastText,
+    position: 'absolute',
     background: isReversed
       ? theme.palette.secondary.main
       : theme.palette.primary.main,
@@ -47,7 +52,8 @@ export const TeamCount = styled(Typography)(({ theme }) => ({
   lineHeight: `${theme.spacing(6)}px`,
 }));
 
-export const Versus = styled(Typography)(({ theme }) => ({
-  color: theme.palette.grey[500],
-  fontSize: theme.typography.h5.fontSize,
+export const TurnIndicator = styled(IconButton)(({ theme }) => ({
+  padding: theme.spacing(2.5),
+  color: `${theme.palette.primary.contrastText} !important`,
+  background: `${theme.palette.primary.light}77 !important`,
 }));

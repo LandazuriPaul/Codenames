@@ -10,6 +10,7 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core';
+import { TrackChanges } from '@material-ui/icons';
 
 import { CodenameType } from '@codenames/domain';
 
@@ -20,7 +21,7 @@ import {
   TeamCount,
   TeamIndicator,
   TeamIndicatorContainer,
-  Versus,
+  TurnIndicator,
 } from './indicators.styles';
 
 export const Indicators: FC<{}> = observer(() => {
@@ -63,7 +64,13 @@ export const Indicators: FC<{}> = observer(() => {
             </TeamIndicator>
           </TeamIndicatorContainer>
         </Tooltip>
-        <Versus>&nbsp;?&nbsp;</Versus>
+        <Tooltip placement="top" title="Team A's Spy Master turn">
+          <div>
+            <TurnIndicator disabled>
+              <TrackChanges color="inherit" />
+            </TurnIndicator>
+          </div>
+        </Tooltip>
         <Tooltip
           title={`${remainingTeamBCount} codenames remaining`}
           placement="top"
