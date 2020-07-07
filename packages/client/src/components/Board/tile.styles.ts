@@ -5,7 +5,7 @@ import { CodenameStatus, MasterViewCodenameType } from '@codenames/domain';
 
 import { setTileBackground } from '~/utils';
 
-export const CodenameContainer = styled('td')(({ theme }) => ({
+export const CellContainer = styled('td')(({ theme }) => ({
   verticalAlign: 'middle',
   textAlign: 'center',
   width: '20%',

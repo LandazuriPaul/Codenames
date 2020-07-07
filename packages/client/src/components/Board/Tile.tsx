@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 import { useHover, useStores } from '~/hooks';
 import { Logger } from '~/utils';
 
-import { CodenameContainer, TilePaper } from './tile.styles';
+import { CellContainer, TilePaper } from './tile.styles';
 
 interface TileProps {
   index: number;
@@ -13,7 +13,7 @@ interface TileProps {
 
 export const Tile: FC<TileProps> = observer(({ index }) => {
   const { gameStore } = useStores();
-  const codename = gameStore.board[index];
+  const cell = gameStore.board[index];
 
   const [isHover, onEnter, onLeave] = useHover();
 
@@ -22,16 +22,16 @@ export const Tile: FC<TileProps> = observer(({ index }) => {
   }
 
   return (
-    <CodenameContainer>
+    <CellContainer>
       <TilePaper
         onClick={handleClick}
         onMouseOver={onEnter}
         onMouseOut={onLeave}
-        status={gameStore.getCodenameStatus(index)}
-        elevation={isHover && !codename.isRevealed ? 10 : 2}
+        status={gameStore.getCellStatus(index)}
+        elevation={isHover && !cell.isRevealed ? 10 : 2}
       >
-        <Typography>{codename.word}</Typography>
+        <Typography>{cell.word}</Typography>
       </TilePaper>
-    </CodenameContainer>
+    </CellContainer>
   );
 });

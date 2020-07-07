@@ -1,6 +1,11 @@
 import React from 'react';
 import { styled } from '@material-ui/core/styles';
-import { IconButton, Theme, Typography } from '@material-ui/core';
+import {
+  IconButton,
+  IconButtonProps,
+  Theme,
+  Typography,
+} from '@material-ui/core';
 
 export const IndicatorsContainer = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -52,8 +57,24 @@ export const TeamCount = styled(Typography)(({ theme }) => ({
   lineHeight: `${theme.spacing(6)}px`,
 }));
 
-export const TurnIndicator = styled(IconButton)(({ theme }) => ({
-  padding: theme.spacing(2.5),
-  color: `${theme.palette.primary.contrastText} !important`,
-  background: `${theme.palette.primary.light}77 !important`,
-}));
+export const TurnIndicator = styled(
+  ({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    turnColor,
+    ...rest
+  }: { turnColor: 'primary' | 'secondary' } & IconButtonProps) => (
+    <IconButton {...rest} />
+  )
+)(
+  ({
+    theme,
+    turnColor,
+  }: {
+    theme: Theme;
+    turnColor: 'primary' | 'secondary';
+  }) => ({
+    padding: theme.spacing(2.5),
+    color: `${theme.palette.primary.contrastText} !important`,
+    background: `${theme.palette[turnColor].light}77 !important`,
+  })
+);

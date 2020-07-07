@@ -10,9 +10,9 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core';
-import { TrackChanges } from '@material-ui/icons';
+import { GpsFixed, TrackChanges } from '@material-ui/icons';
 
-import { CodenameType } from '@codenames/domain';
+import { CodenameType, Turn } from '@codenames/domain';
 
 import { useStores } from '~/hooks';
 
@@ -28,6 +28,7 @@ export const Indicators: FC<{}> = observer(() => {
   const [isEndModalOpen, setIsEndModalOpen] = useState<boolean>(false);
   const {
     gameStore: {
+      currentTurn,
       remainingTeamACount,
       remainingTeamBCount,
       teamACodenamesCount,
@@ -44,6 +45,24 @@ export const Indicators: FC<{}> = observer(() => {
 
   function handleClose(): void {
     setIsEndModalOpen(false);
+  }
+
+  let turnTitle: string;
+  switch (currentTurn) {
+    case Turn.AHint:
+      turnTitle = "Team A's Spy Master turn";
+      break;
+    case Turn.AGuess:
+      turnTitle = "Team A's Guess turn";
+      break;
+    case Turn.BHint:
+      turnTitle = "Team B's Spy Master turn";
+      break;
+    case Turn.BGuess:
+      turnTitle = "Team B's Guess turn";
+      break;
+    default:
+      throw new Error(`${currentTurn} is not a valid turn`);
   }
 
   return (
@@ -64,10 +83,21 @@ export const Indicators: FC<{}> = observer(() => {
             </TeamIndicator>
           </TeamIndicatorContainer>
         </Tooltip>
-        <Tooltip placement="top" title="Team A's Spy Master turn">
+        <Tooltip placement="top" title={turnTitle}>
           <div>
-            <TurnIndicator disabled>
-              <TrackChanges color="inherit" />
+            <TurnIndicator
+              disabled
+              turnColor={
+                currentTurn === Turn.AHint || currentTurn === Turn.AGuess
+                  ? 'primary'
+                  : 'secondary'
+              }
+            >
+              {currentTurn === Turn.AHint || currentTurn === Turn.BHint ? (
+                <TrackChanges color="inherit" />
+              ) : (
+                <GpsFixed color="inherit" />
+              )}
             </TurnIndicator>
           </div>
         </Tooltip>

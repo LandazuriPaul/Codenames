@@ -4,6 +4,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import 'mobx-react-lite/batchingForReactDom';
 
 import { App } from '~/components/App';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { APP_ROOT } from '~/config';
 import { SnackbarProvider } from '~/contexts';
 import { StoresProvider } from '~/stores';
@@ -18,7 +19,9 @@ function ReactApp(): JSX.Element {
     <ThemeProvider theme={DefaultTheme}>
       <StoresProvider>
         <SnackbarProvider>
-          <App />
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
         </SnackbarProvider>
       </StoresProvider>
     </ThemeProvider>

@@ -90,6 +90,7 @@ export class UiStore extends SocketEmitterStore {
     this.rootStore.gameStore.setUserRoleInGame(teams);
     if (game) {
       this.rootStore.gameStore.setBoard(game.board);
+      // this.rootStore.gameStore.setCurrentTurn(turn)
     }
   }
 

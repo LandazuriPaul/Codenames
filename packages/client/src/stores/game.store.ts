@@ -3,7 +3,8 @@ import { persist } from 'mobx-persist';
 
 import {
   Board,
-  Codename,
+  Cell,
+  CodenameState,
   CodenameStatus,
   CodenameType,
   GameEnvelope,
@@ -13,6 +14,7 @@ import {
   Team,
   TeamColor,
   Teams,
+  Turn,
 } from '@codenames/domain';
 
 import { Logger, getTeamColor, masterView } from '~/utils';
@@ -24,13 +26,16 @@ export class GameStore extends SocketEmitterStore {
   static LOCALSTORAGE_KEY = 'game';
 
   @observable
-  board: Codename[];
+  board: Cell[];
 
   @observable
   boardHeight: number;
 
   @observable
   boardWidth: number;
+
+  @observable
+  currentTurn: Turn;
 
   @persist
   @observable
@@ -45,7 +50,7 @@ export class GameStore extends SocketEmitterStore {
   userTeam: Team;
 
   @observable
-  winnerTeam: CodenameType.TeamA | CodenameType.TeamB | undefined;
+  winnerTeam?: CodenameType.TeamA | CodenameType.TeamB;
 
   constructor(rootStore: RootStore) {
     super(rootStore);
@@ -58,6 +63,11 @@ export class GameStore extends SocketEmitterStore {
     this.isPlaying = false;
     this.isSpyMaster = false;
     this.userTeam = Team.Observer;
+  }
+
+  @action
+  setCurrentTurn(turn: Turn): void {
+    this.currentTurn = turn;
   }
 
   /*
@@ -75,9 +85,11 @@ export class GameStore extends SocketEmitterStore {
    */
 
   @action
-  handleGameReady({ board, teams }: GameEnvelope): void {
+  handleGameReady({ board, currentTurn, teams }: GameEnvelope): void {
+    this.currentTurn = currentTurn;
     this.setBoard(board);
     this.setUserRoleInGame(teams);
+    // this.setCurrentTurn(turn);
     Logger.log('game ready');
   }
 
@@ -85,10 +97,18 @@ export class GameStore extends SocketEmitterStore {
    * Helpers
    */
 
+  @action
+  reduceBoardState(boardState: CodenameState[]): void {
+    boardState.forEach((codename, index) => {
+      this.board[index].isRevealed = codename.isRevealed;
+      this.board[index].selectedBy = codename.selectedBy;
+    });
+  }
+
   setBoard(board: Board): void {
     this.boardHeight = board.height;
     this.boardWidth = board.width;
-    this.board = board.codenames;
+    this.board = board.cells;
   }
 
   setUserRoleInGame(teams: Teams): void {
@@ -106,17 +126,17 @@ export class GameStore extends SocketEmitterStore {
     );
   }
 
-  getCodenameStatus(cellIndex: number): CodenameStatus {
-    const codename = this.board[cellIndex];
+  getCellStatus(cellIndex: number): CodenameStatus {
+    const cell = this.board[cellIndex];
     if (this.isSpyMaster) {
-      if (codename.isRevealed) {
-        return masterView(codename.type);
+      if (cell.isRevealed) {
+        return masterView(cell.type);
       } else {
-        return codename.type;
+        return cell.type;
       }
     } else {
-      if (codename.isRevealed) {
-        return codename.type;
+      if (cell.isRevealed) {
+        return cell.type;
       } else {
         return 'hidden';
       }
@@ -125,8 +145,8 @@ export class GameStore extends SocketEmitterStore {
 
   @computed
   get remainingTeamACount(): number {
-    return this.board.reduce((count, codename) => {
-      if (codename.type === CodenameType.TeamA && !codename.isRevealed) {
+    return this.board.reduce((count, cell) => {
+      if (cell.type === CodenameType.TeamA && !cell.isRevealed) {
         return count + 1;
       }
       return count;
@@ -135,8 +155,8 @@ export class GameStore extends SocketEmitterStore {
 
   @computed
   get remainingTeamBCount(): number {
-    return this.board.reduce((count, codename) => {
-      if (codename.type === CodenameType.TeamB && !codename.isRevealed) {
+    return this.board.reduce((count, cell) => {
+      if (cell.type === CodenameType.TeamB && !cell.isRevealed) {
         return count + 1;
       }
       return count;
@@ -145,8 +165,8 @@ export class GameStore extends SocketEmitterStore {
 
   @computed
   get teamACodenamesCount(): number {
-    return this.board.reduce((count, codename) => {
-      if (codename.type === CodenameType.TeamA) {
+    return this.board.reduce((count, cell) => {
+      if (cell.type === CodenameType.TeamA) {
         return count + 1;
       }
       return count;
@@ -155,8 +175,8 @@ export class GameStore extends SocketEmitterStore {
 
   @computed
   get teamBCodenamesCount(): number {
-    return this.board.reduce((count, codename) => {
-      if (codename.type === CodenameType.TeamB) {
+    return this.board.reduce((count, cell) => {
+      if (cell.type === CodenameType.TeamB) {
         return count + 1;
       }
       return count;
