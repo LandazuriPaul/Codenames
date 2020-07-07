@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
   Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
+  Collapse,
   Typography,
 } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
@@ -23,6 +24,7 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
   componentStack,
   resetErrorBoundary,
 }) => {
+  const [isReportOn, setIsReportOn] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const report = generateReport(error, componentStack);
@@ -40,6 +42,10 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
     }
   }
 
+  function handleReport(): void {
+    setIsReportOn(!isReportOn);
+  }
+
   const title = (
     <Typography variant="h5" align="center">
       Oops sorry :&apos;(
@@ -53,7 +59,11 @@ export const ErrorFallback: FC<ErrorFallbackProps> = ({
         <SizedCardContent>
           <Typography component="div">
             <pre>{error.message}</pre>
+            <Button onClick={handleReport}>Show report</Button>
           </Typography>
+          <Collapse in={isReportOn}>
+            <pre>{report}</pre>
+          </Collapse>
         </SizedCardContent>
         <CardActions>
           <ReportButton color="primary" variant="outlined" onClick={onCopy}>
