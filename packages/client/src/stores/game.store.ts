@@ -114,6 +114,7 @@ export class GameStore extends SocketEmitterStore {
     this.board = board.cells;
   }
 
+  @action
   setUserRoleInGame(teams: Teams): void {
     const { username } = this.rootStore.roomStore;
     (Object.entries(teams) as [Team, RoomTeam][]).forEach(
