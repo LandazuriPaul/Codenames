@@ -18,21 +18,22 @@ interface Room {
 }
 
 interface Game {
+  currentTurn: Turn;
   board: Board;
   timer: Timer;
 }
 
 interface Board {
-  codenames: Codename[];
+  cells: Cell[];
   height: number;
   width: number;
 }
 
-interface Codename {
+interface Cell {
+  isRevealed: boolean;
+  selectedBy: string[]; // referring to usernames
   word: string;
-  is_revealed: boolean;
   type: CodenameType;
-  is_selected: boolean;
 }
 
 interface Timer {

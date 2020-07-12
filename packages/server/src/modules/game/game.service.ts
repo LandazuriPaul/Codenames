@@ -5,8 +5,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   AvailableLanguages,
   BoardSettings,
-  Codename,
+  Cell,
   CodenameType,
+  Turn,
 } from '@codenames/domain';
 
 import { ConfigService } from '~/modules/shared/config/config.service';
@@ -29,7 +30,12 @@ export class GameService {
     this.loadDictionaries();
   }
 
-  generateBoard({ dirtyRatio, height, language, width }: BoardSettings): Board {
+  generateBoard({
+    dirtyRatio,
+    height,
+    language,
+    width,
+  }: BoardSettings): { board: Board; firstTurn: Turn.AHint | Turn.BHint } {
     const size = height * width;
     const dirtyDictLength = this.dictionaries[language as AvailableLanguages]
       .dirty.length;
@@ -43,16 +49,23 @@ export class GameService {
       cleanSize,
       dirtySize
     );
-    const codenames = this.getBoardFromWords(words, size);
-    return new Board(height, width, codenames);
+    const { cells, firstTurn } = this.getBoardFromWords(words, size);
+    return {
+      board: new Board(height, width, cells),
+      firstTurn,
+    };
   }
 
   /**
    * Helpers
    */
 
-  private getBoardFromWords(words: string[], size: number): Codename[] {
+  private getBoardFromWords(
+    words: string[],
+    size: number
+  ): { cells: Cell[]; firstTurn: Turn.AHint | Turn.BHint } {
     const turnCount = Math.floor(size / 3);
+    let firstTurn: Turn;
     const CodenameTypeList: CodenameType[] = [];
     const remainingByCategory: Map<CodenameType, number> = new Map([
       [CodenameType.TeamA, 0],
@@ -79,12 +92,14 @@ export class GameService {
         CodenameType.TeamA,
         remainingByCategory.get(CodenameType.TeamA)! + 1
       );
+      firstTurn = Turn.AHint;
     } else {
       CodenameTypeList.push(CodenameType.TeamB);
       remainingByCategory.set(
         CodenameType.TeamB,
         remainingByCategory.get(CodenameType.TeamB)! + 1
       );
+      firstTurn = Turn.BHint;
     }
 
     CodenameTypeList.push(CodenameType.Excluded);
@@ -97,18 +112,21 @@ export class GameService {
     }
 
     const shuffledCodenameTypeList = shuffleArray(CodenameTypeList);
-    const newBoard: Codename[] = [];
+    const cells: Cell[] = [];
 
     for (let i = 0; i < size; i++) {
-      newBoard.push({
+      cells.push({
         word: words[i],
         type: shuffledCodenameTypeList[i],
         isRevealed: false,
-        isSelected: false,
+        selectedBy: [],
       });
     }
 
-    return newBoard;
+    return {
+      cells,
+      firstTurn,
+    };
   }
 
   private getRandomWordsFromDictionary(

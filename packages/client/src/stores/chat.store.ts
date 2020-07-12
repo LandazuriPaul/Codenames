@@ -81,7 +81,7 @@ export class ChatStore extends SocketEmitterStore {
     envelope: GeneralChatEnvelope | TeamChatEnvelope,
     chatMessage: ChatMessage
   ): void {
-    if (envelope.username === this.rootStore.uiStore.username) {
+    if (envelope.username === this.rootStore.roomStore.username) {
       chatMessage.isOwn = true;
     }
   }

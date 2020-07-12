@@ -16,7 +16,7 @@ import { useStores } from '~/hooks';
 export const UserListInfo: FC<{}> = observer(() => {
   const {
     gameStore,
-    uiStore: { userList },
+    roomStore: { userList },
   } = useStores();
 
   const userListTooltip = (

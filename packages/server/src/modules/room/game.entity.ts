@@ -3,17 +3,18 @@ import { Column } from 'typeorm';
 import {
   CodenameType,
   Board as IBoard,
-  Codename as ICodename,
+  Cell as ICell,
   Game as IGame,
   TimerSettings,
+  Turn,
 } from '@codenames/domain';
 
-export class Codename implements ICodename {
+export class Cell implements ICell {
   @Column()
   isRevealed: boolean;
 
   @Column()
-  isSelected: boolean;
+  selectedBy: string[];
 
   @Column()
   type: CodenameType;
@@ -29,13 +30,13 @@ export class Board implements IBoard {
   @Column()
   width: number;
 
-  @Column(() => Codename)
-  codenames: Codename[];
+  @Column(() => Cell)
+  cells: Cell[];
 
-  constructor(height: number, width: number, codenames: Codename[]) {
+  constructor(height: number, width: number, cells: Cell[]) {
     this.height = height;
     this.width = width;
-    this.codenames = codenames;
+    this.cells = cells;
   }
 }
 
@@ -56,11 +57,15 @@ export class Game implements IGame {
   @Column(() => Board)
   board: Board;
 
+  @Column()
+  currentTurn: Turn;
+
   @Column(() => Timer)
   timer: Timer;
 
-  constructor(board: Board, timer: Timer) {
+  constructor(board: Board, currentTurn: Turn, timer: Timer) {
     this.board = board;
+    this.currentTurn = currentTurn;
     this.timer = timer;
   }
 }

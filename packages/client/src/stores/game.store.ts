@@ -25,15 +25,19 @@ import { RootStore } from './root.store';
 export class GameStore extends SocketEmitterStore {
   static LOCALSTORAGE_KEY = 'game';
 
+  @persist('list')
   @observable
   board: Cell[];
 
+  @persist
   @observable
   boardHeight: number;
 
+  @persist
   @observable
   boardWidth: number;
 
+  @persist
   @observable
   currentTurn: Turn;
 
@@ -84,13 +88,11 @@ export class GameStore extends SocketEmitterStore {
    * Listeners
    */
 
-  @action
   handleGameReady({ board, currentTurn, teams }: GameEnvelope): void {
-    this.currentTurn = currentTurn;
+    Logger.log('game ready');
+    this.setCurrentTurn(currentTurn);
     this.setBoard(board);
     this.setUserRoleInGame(teams);
-    // this.setCurrentTurn(turn);
-    Logger.log('game ready');
   }
 
   /**
@@ -105,6 +107,7 @@ export class GameStore extends SocketEmitterStore {
     });
   }
 
+  @action
   setBoard(board: Board): void {
     this.boardHeight = board.height;
     this.boardWidth = board.width;
@@ -112,7 +115,7 @@ export class GameStore extends SocketEmitterStore {
   }
 
   setUserRoleInGame(teams: Teams): void {
-    const { username } = this.rootStore.uiStore;
+    const { username } = this.rootStore.roomStore;
     (Object.entries(teams) as [Team, RoomTeam][]).forEach(
       ([team, { players, spyMaster }]) => {
         if (players.includes(username)) {

@@ -26,15 +26,15 @@ export const Header: FC<{}> = observer(() => {
   const [isConfirmHomeModalOpen, setIsConfirmHomeModalOpen] = useState<boolean>(
     false
   );
-  const { uiStore } = useStores();
+  const { roomStore } = useStores();
 
   function leaveGame(): void {
-    uiStore.leaveRoom();
+    roomStore.leaveRoom();
     closeMenu();
   }
 
   function onTitleClick(): void {
-    if (uiStore.roomId) {
+    if (roomStore.roomId) {
       setIsConfirmHomeModalOpen(true);
     } else {
       leaveGame();
@@ -75,7 +75,7 @@ export const Header: FC<{}> = observer(() => {
                 Codenames
               </Title>
             </Grid>
-            {uiStore.roomId && (
+            {roomStore.roomId && (
               <>
                 <Grid item md={2}>
                   <Indicators />
@@ -92,7 +92,7 @@ export const Header: FC<{}> = observer(() => {
               <ChevronLeft /> Back
             </Button>
           </ListItem>
-          {uiStore.roomId && (
+          {roomStore.roomId && (
             <ListItem>
               <Indicators />
             </ListItem>

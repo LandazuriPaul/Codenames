@@ -1,7 +1,7 @@
-import { Codename } from './codename.interface';
+import { Cell } from './cell.interface';
 
 export interface Board {
   height: number;
   width: number;
-  codenames: Codename[];
+  cells: Cell[];
 }

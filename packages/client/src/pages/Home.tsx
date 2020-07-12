@@ -6,10 +6,10 @@ import { Layout } from '~/components/Layout';
 import { useStores } from '~/hooks';
 
 export const Home: FC<{}> = () => {
-  const { uiStore } = useStores();
+  const { roomStore } = useStores();
 
-  if (uiStore.roomId) {
-    return <Redirect to={`/${uiStore.roomId}`} />;
+  if (roomStore.roomId) {
+    return <Redirect to={`/${roomStore.roomId}`} />;
   }
 
   return (

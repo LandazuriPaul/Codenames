@@ -55,7 +55,7 @@ export const TeamSettings: FC<{}> = observer(() => {
     settings: { teams },
   } = useContext(gameSettingsContext);
   const {
-    uiStore: { userList },
+    roomStore: { userList },
   } = useStores();
 
   const columnEntries = formatToColumnEntries(teams, userList);

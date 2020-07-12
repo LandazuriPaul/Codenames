@@ -43,13 +43,14 @@ export class RoomGateway {
       username,
       userSockets
     );
-    socket.emit(RoomEvent.RoomJoined, {
+    const message: RoomJoinedEnvelope = {
       roomId: room._id,
       isHost,
       usernames: Array.from(room.usernames),
       teams: room.teams.toJSON(),
       game: room.game,
-    });
+    };
+    socket.emit(RoomEvent.RoomJoined, message);
   }
 
   @SubscribeMessage(RoomEvent.LeaveRoom)

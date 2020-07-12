@@ -48,7 +48,7 @@ export class WebsocketStore extends ChildStore {
   }
 
   attachSocketListeners(): void {
-    const { chatStore, gameStore, uiStore } = this.rootStore;
+    const { chatStore, gameStore, roomStore } = this.rootStore;
     this._socket
       // Default
       .on(SocketEvent.Connect, this.handleConnect.bind(this))
@@ -58,10 +58,10 @@ export class WebsocketStore extends ChildStore {
       .on(SocketEvent.Disconnect, this.handleDisconnect.bind(this))
 
       // UiStore
-      .on(RoomEvent.RoomJoined, uiStore.roomJoined.bind(uiStore))
-      .on(RoomEvent.RoomLeft, uiStore.roomLeft.bind(uiStore))
-      .on(RoomEvent.UserJoined, uiStore.userJoined.bind(uiStore))
-      .on(RoomEvent.UserLeft, uiStore.userLeft.bind(uiStore))
+      .on(RoomEvent.RoomJoined, roomStore.roomJoined.bind(roomStore))
+      .on(RoomEvent.RoomLeft, roomStore.roomLeft.bind(roomStore))
+      .on(RoomEvent.UserJoined, roomStore.userJoined.bind(roomStore))
+      .on(RoomEvent.UserLeft, roomStore.userLeft.bind(roomStore))
 
       // Chat
       .on(ChatEvent.GeneralMessage, chatStore.handleMessage.bind(chatStore))
@@ -104,6 +104,7 @@ export class WebsocketStore extends ChildStore {
   @action
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleConnectError(err: any): void {
+    // FIXME: on invalid token, return to home?
     Logger.log('ws: connection error');
     Logger.error(err);
     // If after a number of retries it doesn't work

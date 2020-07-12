@@ -22,8 +22,8 @@ interface UsernameFormProps {
 }
 
 export const UsernameForm: FC<UsernameFormProps> = ({ roomId }) => {
-  const { uiStore, websocketStore } = useStores();
-  const [username, setUsername] = useState<string>(uiStore.username || '');
+  const { roomStore, websocketStore } = useStores();
+  const [username, setUsername] = useState<string>(roomStore.username || '');
   const { enqueueSnackbar } = useSnackbar();
   const [getAccessToken, { status }] = useMutation(connect, {
     throwOnError: true,
@@ -32,7 +32,7 @@ export const UsernameForm: FC<UsernameFormProps> = ({ roomId }) => {
   async function connectToRoom(): Promise<void> {
     try {
       const { accessToken } = await getAccessToken({ roomId, username });
-      uiStore.setUsername(username);
+      roomStore.setUsername(username);
       websocketStore.setToken(accessToken);
       enqueueSnackbar(`Hey ${username}, welcome to the room ${roomId}!`, {
         variant: 'success',

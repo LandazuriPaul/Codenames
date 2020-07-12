@@ -10,7 +10,6 @@ import {
   GameEnvelope,
   GameEvent,
   GameSettings,
-  Team,
   Teams,
 } from '@codenames/domain';
 
@@ -38,14 +37,14 @@ export class GameGateway {
     @ConnectedSocket() { user: { room } }: AuthenticatedSocket,
     @MessageBody() settings: GameSettings
   ): Promise<void> {
-    const board = this.gameService.generateBoard(settings.board);
+    const { board, firstTurn } = this.gameService.generateBoard(settings.board);
     const timer = new Timer(settings.timer.guess, settings.timer.hint);
-    const game = new Game(board, timer);
-    this.roomService.initRoomGame(room, game, settings.teams);
-
+    const game = new Game(board, firstTurn, timer);
+    await this.roomService.initRoomGame(room, game, settings.teams);
     const teams: Teams = room.teams.toJSON();
     const newGame: GameEnvelope = {
       board,
+      currentTurn: firstTurn,
       timer,
       teams,
     };

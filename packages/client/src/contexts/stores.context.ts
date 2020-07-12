@@ -1,11 +1,11 @@
 import { createContext } from 'react';
 
-import { ChatStore, GameStore, UiStore, WebsocketStore } from '~/stores';
+import { ChatStore, GameStore, RoomStore, WebsocketStore } from '~/stores';
 
 export interface StoresContext {
   chatStore: ChatStore;
   gameStore: GameStore;
-  uiStore: UiStore;
+  roomStore: RoomStore;
   websocketStore: WebsocketStore;
 }
 

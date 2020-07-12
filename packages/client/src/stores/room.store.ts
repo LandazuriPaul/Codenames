@@ -8,8 +8,8 @@ import { Logger } from '~/utils';
 import { RootStore } from './root.store';
 import { SocketEmitterStore } from './socketEmitter.store';
 
-export class UiStore extends SocketEmitterStore {
-  static LOCALSTORAGE_KEY = 'ui';
+export class RoomStore extends SocketEmitterStore {
+  static LOCALSTORAGE_KEY = 'room';
 
   @persist
   @observable
@@ -90,7 +90,7 @@ export class UiStore extends SocketEmitterStore {
     this.rootStore.gameStore.setUserRoleInGame(teams);
     if (game) {
       this.rootStore.gameStore.setBoard(game.board);
-      // this.rootStore.gameStore.setCurrentTurn(turn)
+      this.rootStore.gameStore.setCurrentTurn(game.currentTurn);
     }
   }
 

@@ -34,7 +34,7 @@ export const GameForm: FC<{}> = () => {
 
   const {
     gameStore,
-    uiStore: { isHost },
+    roomStore: { isHost },
   } = useStores();
 
   function setSetting(

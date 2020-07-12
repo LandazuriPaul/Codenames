@@ -12,7 +12,7 @@ import { useStores } from '~/hooks';
 export const Room: FC<{}> = observer(() => {
   const { roomId } = useParams();
   const {
-    uiStore,
+    roomStore,
     websocketStore: { token },
   } = useStores();
 
@@ -21,19 +21,19 @@ export const Room: FC<{}> = observer(() => {
     return <Redirect to={`/${cleanRoomId}`} />;
   }
 
-  if (uiStore.roomId && roomId !== uiStore.roomId) {
-    return <Redirect to={`/${uiStore.roomId}`} />;
+  if (roomStore.roomId && roomId !== roomStore.roomId) {
+    return <Redirect to={`/${roomStore.roomId}`} />;
   }
 
   useEffect(() => {
     if (token) {
-      uiStore.joinRoom(roomId);
+      roomStore.joinRoom(roomId);
     }
-  }, [uiStore, token, roomId]);
+  }, [roomStore, token, roomId]);
 
   return (
     <Layout>
-      {uiStore.roomId && token ? (
+      {roomStore.roomId && token ? (
         <Dashboard />
       ) : (
         <UsernameForm roomId={roomId} />

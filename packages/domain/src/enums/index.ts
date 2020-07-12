@@ -6,3 +6,4 @@ export * from './masterViewCodenameType.enum';
 export * from './roomEvent.enum';
 export * from './socketEvent.enum';
 export * from './team.enum';
+export * from './turn.enum';
