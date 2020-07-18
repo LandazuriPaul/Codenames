@@ -43,7 +43,7 @@ export class RoomService {
       _id: roomId,
       host: username,
       teams: new Teams(),
-      usernames: [username],
+      usernames: new Set([username]),
     });
     return this.assignUserToRoomTeam(newRoom, username, Team.Observer);
   }
