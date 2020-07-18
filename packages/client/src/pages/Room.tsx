@@ -16,6 +16,12 @@ export const Room: FC<{}> = observer(() => {
     websocketStore: { token },
   } = useStores();
 
+  useEffect(() => {
+    if (token) {
+      roomStore.joinRoom(roomId);
+    }
+  }, [roomStore, token, roomId]);
+
   const cleanRoomId = cleanRoomIdFromInput(roomId);
   if (roomId !== cleanRoomId) {
     return <Redirect to={`/${cleanRoomId}`} />;
@@ -24,12 +30,6 @@ export const Room: FC<{}> = observer(() => {
   if (roomStore.roomId && roomId !== roomStore.roomId) {
     return <Redirect to={`/${roomStore.roomId}`} />;
   }
-
-  useEffect(() => {
-    if (token) {
-      roomStore.joinRoom(roomId);
-    }
-  }, [roomStore, token, roomId]);
 
   return (
     <Layout>
