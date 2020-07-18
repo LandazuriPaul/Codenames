@@ -34,9 +34,16 @@ export class GameGateway {
 
   @SubscribeMessage(GameEvent.GenerateGame)
   async onGenerateGame(
-    @ConnectedSocket() { user: { room } }: AuthenticatedSocket,
+    @ConnectedSocket()
+    {
+      user: {
+        room: { _id },
+      },
+    }: AuthenticatedSocket,
     @MessageBody() settings: GameSettings
   ): Promise<void> {
+    // refetch to get the most actual room data
+    const room = await this.roomService.getRoom(_id);
     const { board, firstTurn } = this.gameService.generateBoard(settings.board);
     const timer = new Timer(settings.timer.guess, settings.timer.hint);
     const game = new Game(board, firstTurn, timer);
