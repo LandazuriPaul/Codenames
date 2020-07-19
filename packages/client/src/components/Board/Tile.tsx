@@ -22,29 +22,34 @@ export const Tile: FC<TileProps> = observer(({ index }) => {
     gameStore.onCellClick(index);
   }
 
-  return (
-    <CellContainer>
-      <TilePaper
-        onClick={handleClick}
-        onMouseOver={onEnter}
-        onMouseOut={onLeave}
-        status={gameStore.getCellStatus(index)}
-        elevation={isHover && !cell.isRevealed ? 10 : 2}
-      >
-        <Typography>{cell.word}</Typography>
-        {cell.selectedBy.size > 0 && (
-          <Tooltip placement="right" title={printSelectors(cell.selectedBy)}>
+  function renderCell(): ReactNode {
+    const word = <Typography>{cell.word}</Typography>;
+    const tileProps = {
+      onClick: handleClick,
+      onMouseOver: onEnter,
+      onMouseOut: onLeave,
+      status: gameStore.getCellStatus(index),
+      elevation: isHover && !cell.isRevealed ? 10 : 2,
+    };
+    if (cell.selectedBy.size > 0) {
+      return (
+        <Tooltip placement="right" title={printSelectors(cell.selectedBy)}>
+          <TilePaper {...tileProps}>
+            {word}
             <PlacedBadge
               badgeContent={cell.selectedBy.size}
               color={
                 Turn.AGuess === gameStore.currentTurn ? 'primary' : 'secondary'
               }
             />
-          </Tooltip>
-        )}
-      </TilePaper>
-    </CellContainer>
-  );
+          </TilePaper>
+        </Tooltip>
+      );
+    }
+    return <TilePaper {...tileProps}>{word}</TilePaper>;
+  }
+
+  return <CellContainer>{renderCell()}</CellContainer>;
 });
 
 function printSelectors(usernameSet: Set<string>): ReactNode {
