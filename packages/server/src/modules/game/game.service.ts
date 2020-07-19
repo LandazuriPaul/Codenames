@@ -67,12 +67,24 @@ export class GameService {
     room: Room,
     cellIndex: number,
     username: string
-  ): Promise<void> {
+  ): Promise<number | undefined> {
     if (!room.game) {
-      return;
+      return undefined;
     }
+
+    // get old selection
+    const oldIndex = room.game.board.cells.findIndex(cell =>
+      cell.selectedBy.has(username)
+    );
+    if (oldIndex) {
+      room.game.board.cells[oldIndex].selectedBy.delete(username);
+    }
+
+    // set new selection
     room.game.board.cells[cellIndex].selectedBy.add(username);
     await this.roomRepository.save(room);
+
+    return oldIndex;
   }
 
   /**

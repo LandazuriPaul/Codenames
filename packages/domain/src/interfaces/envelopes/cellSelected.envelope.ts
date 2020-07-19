@@ -1,4 +1,5 @@
 export interface CellSelectedEnvelope {
-  cellIndex: number;
+  newIndex: number;
+  oldIndex?: number;
   username: string;
 }

@@ -67,8 +67,16 @@ export class GameGateway {
       username,
     } = user;
     const room = await this.roomService.getRoom(_id);
-    await this.gameService.selectCellByUser(room, cellIndex, username);
-    const message: CellSelectedEnvelope = { cellIndex, username };
+    const oldIndex = await this.gameService.selectCellByUser(
+      room,
+      cellIndex,
+      username
+    );
+    const message: CellSelectedEnvelope = {
+      newIndex: cellIndex,
+      oldIndex,
+      username,
+    };
     this.socketService.emitToRoom(room, GameEvent.CellSelected, message);
   }
 }

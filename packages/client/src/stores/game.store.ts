@@ -109,8 +109,15 @@ export class GameStore extends SocketEmitterStore {
   }
 
   @action
-  handleCellSelected({ cellIndex, username }: CellSelectedEnvelope): void {
-    this.board[cellIndex].selectedBy.add(username);
+  handleCellSelected({
+    newIndex,
+    oldIndex,
+    username,
+  }: CellSelectedEnvelope): void {
+    if (oldIndex) {
+      this.board[oldIndex].selectedBy.delete(username);
+    }
+    this.board[newIndex].selectedBy.add(username);
   }
 
   /**
