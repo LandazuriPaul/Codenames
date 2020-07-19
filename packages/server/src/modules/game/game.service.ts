@@ -76,7 +76,7 @@ export class GameService {
     const oldIndex = room.game.board.cells.findIndex(cell =>
       cell.selectedBy.has(username)
     );
-    if (oldIndex) {
+    if (oldIndex !== -1) {
       room.game.board.cells[oldIndex].selectedBy.delete(username);
     }
 
@@ -84,7 +84,7 @@ export class GameService {
     room.game.board.cells[cellIndex].selectedBy.add(username);
     await this.roomRepository.save(room);
 
-    return oldIndex;
+    return oldIndex !== -1 ? oldIndex : undefined;
   }
 
   /**
