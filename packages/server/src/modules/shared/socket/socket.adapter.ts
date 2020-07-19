@@ -68,7 +68,9 @@ export class SocketAdapter extends IoAdapter implements WebSocketAdapter {
       );
       next();
     } catch (err) {
-      this.logger.error(err);
+      this.logger.error('An error occurred on payload validation');
+      // eslint-disable-next-line no-console
+      console.error(err);
       next(err);
     }
   }
