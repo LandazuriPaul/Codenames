@@ -1,10 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Badge, Typography } from '@material-ui/core';
+import { Tooltip, Typography } from '@material-ui/core';
+
+import { Turn } from '@codenames/domain';
 
 import { useHover, useStores } from '~/hooks';
 
-import { CellContainer, TilePaper } from './tile.styles';
+import { CellContainer, PlacedBadge, TilePaper } from './tile.styles';
 
 interface TileProps {
   index: number;
@@ -31,9 +33,28 @@ export const Tile: FC<TileProps> = observer(({ index }) => {
       >
         <Typography>{cell.word}</Typography>
         {cell.selectedBy.size > 0 && (
-          <Badge badgeContent={cell.selectedBy.size} />
+          <Tooltip placement="right" title={printSelectors(cell.selectedBy)}>
+            <PlacedBadge
+              badgeContent={cell.selectedBy.size}
+              color={
+                Turn.AGuess === gameStore.currentTurn ? 'primary' : 'secondary'
+              }
+            />
+          </Tooltip>
         )}
       </TilePaper>
     </CellContainer>
   );
 });
+
+function printSelectors(usernameSet: Set<string>): ReactNode {
+  return (
+    <>
+      {Array.from(usernameSet).map(username => (
+        <Typography key={username} variant="subtitle2">
+          {username}
+        </Typography>
+      ))}
+    </>
+  );
+}
