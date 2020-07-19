@@ -1,10 +1,7 @@
-import { Teams } from '../teams.interface';
-import { Game } from '../game.interface';
+import { GameReadyEnvelope } from './gameReady.envelope';
 
-export interface RoomJoinedEnvelope {
-  game?: Game;
+export interface RoomJoinedEnvelope extends GameReadyEnvelope {
   isHost: boolean;
   roomId: string;
-  teams: Teams;
   usernames: string[];
 }

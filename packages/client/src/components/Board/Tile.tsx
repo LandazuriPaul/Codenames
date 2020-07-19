@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Typography } from '@material-ui/core';
+import { Badge, Typography } from '@material-ui/core';
 
 import { useHover, useStores } from '~/hooks';
-import { Logger } from '~/utils';
 
 import { CellContainer, TilePaper } from './tile.styles';
 
@@ -18,7 +17,7 @@ export const Tile: FC<TileProps> = observer(({ index }) => {
   const [isHover, onEnter, onLeave] = useHover();
 
   function handleClick(): void {
-    Logger.log(`tile ${index} clicked`);
+    gameStore.onCellClick(index);
   }
 
   return (
@@ -31,6 +30,9 @@ export const Tile: FC<TileProps> = observer(({ index }) => {
         elevation={isHover && !cell.isRevealed ? 10 : 2}
       >
         <Typography>{cell.word}</Typography>
+        {cell.selectedBy.size > 0 && (
+          <Badge badgeContent={cell.selectedBy.size} />
+        )}
       </TilePaper>
     </CellContainer>
   );

@@ -4,10 +4,11 @@ import { Repository } from 'typeorm';
 
 import { Team, TeamSettings } from '@codenames/domain';
 
+import { Game } from '~/modules/game/game.entity';
+
 import { Room } from './room.entity';
 import { RoomTeam, Teams } from './teams.entity';
 import { RoomNotFound } from './room.exceptions';
-import { Game } from './game.entity';
 
 @Injectable()
 export class RoomService {
@@ -65,6 +66,10 @@ export class RoomService {
     this.setRoomTeams(room, newTeams);
     return this.roomRepository.save(room);
   }
+
+  /**
+   * Helpers
+   */
 
   private async assignUserToRoomTeam(
     room: Room,

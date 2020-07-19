@@ -1,6 +1,8 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import {
   AvailableLanguages,
@@ -11,7 +13,8 @@ import {
 } from '@codenames/domain';
 
 import { ConfigService } from '~/modules/shared/config/config.service';
-import { Board } from '~/modules/room/game.entity';
+import { Board } from '~/modules/game/game.entity';
+import { Room } from '~/modules/room/room.entity';
 
 import { getRandomInt, getShuffledSizedSlice, shuffleArray } from './utils';
 
@@ -26,7 +29,11 @@ export class GameService {
 
   private dictionaries: Record<AvailableLanguages, Dictionary>;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    @InjectRepository(Room)
+    private readonly roomRepository: Repository<Room>
+  ) {
     this.loadDictionaries();
   }
 
@@ -54,6 +61,18 @@ export class GameService {
       board: new Board(height, width, cells),
       firstTurn,
     };
+  }
+
+  async selectCellByUser(
+    room: Room,
+    cellIndex: number,
+    username: string
+  ): Promise<void> {
+    if (!room.game) {
+      return;
+    }
+    room.game.board.cells[cellIndex].selectedBy.add(username);
+    await this.roomRepository.save(room);
   }
 
   /**
@@ -119,7 +138,7 @@ export class GameService {
         word: words[i],
         type: shuffledCodenameTypeList[i],
         isRevealed: false,
-        selectedBy: [],
+        selectedBy: new Set(),
       });
     }
 

@@ -89,8 +89,7 @@ export class RoomStore extends SocketEmitterStore {
     Logger.log(`users already here: ${this.userList.join(', ')}`);
     this.rootStore.gameStore.setUserRoleInGame(teams);
     if (game) {
-      this.rootStore.gameStore.setBoard(game.board);
-      this.rootStore.gameStore.setCurrentTurn(game.currentTurn);
+      this.rootStore.gameStore.setGame(game);
     }
   }
 

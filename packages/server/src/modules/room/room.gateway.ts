@@ -46,9 +46,7 @@ export class RoomGateway {
     const message: RoomJoinedEnvelope = {
       roomId: room._id,
       isHost,
-      usernames: Array.from(room.usernames),
-      teams: room.teams.toJSON(),
-      game: room.game,
+      ...room.toJSON(),
     };
     socket.emit(RoomEvent.RoomJoined, message);
   }

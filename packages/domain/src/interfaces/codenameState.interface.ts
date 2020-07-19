@@ -1,4 +1,4 @@
 export interface CodenameState {
   isRevealed: boolean;
-  selectedBy: string[];
+  selectedBy: Set<string>;
 }
