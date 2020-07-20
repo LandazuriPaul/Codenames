@@ -1,4 +1,5 @@
 import { Turn } from '~/enums';
+import { PlayingTeam } from '~/types';
 
 import { Board } from '../board.interface';
 import { TimerSettings } from '../settings';
@@ -10,4 +11,5 @@ export interface GameEnvelope {
   board: Omit<Board, 'cells'> & { cells: CellEnvelope[] };
   currentTurn: Turn;
   timer: TimerSettings;
+  winner?: PlayingTeam;
 }

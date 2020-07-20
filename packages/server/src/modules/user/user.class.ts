@@ -1,6 +1,6 @@
 import { Team } from '@codenames/domain';
 
-import { Room } from '~/modules/room/room.entity';
+import { Room } from '~/entities';
 
 export class User {
   room: Room;

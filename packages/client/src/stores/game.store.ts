@@ -3,6 +3,7 @@ import { persist } from 'mobx-persist';
 
 import {
   Cell,
+  CellRevealedEnvelope,
   CellSelectedEnvelope,
   CodenameState,
   CodenameStatus,
@@ -11,6 +12,7 @@ import {
   GameEvent,
   GameReadyEnvelope,
   GameSettings,
+  PlayingTeam,
   RoomTeam,
   Team,
   TeamColor,
@@ -54,6 +56,14 @@ export class GameStore extends SocketEmitterStore {
   @observable
   userTeam: Team;
 
+  @persist
+  @observable
+  remainingTeamACount: number;
+
+  @persist
+  @observable
+  remainingTeamBCount: number;
+
   @observable
   winnerTeam?: CodenameType.TeamA | CodenameType.TeamB;
 
@@ -68,6 +78,8 @@ export class GameStore extends SocketEmitterStore {
     this.isPlaying = false;
     this.isSpyMaster = false;
     this.userTeam = Team.Observer;
+    this.remainingTeamACount = 0;
+    this.remainingTeamBCount = 0;
   }
 
   @action
@@ -109,6 +121,28 @@ export class GameStore extends SocketEmitterStore {
   }
 
   @action
+  handleGameWon(winner: PlayingTeam): void {
+    this.winnerTeam = winner;
+  }
+
+  @action
+  handleCellRevealed({
+    cellIndex,
+    nextTurn,
+    remaining,
+  }: CellRevealedEnvelope): void {
+    this.remainingTeamACount = remaining[Team.A];
+    this.remainingTeamBCount = remaining[Team.B];
+    this.currentTurn = nextTurn;
+    this.board.forEach((cell, index) => {
+      cell.selectedBy = new Set();
+      if (index === cellIndex) {
+        cell.isRevealed = true;
+      }
+    });
+  }
+
+  @action
   handleCellSelected({
     newIndex,
     oldIndex,
@@ -144,6 +178,8 @@ export class GameStore extends SocketEmitterStore {
   setBoard(board: GameEnvelope['board']): void {
     this.boardHeight = board.height;
     this.boardWidth = board.width;
+    this.remainingTeamACount = board.remaining[Team.A];
+    this.remainingTeamBCount = board.remaining[Team.B];
     this.board = board.cells.map(cell => ({
       ...cell,
       selectedBy: new Set(cell.selectedBy),
@@ -185,26 +221,6 @@ export class GameStore extends SocketEmitterStore {
         return 'hidden';
       }
     }
-  }
-
-  @computed
-  get remainingTeamACount(): number {
-    return this.board.reduce((count, cell) => {
-      if (cell.type === CodenameType.TeamA && !cell.isRevealed) {
-        return count + 1;
-      }
-      return count;
-    }, 0);
-  }
-
-  @computed
-  get remainingTeamBCount(): number {
-    return this.board.reduce((count, cell) => {
-      if (cell.type === CodenameType.TeamB && !cell.isRevealed) {
-        return count + 1;
-      }
-      return count;
-    }, 0);
   }
 
   @computed

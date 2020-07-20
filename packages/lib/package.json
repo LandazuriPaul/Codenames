@@ -11,6 +11,9 @@
     "start:dev": "tsc --watch",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix"
   },
+  "dependencies": {
+    "@codenames/domain": "^0.1.0"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",

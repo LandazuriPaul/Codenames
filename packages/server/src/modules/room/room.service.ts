@@ -4,10 +4,8 @@ import { Repository } from 'typeorm';
 
 import { Team, TeamSettings } from '@codenames/domain';
 
-import { Game } from '~/modules/game/game.entity';
+import { Game, Room, RoomTeam, Teams } from '~/entities';
 
-import { Room } from './room.entity';
-import { RoomTeam, Teams } from './teams.entity';
 import { RoomNotFound } from './room.exceptions';
 
 @Injectable()

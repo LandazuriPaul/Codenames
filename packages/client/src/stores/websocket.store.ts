@@ -69,6 +69,8 @@ export class WebsocketStore extends ChildStore {
 
       // Game
       .on(GameEvent.GameReady, gameStore.handleGameReady.bind(gameStore))
+      .on(GameEvent.GameWon, gameStore.handleGameWon.bind(gameStore))
+      .on(GameEvent.CellRevealed, gameStore.handleCellRevealed.bind(gameStore))
       .on(GameEvent.CellSelected, gameStore.handleCellSelected.bind(gameStore));
   }
 

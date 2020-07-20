@@ -2,12 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { Team } from '@codenames/domain';
 
-import { Room } from '~/modules/room/room.entity';
+import { Room, RoomTeam } from '~/entities';
 import { RoomService } from '~/modules/room/room.service';
 
 import { User } from './user.class';
 import { UserNotFound } from './user.exceptions';
-import { RoomTeam } from '../room/teams.entity';
 
 interface UserRole {
   isHost: boolean;

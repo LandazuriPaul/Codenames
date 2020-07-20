@@ -13,9 +13,7 @@ import {
 
 import { RoomJoinedEnvelope } from '@codenames/domain';
 
-import { Game } from '~/modules/game/game.entity';
-
-import { Teams } from './teams.entity';
+import { Game, Teams } from '~/entities';
 
 @Entity('rooms')
 export class Room {

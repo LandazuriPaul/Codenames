@@ -25,6 +25,10 @@ interface Game {
 
 interface Board {
   cells: Cell[];
+  remaining: {
+    a: number;
+    b: number;
+  };
   height: number;
   width: number;
 }

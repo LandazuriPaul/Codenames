@@ -7,6 +7,7 @@ import {
 } from '@nestjs/websockets';
 
 import {
+  CellRevealedEnvelope,
   CellSelectedEnvelope,
   GameEvent,
   GameReadyEnvelope,
@@ -14,10 +15,10 @@ import {
   Teams,
 } from '@codenames/domain';
 
+import { Game, Timer } from '~/entities';
 import { RedisPropagatorInterceptor } from '~/modules/shared/redisPropagator/redisPropagator.interceptor';
 import { AuthenticatedSocket } from '~/modules/shared/socket/authenticatedSocket.interface';
 import { SocketService } from '~/modules/shared/socket/socket.service';
-import { Game, Timer } from '~/modules/game/game.entity';
 import { RoomService } from '~/modules/room/room.service';
 
 import { GameService } from './game.service';
@@ -67,16 +68,29 @@ export class GameGateway {
       username,
     } = user;
     const room = await this.roomService.getRoom(_id);
-    const oldIndex = await this.gameService.selectCellByUser(
-      room,
-      cellIndex,
-      username
-    );
-    const message: CellSelectedEnvelope = {
-      newIndex: cellIndex,
+    const {
+      nextTurn,
       oldIndex,
-      username,
-    };
-    this.socketService.emitToRoom(room, GameEvent.CellSelected, message);
+      remaining,
+      winner,
+    } = await this.gameService.selectCellByUser(room, cellIndex, username);
+    if (!remaining) {
+      const message: CellSelectedEnvelope = {
+        newIndex: cellIndex,
+        oldIndex,
+        username,
+      };
+      this.socketService.emitToRoom(room, GameEvent.CellSelected, message);
+    } else {
+      const message: CellRevealedEnvelope = {
+        cellIndex,
+        nextTurn,
+        remaining,
+      };
+      this.socketService.emitToRoom(room, GameEvent.CellRevealed, message);
+      if (winner) {
+        this.socketService.emitToRoom(room, GameEvent.GameWon, winner);
+      }
+    }
   }
 }

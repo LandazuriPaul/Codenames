@@ -4,9 +4,9 @@ import { Socket } from 'socket.io';
 
 import { Team } from '@codenames/domain';
 
+import { Room } from '~/entities';
 import { ConfigService } from '~/modules/shared/config/config.service';
 import { User } from '~/modules/user/user.class';
-import { Room } from '~/modules/room/room.entity';
 
 import { SocketRoomHash } from './socketRoomHash.type';
 import { SocketRoomIdentifier } from './socketRoomIdentifier.interface';

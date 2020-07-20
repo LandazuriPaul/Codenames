@@ -1,7 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
+import { Room } from '~/entities';
 import { ConfigService } from '~/modules/shared/config/config.service';
-import { Room } from '~/modules/room/room.entity';
 
 export class MongodbConfig {
   static getConfig(configService: ConfigService): TypeOrmModuleOptions {

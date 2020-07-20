@@ -12,7 +12,8 @@ import {
 } from '@material-ui/core';
 import { GpsFixed, TrackChanges } from '@material-ui/icons';
 
-import { CodenameType, Turn } from '@codenames/domain';
+import { CodenameType, Team, Turn } from '@codenames/domain';
+import { getPhaseTurn, getTeamsTurn } from '@codenames/lib';
 
 import { useStores } from '~/hooks';
 
@@ -88,12 +89,10 @@ export const Indicators: FC<{}> = observer(() => {
             <TurnIndicator
               disabled
               turnColor={
-                currentTurn === Turn.AHint || currentTurn === Turn.AGuess
-                  ? 'primary'
-                  : 'secondary'
+                getTeamsTurn(currentTurn) === Team.A ? 'primary' : 'secondary'
               }
             >
-              {currentTurn === Turn.AHint || currentTurn === Turn.BHint ? (
+              {getPhaseTurn(currentTurn) === 'hint' ? (
                 <TrackChanges color="inherit" />
               ) : (
                 <GpsFixed color="inherit" />
