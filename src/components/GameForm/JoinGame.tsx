@@ -11,6 +11,7 @@ import {
   IconButton,
   InputAdornment,
   MenuItem,
+  Slider,
   TextField,
   Tooltip,
   Typography,
@@ -22,12 +23,13 @@ import { AvailableLanguages } from '~/domain';
 import { useStores } from '~/hooks';
 import { cleanGameSeedFromInput } from '~/utils';
 
-import { JoinButton, JoinRow, Jonction } from './joinGame.styles';
+import { DirtyLabel, JoinButton, JoinRow, Jonction } from './joinGame.styles';
 
 export const JoinGame: FC<{}> = observer(() => {
   const { gameStore } = useStores();
   const [newGameId, setNewGameId] = useState<string>('');
   const [isGameIdValid, setIsGameIdValid] = useState<boolean>(true);
+  const [dirtyRatio, setDirtyRatio] = useState<number>(0);
 
   const { joinGame, newLang, setNewLang } = useContext(gameFormContext);
 
@@ -35,7 +37,7 @@ export const JoinGame: FC<{}> = observer(() => {
     event: MouseEvent<HTMLAnchorElement, MouseEvent> | FormEvent
   ): void {
     event.preventDefault();
-    joinGame(newGameId);
+    joinGame(newGameId, dirtyRatio);
   }
 
   function handleLangChange(event): void {
@@ -55,6 +57,24 @@ export const JoinGame: FC<{}> = observer(() => {
   function handleReset(): void {
     const generatedSeed = gameStore.getNewRandomSeed();
     setNewGameId(generatedSeed);
+  }
+
+  function onDirtyRatioChange(
+    event: ChangeEvent<{}>,
+    value: number | number[]
+  ): void {
+    event.preventDefault();
+    const ratio = typeof value === 'number' ? value : value[0];
+    setDirtyRatio(ratio);
+  }
+
+  function onSliderChange(
+    event: ChangeEvent<{}>,
+    value: number | number[]
+  ): void {
+    event.preventDefault();
+    const ratio = typeof value === 'number' ? value : value[0];
+    setDirtyRatio(ratio);
   }
 
   return (
@@ -112,6 +132,16 @@ export const JoinGame: FC<{}> = observer(() => {
                 </InputAdornment>
               ),
             }}
+          />
+        </JoinRow>
+        <JoinRow>
+          <DirtyLabel>Dirty level</DirtyLabel>
+          <Slider
+            value={dirtyRatio}
+            onChange={onSliderChange}
+            onChangeCommitted={onDirtyRatioChange}
+            valueLabelDisplay="auto"
+            color="primary"
           />
         </JoinRow>
         <JoinRow>

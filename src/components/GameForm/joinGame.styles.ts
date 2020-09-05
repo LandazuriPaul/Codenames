@@ -1,5 +1,14 @@
 import styled from 'styled-components';
-import { Button, Theme } from '@material-ui/core';
+import { Button, Theme, Typography } from '@material-ui/core';
+
+export const DirtyLabel = styled(Typography)`
+  ${({ theme }: { theme: Theme }) => `
+    white-space: nowrap;
+    margin-right: ${theme.spacing(3)}px;
+    font-style: italic;
+    color: ${theme.palette.grey[600]}
+  `}
+`;
 
 export const FlexBreak = styled.div`
   flex-basis: 100%;

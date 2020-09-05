@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import {
   Button,
@@ -33,6 +33,7 @@ import { GameHandlerContainer, GameHandlerForm } from './gameHandler.styles';
 
 export const GameHandler: FC<{}> = observer(() => {
   const { lang, seed } = useParams();
+  const { search } = useLocation();
   const [newSeed, setNewSeed] = useState<string>(seed);
   const [newLang, setNewLang] = useState<AvailableLanguages>(
     lang as AvailableLanguages
@@ -92,7 +93,10 @@ export const GameHandler: FC<{}> = observer(() => {
       event.preventDefault();
     }
     if (isSetupRoomChanged) {
-      history.push(`/${newLang}/${newSeed}`);
+      history.push({
+        pathname: `/${newLang}/${newSeed}`,
+        search,
+      });
       setIsEditMode(false);
       enqueueSnackbar('New game!', { variant: 'info' });
     }

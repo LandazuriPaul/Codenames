@@ -21,8 +21,12 @@ export const GameForm: FC<{}> = observer(() => {
 
   const [newLang, setNewLang] = useState<AvailableLanguages>(currentLang);
 
-  function joinGame(gameId: string): void {
-    history.push(`/${newLang}/${gameId}`);
+  function joinGame(gameId: string, dirtyRatio: number): void {
+    let location = `/${newLang}/${gameId}`;
+    if (dirtyRatio > 0) {
+      location = `${location}?dirty=${dirtyRatio}`;
+    }
+    history.push(location);
     enqueueSnackbar('New game', { variant: 'info' });
   }
 
