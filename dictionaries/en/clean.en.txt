@@ -89,6 +89,7 @@ Court
 Cover
 Crane
 Crash
+Cream Pie
 Cricket
 Cross
 Crown
@@ -406,6 +407,7 @@ Eruption
 Burger
 Hot Dog
 Pizza
+Salty
 Sausage
 Hands
 Cherry
