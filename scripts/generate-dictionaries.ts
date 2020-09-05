@@ -1,19 +1,34 @@
 import { join } from 'path';
-import { readFileSync, readdirSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 
-const DICTIONARIES_DIR = join(__dirname, '..', 'clean', 'dictionaries');
+const DICTIONARIES_DIR = join(__dirname, '..', 'dictionaries');
 const DATA_FILE_PATH = join(__dirname, '..', 'src', 'data.json');
-const DICTIONARY_LANG_MATCH_REGEXP = /^dictionary\.([a-z]+)\.txt$/;
 
-const fileList = readdirSync(DICTIONARIES_DIR);
-const dictionaryLangMap = fileList.reduce((map, filename) => {
-  const lang = filename.match(DICTIONARY_LANG_MATCH_REGEXP);
-  const dictionary = readFileSync(join(DICTIONARIES_DIR, filename))
+function getDictionaryFromFile(filename: string): string[] {
+  if (!existsSync(filename)) {
+    return [];
+  }
+  return readFileSync(join(filename))
     .toString()
     .trim()
     .split('\n');
-  if (lang && lang.length > 0) {
-    map[lang[1]] = dictionary;
+}
+
+function getLangDictionary(lang: string): { clean: string[]; dirty: string[] } {
+  const langDir = join(DICTIONARIES_DIR, lang);
+  const clean = getDictionaryFromFile(join(langDir, `clean.${lang}.txt`));
+  const dirty = getDictionaryFromFile(join(langDir, `dirty.${lang}.txt`));
+  return {
+    clean,
+    dirty,
+  };
+}
+
+const langList = readdirSync(DICTIONARIES_DIR);
+const dictionaryLangMap = langList.reduce((map, lang) => {
+  if (lang && lang.length === 2) {
+    const dictionary = getLangDictionary(lang);
+    map[lang] = dictionary;
   }
   return map;
 }, {});

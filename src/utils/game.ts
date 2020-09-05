@@ -79,3 +79,8 @@ export function masterView(cellType: CellType): MasterViewCellType {
       return MasterViewCellType.MasterViewNeutral;
   }
 }
+
+export function getShuffledSizedSlice<T>(arr: T[], size: number): T[] {
+  const shuffledArray = shuffleArray(arr);
+  return shuffledArray.slice(0, size);
+}

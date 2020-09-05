@@ -6,6 +6,7 @@ import data from '~/data.json';
 import { AvailableLanguages, Cell, CellStatus, CellType } from '~/domain';
 import {
   getRandomInt,
+  getShuffledSizedSlice,
   masterView,
   numericToStringSeed,
   shuffleArray,
@@ -36,6 +37,9 @@ export class GameStore extends ChildStore {
 
   @observable
   isMasterMode: boolean;
+
+  @observable
+  dirtyRatio: number;
 
   @observable
   winnerTeam: CellType.TeamA | CellType.TeamB | undefined;
@@ -74,6 +78,11 @@ export class GameStore extends ChildStore {
   @action
   setLang(lang: AvailableLanguages): void {
     this.lang = lang;
+  }
+
+  @action
+  setDirtyRatio(dirtyRatio: number): void {
+    this.dirtyRatio = dirtyRatio;
   }
 
   @action
@@ -131,7 +140,17 @@ export class GameStore extends ChildStore {
   }
 
   private generateBoardFromSeed(): Cell[] {
+    // fake random around seed
     seedrandom(this.seed, { global: true });
+
+    // dirty level
+    const dirtyDictLength = data[this.lang].dirty.length;
+    let dirtySize = Math.floor((this.dirtyRatio / 100) * GameStore.BOARD_SIZE);
+    if (dirtyDictLength < dirtySize) {
+      dirtySize = dirtyDictLength;
+    }
+    const cleanSize = GameStore.BOARD_SIZE - dirtySize;
+
     const cellTypeList: CellType[] = [];
     for (let i = 0; i < GameStore.TURN_COUNT; i++) {
       cellTypeList.push(CellType.TeamA);
@@ -171,9 +190,9 @@ export class GameStore extends ChildStore {
       );
     }
     const shuffledCellTypeList = shuffleArray(cellTypeList);
-    const shuffledDictionary = shuffleArray(data[this.lang]).slice(
-      0,
-      GameStore.BOARD_SIZE
+    const shuffledDictionary = this.getRandomWordsFromDictionary(
+      cleanSize,
+      dirtySize
     );
     const newBoard: Cell[] = [];
     for (let i = 0; i < GameStore.BOARD_SIZE; i++) {
@@ -185,5 +204,14 @@ export class GameStore extends ChildStore {
       });
     }
     return newBoard;
+  }
+
+  private getRandomWordsFromDictionary(
+    cleanSize: number,
+    dirtySize: number
+  ): string[] {
+    const cleanSlice = getShuffledSizedSlice(data[this.lang].clean, cleanSize);
+    const dirtySlice = getShuffledSizedSlice(data[this.lang].dirty, dirtySize);
+    return shuffleArray([...cleanSlice, ...dirtySlice]);
   }
 }
