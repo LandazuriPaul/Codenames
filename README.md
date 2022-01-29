@@ -22,13 +22,13 @@ Here is an unordered list of improvements coming up:
 
 - Whose turn is it currently?
 
-- Randomize teams
-
-- Dirty version
-
 - Counter for the time for each turn --> Time restricted games ?
 
 ### Frontend
+
+- Fix leaving a room
+
+- Fix when a number of failed on token expiry
 
 - Mobile friendly! So that the spymasters can be even more discrete! --> Be clear if you need to scroll right
 
