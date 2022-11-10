@@ -37,7 +37,7 @@
     "git-last-commit": "^1.0.0",
     "ioredis": "^4.17.3",
     "mongodb": "^3.5.9",
-    "passport": "^0.4.1",
+    "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "query-string": "^6.12.1",
     "reflect-metadata": "^0.1.13",
