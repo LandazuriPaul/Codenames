@@ -24,7 +24,7 @@
     "@codenames/domain": "^0.1.0",
     "@codenames/lib": "^0.1.0",
     "@hapi/joi": "^17.1.1",
-    "@nestjs/common": "^7.0.0",
+    "@nestjs/common": "^10.4.16",
     "@nestjs/core": "^9.0.5",
     "@nestjs/jwt": "^7.0.0",
     "@nestjs/passport": "^7.0.0",
